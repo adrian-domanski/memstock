@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
   * {
@@ -11,7 +11,8 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    background-color: #3A3A3A
+    background-color: #3A3A3A;
+    color: ${({ theme }) => theme.colors.white500};
   }
 
   #__next {
@@ -19,6 +20,13 @@ const GlobalStyles = createGlobalStyle`
     grid-template-rows: auto 1fr auto;
     min-height: 100vh;
   }
+  
+`;
+
+const MainContent = styled.main`
+  max-width: ${({ theme }) => theme.pageWideSectionMaxWidth};
+  width: 100%;
+  margin: 0 auto;
 `;
 
 const Layout: React.FC = ({ children }) => {
@@ -26,7 +34,7 @@ const Layout: React.FC = ({ children }) => {
     <>
       <GlobalStyles />
       <Navbar />
-      <main>{children}</main>
+      <MainContent>{children}</MainContent>
       <Footer />
     </>
   );

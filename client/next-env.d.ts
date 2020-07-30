@@ -10,6 +10,7 @@ declare module "styled-components" {
     boxShadow: "5px 5px 20px 0px rgba(0, 0, 0, 0.1)";
     colors: {
       primary: "#D69D00";
+      success: "#48C774";
       primaryDarker: "#ad8108";
       accent: "#41B4B0";
       danger: "#FF3860";
@@ -19,6 +20,7 @@ declare module "styled-components" {
       dark500: "#4a4a4a";
       white500: "#E9E9E9";
       grey500: "#cccccc";
+      grey600: "#a5a5a5";
     };
     fontSize: {
       desktop: {
