@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mems",
+  "info": {
+    "name": "mem"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "categories": {
+      "collection": "category",
+      "via": "mems",
+      "dominant": true
+    },
+    "image": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": true
+    },
+    "likes": {
+      "default": 0,
+      "type": "integer"
+    },
+    "dislikes": {
+      "default": 0,
+      "type": "integer"
+    },
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "mem"
+    },
+    "comments": {
+      "collection": "comment",
+      "via": "mem"
+    }
+  }
+}

@@ -7,19 +7,23 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "dev": "concurrently \"npm run develop\" \"npm run dev --prefix ../client\""
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "concurrently": "^5.2.0"
+  },
   "dependencies": {
     "strapi": "3.1.1",
     "strapi-admin": "3.1.1",
-    "strapi-utils": "3.1.1",
-    "strapi-plugin-content-type-builder": "3.1.1",
+    "strapi-connector-mongoose": "3.1.1",
     "strapi-plugin-content-manager": "3.1.1",
-    "strapi-plugin-users-permissions": "3.1.1",
+    "strapi-plugin-content-type-builder": "3.1.1",
     "strapi-plugin-email": "3.1.1",
+    "strapi-plugin-graphql": "^3.1.1",
     "strapi-plugin-upload": "3.1.1",
-    "strapi-connector-mongoose": "3.1.1"
+    "strapi-plugin-users-permissions": "3.1.1",
+    "strapi-utils": "3.1.1"
   },
   "author": {
     "name": "A Strapi developer"

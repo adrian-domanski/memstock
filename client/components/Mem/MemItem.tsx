@@ -1,114 +1,18 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import MemActions from "./MemActions";
+import {
+  StyledMemItem,
+  MemItemHeader,
+  StyledDropdown,
+  MemItemBody,
+  MemItemFooter,
+} from "../../utils/styled/components/MemItem";
 
-const StyledMemItem = styled.article`
-  :not(:last-child) {
-    margin-bottom: 1.5rem;
-  }
+interface Props {
+  mem: any;
+}
 
-  box-shadow: ${({ theme }) => theme.boxShadow};
-`;
-
-const MemItemHeader = styled.header`
-  background: ${({ theme }) => theme.colors.dark700};
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  .options {
-    cursor: pointer;
-
-    :hover i {
-      color: ${({ theme }) => theme.colors.primaryDarker};
-    }
-
-    i {
-      transition: color 0.2s ease-in-out;
-      color: ${({ theme }) => theme.colors.primary};
-      font-size: 1.5rem;
-      width: 50px;
-      height: 50px;
-      background: unset;
-      border: none;
-
-      &.active {
-        background: ${({ theme }) => theme.colors.dark800};
-      }
-    }
-  }
-
-  .avatar {
-    display: flex;
-    img {
-      border-radius: 50%;
-      width: 50px;
-    }
-    figcaption {
-      padding-left: 0.8rem;
-
-      .user-name {
-        color: ${({ theme }) => theme.colors.primary};
-        font-size: 1.1rem;
-      }
-
-      .user-rank {
-        color: ${({ theme }) => theme.colors.accent};
-        font-size: 0.9rem;
-      }
-    }
-  }
-`;
-
-const MemItemBody = styled.div`
-  padding: 1rem;
-  background: ${({ theme }) => theme.colors.dark600};
-
-  .mem-title {
-    color: ${({ theme }) => theme.colors.white500};
-    font-size: 2rem;
-  }
-
-  .mem-categories {
-    display: flex;
-
-    li {
-      color: ${({ theme }) => theme.colors.primary};
-
-      :not(:last-child) {
-        margin-right: 5px;
-      }
-    }
-  }
-`;
-
-const MemItemFooter = styled.footer`
-  padding: 1rem;
-  background: ${({ theme }) => theme.colors.dark700};
-`;
-
-const StyledDropdown = styled.div`
-  box-shadow: ${({ theme }) => theme.boxShadow};
-  .dropdown-content {
-    background-color: ${({ theme }) => theme.colors.dark700};
-  }
-
-  .dropdown-item {
-    color: ${({ theme }) => theme.colors.white500};
-
-    :hover {
-      background-color: ${({ theme }) => theme.colors.dark800};
-      color: ${({ theme }) => theme.colors.white500};
-    }
-  }
-
-  .dropdown-divider {
-    background-color: ${({ theme }) => theme.colors.dark800};
-  }
-`;
-
-const MemItem: React.FC = () => {
+const MemItem: React.FC<Props> = ({ mem }) => {
   const [isOptionsActive, setIsOptionsActive] = useState(false);
   return (
     <StyledMemItem>
@@ -119,8 +23,8 @@ const MemItem: React.FC = () => {
             alt="Domyślne zdjęcie użytkownika, który nie ustawił swojego zdjęcia."
           />
           <figcaption>
-            <div className="user-name">Onyx321</div>
-            <div className="user-rank">Fanatyk wędkarstwa</div>
+            <div className="user-name">{mem.user.username}</div>
+            <div className="user-rank">{mem.user.rank}</div>
           </figcaption>
         </figure>
         <div
@@ -171,20 +75,23 @@ const MemItem: React.FC = () => {
         <div className="section py-3">
           <figure>
             <figcaption>
-              <h3 className="mem-title">Mem title</h3>
+              <h3 className="mem-title">{mem.title}</h3>
               <ul className="mem-categories mb-3">
-                <li>#beka</li>
-                <li>#hehe</li>
-                <li>#śmieszne</li>
+                {mem.categories.map(({ name, id }) => (
+                  <li key={id}>#{name}</li>
+                ))}
               </ul>
             </figcaption>
-            <img src="https://picsum.photos/1000/600" alt="random img" />
+            <img
+              src={`${process.env.SERVER_URL}${mem.image.url}`}
+              alt="random img"
+            />
           </figure>
         </div>
       </MemItemBody>
       <MemItemFooter>
         <div className="section py-0">
-          <MemActions />
+          <MemActions likes={mem.likes} dislikes={mem.dislikes} />
         </div>
       </MemItemFooter>
     </StyledMemItem>

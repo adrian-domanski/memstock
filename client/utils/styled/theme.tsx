@@ -17,6 +17,7 @@ export const theme: DefaultTheme = {
     white500: "#E9E9E9",
     grey500: "#cccccc",
     grey600: "#a5a5a5",
+    grey700: "#6b6b6b",
   },
   fontSize: {
     desktop: {

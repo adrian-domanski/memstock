@@ -11,6 +11,7 @@ import {
 import { Button, Input } from "../../utils/styled/components/components";
 import Link from "next/link";
 import { withRouter, SingletonRouter } from "next/router";
+import styled from "styled-components";
 
 interface Props {
   router: SingletonRouter;
@@ -47,9 +48,9 @@ const Navbar: React.FC<Props> = ({ router }) => {
           <div className="navbar-brand">
             <Link href="/">
               <a>
-                <h1 className="navbar-item">
-                  <Logo src="/img/MemStock.png" alt="MemStock" />
-                </h1>
+                <Logo className="navbar-item">
+                  <span>Mem</span>Stock
+                </Logo>
               </a>
             </Link>
 
@@ -112,12 +113,16 @@ const Navbar: React.FC<Props> = ({ router }) => {
             </div>
             <div className="navbar-item is-hidden-desktop px-0 is-flex">
               <div className="buttons margin-auto">
-                <Button className="is-primary is-size-6 px-4 mr-4">
-                  Rejestracja
-                </Button>
-                <Button className="is-primary light is-size-6 px-4">
-                  Logowanie
-                </Button>
+                <Link href="/rejestracja">
+                  <Button as="a" className="is-primary is-size-6 px-4 mr-4">
+                    Rejestracja
+                  </Button>
+                </Link>
+                <Link href="/logowanie">
+                  <Button as="a" className="is-primary light is-size-6 px-4">
+                    Logowanie
+                  </Button>
+                </Link>
               </div>
             </div>
             <SearchBar className="field is-grouped">
@@ -140,12 +145,16 @@ const Navbar: React.FC<Props> = ({ router }) => {
             <div className="navbar-end">
               <div className="navbar-item px-0">
                 <div className="buttons">
-                  <Button className="is-primary is-size-6 px-4 mr-4">
-                    Rejestracja
-                  </Button>
-                  <Button className="is-primary light is-size-6 px-4">
-                    Logowanie
-                  </Button>
+                  <Link href="/rejestracja">
+                    <Button as="a" className="is-primary is-size-6 px-4 mr-4">
+                      Rejestracja
+                    </Button>
+                  </Link>
+                  <Link href="/logowanie">
+                    <Button as="a" className="is-primary light is-size-6 px-4">
+                      Logowanie
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>

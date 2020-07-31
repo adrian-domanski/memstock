@@ -7,50 +7,80 @@ const FlexWrapper = styled.div`
 `;
 
 const MemLikes = styled.div`
-  display: grid;
-  grid-template-areas: "like counter dislike";
-  grid-template-columns: 40px 80px 40px;
-  grid-template-rows: 40px;
-  gap: 8px;
+  &&& {
+    display: grid;
+    grid-template-areas: "like counter dislike";
+    grid-template-columns: 40px 80px 40px;
+    grid-template-rows: 40px;
+    gap: 8px;
 
-  .like {
-    grid-area: like;
-    background: ${({ theme }) => theme.colors.success};
-    font-weight: 400;
-    font-size: 2.5rem;
-  }
+    .like {
+      grid-area: like;
+      background: #24964c;
+      font-weight: 400;
+      font-size: 2.5rem;
+      color: ${({ theme }) => theme.colors.white500};
+      height: 100%;
+      width: 40px;
+      display: block;
+      padding: 0;
+      border: 0;
 
-  .dislike {
-    grid-area: dislike;
-    background: ${({ theme }) => theme.colors.danger};
-    font-weight: 400;
-    font-size: 2.5rem;
-  }
-
-  .counter {
-    grid-area: counter;
-    background: #484848;
-
-    .likes {
-      color: ${({ theme }) => theme.colors.success};
+      :active {
+        background: #2d864c;
+      }
     }
 
-    .dislikes {
-      color: ${({ theme }) => theme.colors.danger};
+    .dislike {
+      grid-area: dislike;
+      background: ${({ theme }) => theme.colors.danger};
+      font-weight: 400;
+      font-size: 2.5rem;
+      color: ${({ theme }) => theme.colors.white500};
+      height: 100%;
+      width: 40px;
+      display: block;
+      padding: 0;
+      border: 0;
+
+      :active {
+        background: #903245;
+      }
     }
 
-    .divider {
-      margin: 0 5px;
-    }
-  }
+    .counter {
+      grid-area: counter;
+      background: #484848;
 
-  .like,
-  .dislike,
-  .counter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
+      .likes {
+        color: ${({ theme }) => theme.colors.success};
+      }
+
+      .dislikes {
+        color: ${({ theme }) => theme.colors.danger};
+      }
+
+      .divider {
+        margin: 0 5px;
+      }
+    }
+
+    .like,
+    .dislike {
+      transition: background 0.1s ease-in-out;
+      :focus {
+        box-shadow: none;
+      }
+    }
+
+    .like,
+    .dislike,
+    .counter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
   }
 `;
 
@@ -62,16 +92,21 @@ const ShareButton = styled.button`
   }
 `;
 
-const MemActions: React.FC = () => {
+interface Props {
+  likes: number;
+  dislikes: number;
+}
+
+const MemActions: React.FC<Props> = ({ likes, dislikes }) => {
   return (
     <FlexWrapper>
       <MemLikes>
-        <div className="like">+</div>
-        <div className="dislike">-</div>
+        <button className="button like">+</button>
+        <button className="button dislike">-</button>
         <div className="counter">
-          <span className="likes">12</span>
+          <span className="likes">{likes}</span>
           <span className="divider">/</span>
-          <span className="dislikes">3</span>
+          <span className="dislikes">{dislikes}</span>
         </div>
       </MemLikes>
       <ShareButton className="button is-link">

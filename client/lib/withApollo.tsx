@@ -1,6 +1,6 @@
 import withApollo from "next-with-apollo";
 import ApolloClient from "apollo-client";
-import { ApolloProvider } from "react-apollo";
+import { ApolloProvider } from "@apollo/react-hooks";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import cookie from "next-cookies";
 import { getCookie, isServer } from "../utils/helpers";
@@ -13,7 +13,7 @@ export default withApollo(
   ({ initialState, ctx }) => {
     const httpLink = createUploadLink({
       uri: dev
-        ? "http://localhost:5000/graphql"
+        ? "http://localhost:1337/graphql"
         : "http://api.dev.adrian-domanski.pl/graphql",
     });
 

@@ -3,11 +3,43 @@ import styled from "styled-components";
 export interface Props {
   className?: string;
   role?: string;
-  src?: string;
-  alt?: string;
+  as?: string;
 }
 
-export const Button: React.FC<Props> = styled.button.attrs({
+export const LogoSubText: React.FC<{ className: string }> = styled.h2.attrs({
+  className: "is-size-3",
+})`
+  font-family: "Amaranth";
+  color: ${({ theme }) => theme.colors.primary};
+`;
+
+export const ContentHeader: React.FC = styled.header`
+  background: ${({ theme }) => theme.colors.dark700};
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+`;
+
+export const ContentBody: React.FC = styled.div`
+  padding: 1rem;
+  background: ${({ theme }) => theme.colors.dark600};
+`;
+
+export const ContentFooter: React.FC<Props> = styled.footer`
+  padding: 1rem;
+  background: ${({ theme }) => theme.colors.dark700};
+`;
+
+export const PageWrapper: React.FC = styled.section.attrs({
+  className: "section",
+})``;
+
+export const Button: React.FC<{
+  className: string;
+  as?: string;
+}> = styled.button.attrs({
   className: "button",
 })`
   &&& {
@@ -71,4 +103,9 @@ export const Input = styled.input.attrs({
   ::placeholder {
     color: ${({ theme }) => theme.colors.grey500};
   }
+`;
+
+export const StyledTitle: React.FC<Props> = styled.h2`
+  color: ${({ theme }) => theme.colors.primary};
+  font-size: 1.8rem;
 `;

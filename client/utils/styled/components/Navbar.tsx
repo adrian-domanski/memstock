@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { Props } from "./components";
 
-export const Logo: React.FC<Props> = styled.img`
-  &&& {
-    display: block;
-    height: 43px;
-    max-height: unset;
+export const Logo: React.FC<{ className?: string }> = styled.h1`
+  color: ${({ theme }) => theme.colors.primary};
+  font-family: "Amaranth";
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  span {
+    color: ${({ theme }) => theme.colors.accent};
   }
 `;
 
