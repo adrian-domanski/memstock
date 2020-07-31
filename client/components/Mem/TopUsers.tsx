@@ -6,7 +6,9 @@ import {
   ContentFooter,
   Button,
 } from "../../utils/styled/components/components";
-import MemTile from "./MemTile";
+import { useQuery } from "@apollo/react-hooks";
+import { getTopUsersQuery } from "../../queries/userQueries";
+import Loader from "../Loader";
 
 const StyledPopularSection = styled.article`
   :not(:last-child) {
@@ -59,44 +61,37 @@ const RankingListItem = styled.li`
 `;
 
 const TopUsers: React.FC = () => {
+  const { data, loading } = useQuery(getTopUsersQuery);
+
   return (
     <StyledPopularSection>
       <PopularSectionHeader>
         <StyledTitle>Ranking</StyledTitle>
       </PopularSectionHeader>
       <PopularSectionBody>
-        <RankingList>
-          <RankingListItem>
-            <figure>
-              <img src="/img/avatar-placeholder.jpg" alt="" />
-              <figcaption>Onyx352 (32 pkt)</figcaption>
-            </figure>
-          </RankingListItem>
-          <RankingListItem>
-            <figure>
-              <img src="/img/avatar-placeholder.jpg" alt="" />
-              <figcaption>Onyx352 (32 pkt)</figcaption>
-            </figure>
-          </RankingListItem>
-          <RankingListItem>
-            <figure>
-              <img src="/img/avatar-placeholder.jpg" alt="" />
-              <figcaption>Onyx352 (32 pkt)</figcaption>
-            </figure>
-          </RankingListItem>
-          <RankingListItem>
-            <figure>
-              <img src="/img/avatar-placeholder.jpg" alt="" />
-              <figcaption>Onyx352 (32 pkt)</figcaption>
-            </figure>
-          </RankingListItem>
-          <RankingListItem>
-            <figure>
-              <img src="/img/avatar-placeholder.jpg" alt="" />
-              <figcaption>Onyx352 (32 pkt)</figcaption>
-            </figure>
-          </RankingListItem>
-        </RankingList>
+        {!loading ? (
+          <RankingList>
+            {data.users.map(({ username, rank, id, avatar }) => (
+              <RankingListItem key={id}>
+                <figure>
+                  <img
+                    src={
+                      avatar
+                        ? `${process.env.SERVER_URL}${avatar.url}`
+                        : `/img/avatar-placeholder.jpg`
+                    }
+                    alt={`Zdjęcie profilowe użytkownika ${username}`}
+                  />
+                  <figcaption>
+                    {username} ({rank} pkt)
+                  </figcaption>
+                </figure>
+              </RankingListItem>
+            ))}
+          </RankingList>
+        ) : (
+          <Loader />
+        )}
       </PopularSectionBody>
       <ContentFooter>
         <Button className="is-primary margin-auto light">Zobacz ranking</Button>

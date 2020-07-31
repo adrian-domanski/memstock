@@ -58,12 +58,23 @@
       "via": "user"
     },
     "mem": {
-      "via": "user",
-      "model": "mem"
+      "model": "mem",
+      "via": "user"
     },
     "rank": {
       "type": "integer",
       "default": 0
+    },
+    "avatar": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false
     }
   }
 }
