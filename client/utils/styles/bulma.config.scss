@@ -4,3 +4,28 @@ $family-sans-serif: BlinkMacSystemFont, -apple-system, "Montserrat", "Roboto",
   "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
   "Helvetica", "Arial", sans-serif;
 $radius: 0;
+
+.select select:hover,
+.textarea:hover,
+.input:hover,
+.select select.is-hovered,
+.is-hovered.textarea,
+.is-hovered.input {
+  border-color: transparent !important;
+}
+
+.select select:focus,
+.textarea:focus,
+.input:focus,
+.select select.is-focused,
+.is-focused.textarea,
+.is-focused.input,
+.select select:active,
+.textarea:active,
+.input:active,
+.select select.is-active,
+.is-active.textarea,
+.is-active.input {
+  border-color: $primary !important;
+  box-shadow: none !important;
+}

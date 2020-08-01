@@ -36,14 +36,14 @@
       "default": 0,
       "type": "integer"
     },
-    "user": {
-      "via": "mem",
-      "plugin": "users-permissions",
-      "model": "user"
-    },
     "comments": {
       "collection": "comment",
       "via": "mem"
+    },
+    "user": {
+      "via": "mems",
+      "plugin": "users-permissions",
+      "model": "user"
     }
   }
 }

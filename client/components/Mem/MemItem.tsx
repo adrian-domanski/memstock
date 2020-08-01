@@ -7,6 +7,7 @@ import {
   MemItemBody,
   MemItemFooter,
 } from "../../utils/styled/components/MemItem";
+import Link from "next/link";
 
 interface Props {
   mem: any;
@@ -75,17 +76,25 @@ const MemItem: React.FC<Props> = ({ mem }) => {
         <div className="section py-3">
           <figure>
             <figcaption>
-              <h3 className="mem-title">{mem.title}</h3>
+              <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
+                <a>
+                  <h3 className="mem-title">{mem.title}</h3>
+                </a>
+              </Link>
               <ul className="mem-categories mb-3">
                 {mem.categories.map(({ name, id }) => (
                   <li key={id}>#{name}</li>
                 ))}
               </ul>
             </figcaption>
-            <img
-              src={`${process.env.SERVER_URL}${mem.image.url}`}
-              alt="random img"
-            />
+            <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
+              <a>
+                <img
+                  src={`${process.env.SERVER_URL}${mem.image.url}`}
+                  alt={mem.title}
+                />
+              </a>
+            </Link>
           </figure>
         </div>
       </MemItemBody>

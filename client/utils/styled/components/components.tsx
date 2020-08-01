@@ -6,14 +6,14 @@ export interface Props {
   as?: string;
 }
 
-export const LogoSubText: React.FC<{ className: string }> = styled.h2.attrs({
+export const LogoSubText: React.FC<Props> = styled.h2.attrs({
   className: "is-size-3",
 })`
   font-family: "Amaranth";
   color: ${({ theme }) => theme.colors.primary};
 `;
 
-export const ContentHeader: React.FC = styled.header`
+export const ContentHeader: React.FC<Props> = styled.header`
   background: ${({ theme }) => theme.colors.dark700};
   padding: 1rem 2rem;
   display: flex;
@@ -22,7 +22,7 @@ export const ContentHeader: React.FC = styled.header`
   height: 80px;
 `;
 
-export const ContentBody: React.FC = styled.div`
+export const ContentBody: React.FC<Props> = styled.div`
   padding: 1rem;
   background: ${({ theme }) => theme.colors.dark600};
 `;
@@ -32,14 +32,11 @@ export const ContentFooter: React.FC<Props> = styled.footer`
   background: ${({ theme }) => theme.colors.dark700};
 `;
 
-export const PageWrapper: React.FC = styled.section.attrs({
+export const PageWrapper: React.FC<Props> = styled.section.attrs({
   className: "section",
 })``;
 
-export const Button: React.FC<{
-  className: string;
-  as?: string;
-}> = styled.button.attrs({
+export const Button: React.FC<Props> = styled.button.attrs({
   className: "button",
 })`
   &&& {
@@ -83,7 +80,7 @@ export const Button: React.FC<{
   }
 `;
 
-export const Input = styled.input.attrs({
+export const Input: React.FC<Props> = styled.input.attrs({
   className: "input",
 })`
   background-color: ${({ theme }) => theme.colors.dark500};

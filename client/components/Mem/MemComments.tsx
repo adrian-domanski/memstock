@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {
   ContentHeader,
   ContentBody,
+  Button,
 } from "../../utils/styled/components/components";
 
 const CommentsSection = styled.section.attrs({ className: "section" })`
@@ -19,7 +20,7 @@ const CustomContentHeader = styled(ContentHeader)`
   background-color: ${({ theme }) => theme.colors.dark800};
 
   .username {
-    padding-left: 0.8rem;
+    padding-left: 0.6rem;
     font-weight: 500;
     font-size: 1.1rem;
     color: ${({ theme }) => theme.colors.primary};
@@ -29,6 +30,35 @@ const CustomContentHeader = styled(ContentHeader)`
 const CustomContentBody = styled(ContentBody)`
   background-color: ${({ theme }) => theme.colors.dark700};
   padding: 1rem 2rem;
+`;
+
+const CommentsSectionTitle = styled.h1`
+  color: ${({ theme }) => theme.colors.white500};
+  font-size: 1.5rem;
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 1.8rem;
+
+  :before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+const StyledTextArea = styled.textarea`
+  background: ${({ theme }) => theme.colors.dark800};
+  border-color: ${({ theme }) => theme.colors.dark800};
+  color: ${({ theme }) => theme.colors.white500};
+
+  ::placeholder {
+    color: ${({ theme }) => theme.colors.grey700};
+  }
 `;
 
 interface Props {
@@ -47,6 +77,19 @@ interface Props {
 const MemComments: React.FC<Props> = ({ comments }) => {
   return (
     <CommentsSection>
+      <CommentsSectionTitle>Co o tym sądzisz?</CommentsSectionTitle>
+      <div className="field">
+        <div className="control">
+          <StyledTextArea
+            className="textarea mb-3"
+            placeholder="Napisz kilka słów, zachowując kulturę wypowiedzi i takie tam..."
+          ></StyledTextArea>
+        </div>
+      </div>
+      <Button className="is-primary light mb-5 px-5 is-small">
+        Dodaj komentarz
+      </Button>
+      <CommentsSectionTitle>Komentarze</CommentsSectionTitle>
       {comments.map((comment) => (
         <article key={comment.id}>
           <CustomContentHeader>
@@ -60,7 +103,9 @@ const MemComments: React.FC<Props> = ({ comments }) => {
             ></Avatar>
             <span className="username">{comment.user.username}</span>
           </CustomContentHeader>
-          <CustomContentBody>{comment.content}</CustomContentBody>
+          <CustomContentBody className="py-5">
+            {comment.content}
+          </CustomContentBody>
         </article>
       ))}
     </CommentsSection>

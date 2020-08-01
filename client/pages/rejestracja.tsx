@@ -1,66 +1,121 @@
 import React, { useState } from "react";
 import Layout from "../components/layout/Layout";
 import {
-  PageWrapper,
-  ContentHeader,
   ContentBody,
   ContentFooter,
   LogoSubText,
   Button,
 } from "../utils/styled/components/components";
 import { Logo } from "../utils/styled/components/Navbar";
-import styled from "styled-components";
 import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
-
-const CustomPageWrapper = styled(PageWrapper)`
-  max-width: ${({ theme }) => theme.pageMaxWidth};
-  margin-left: auto;
-  margin-right: auto;
-`;
-
-const CustomContentHeader = styled(ContentHeader)`
-  height: auto;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 2rem 0;
-`;
-
-const ExtendedLogoWrapper = styled.div`
-  text-align: center;
-`;
-
-const StyledForm = styled.form`
-  &&& {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    max-width: 700px;
-    margin: 3rem auto 0 auto;
-
-    label {
-      color: ${({ theme }) => theme.colors.grey600};
-      font-weight: 500;
-    }
-
-    input {
-      background: ${({ theme }) => theme.colors.dark800};
-      border-color: ${({ theme }) => theme.colors.dark800};
-      color: ${({ theme }) => theme.colors.white500};
-
-      ::placeholder {
-        color: ${({ theme }) => theme.colors.grey700};
-      }
-    }
-  }
-`;
+import {
+  CustomPageWrapper,
+  CustomContentHeader,
+  ExtendedLogoWrapper,
+  StyledForm,
+} from "../utils/styled/pages/rejestracja";
+import validator from "validator";
+import { error } from "console";
 
 const rejestracja: React.FC = () => {
   const [recaptcha, setRecaptcha] = useState(false);
+  const [alerts, setAlerts] = useState<
+    {
+      msg: string;
+      type: "success" | "danger" | "";
+    }[]
+  >([]);
+  const [errors, setErrors] = useState({
+    USERNAME: "",
+    EMAIL: "",
+    PASSWORD: "",
+    SAME_PASSWORDS: "",
+    ALL_FIELDS_FILLED: "",
+  });
+  const [credentials, setCredentials] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const handleChange = (value) => {
-    console.log(value);
+  const handleChange = ({
+    target: { value, name },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setCredentials({ ...credentials, [name]: value });
+    console.log(credentials);
+  };
+
+  const handleValidate = () => {
+    let currentErrors = {
+      USERNAME: "",
+      EMAIL: "",
+      PASSWORD: "",
+      SAME_PASSWORDS: "",
+      ALL_FIELDS_FILLED: "",
+    };
+
+    if (
+      !credentials.username ||
+      !credentials.email ||
+      !credentials.password ||
+      !credentials.confirmPassword ||
+      !recaptcha
+    ) {
+      currentErrors = {
+        ...currentErrors,
+        ALL_FIELDS_FILLED:
+          "Proszę wypełnić wszystkie informacje oraz zaznaczyć pole ReCAPTCHA",
+      };
+    } else {
+      if (credentials.username.length < 3 || credentials.username.length > 16) {
+        console.log(true);
+        currentErrors = {
+          ...currentErrors,
+          USERNAME: "Nazwa użytkownika musi zawierać od 3 do 16 znaków",
+        };
+      }
+      if (!validator.isAlphanumeric(credentials.username, "pl-PL")) {
+        currentErrors = {
+          ...currentErrors,
+          USERNAME:
+            "Nazwa użytkownika może składać się wyłącznie z liter oraz cyfr",
+        };
+      }
+      if (!validator.isEmail(credentials.email)) {
+        currentErrors = {
+          ...currentErrors,
+          EMAIL: "Niepoprawny adres email",
+        };
+      }
+      if (credentials.password.length < 6) {
+        currentErrors = {
+          ...currentErrors,
+          PASSWORD: "Hasło musi zawierać minimum 6 znaków",
+        };
+      }
+      if (credentials.password !== credentials.confirmPassword) {
+        currentErrors = {
+          ...currentErrors,
+          SAME_PASSWORDS: "Hasła nie są identyczne",
+        };
+      }
+    }
+
+    setErrors(currentErrors);
+
+    for (let p in currentErrors) {
+      if (currentErrors[p]) return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!handleValidate()) {
+      //  Create user
+    }
   };
 
   return (
@@ -77,79 +132,110 @@ const rejestracja: React.FC = () => {
           </ExtendedLogoWrapper>
         </CustomContentHeader>
         <ContentBody>
-          <StyledForm action="submit">
+          <StyledForm onSubmit={handleSubmit} action="submit">
+            {errors.ALL_FIELDS_FILLED && (
+              <div className="notification is-danger is-light">
+                {errors.ALL_FIELDS_FILLED}
+              </div>
+            )}
             <div className="field">
               <label className="label">Nazwa użytkownika</label>
-              <div className="control has-icons-left has-icons-right">
+              <div className="control has-icons-left">
                 <input
-                  className="input is-success"
+                  className={`input ${
+                    errors.USERNAME || errors.ALL_FIELDS_FILLED
+                      ? "is-danger"
+                      : ""
+                  }`}
                   type="text"
-                  placeholder="Text input"
-                  value="bulma"
+                  placeholder="Nazwa użytkownika (widoczna publicznie)"
+                  name="username"
+                  value={credentials.username}
+                  onChange={handleChange}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-user"></i>
                 </span>
-                <span className="icon is-small is-right">
-                  <i className="fas fa-check"></i>
-                </span>
               </div>
-              <p className="help is-success">Nazwa jest dostępna</p>
+              {errors.USERNAME && (
+                <p className="help is-danger">{errors.USERNAME}</p>
+              )}
             </div>
             <div className="field">
               <label className="label">Email</label>
-              <div className="control has-icons-left has-icons-right">
+              <div className="control has-icons-left">
                 <input
-                  className="input is-danger"
+                  className={`input ${
+                    errors.EMAIL || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
+                  }`}
                   type="email"
+                  name="email"
                   placeholder="Twój adres email"
+                  value={credentials.email}
+                  onChange={handleChange}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-envelope"></i>
                 </span>
-                <span className="icon is-small is-right">
-                  <i className="fas fa-exclamation-triangle"></i>
-                </span>
               </div>
-              <p className="help is-danger">This email is invalid</p>
+              {errors.EMAIL && <p className="help is-danger">{errors.EMAIL}</p>}
             </div>
             <div className="field">
               <label className="label">Hasło</label>
-              <div className="control has-icons-left has-icons-right">
+              <div className="control has-icons-left">
                 <input
-                  className="input is-danger"
-                  type="email"
+                  className={`input ${
+                    errors.PASSWORD ||
+                    errors.SAME_PASSWORDS ||
+                    errors.ALL_FIELDS_FILLED
+                      ? "is-danger"
+                      : ""
+                  }`}
+                  type="password"
                   placeholder="Hasło do twojego konta"
+                  name="password"
+                  value={credentials.password}
+                  onChange={handleChange}
                 />
                 <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
-                <span className="icon is-small is-right">
-                  <i className="fas fa-exclamation-triangle"></i>
+                  <i className="fas fa-lock"></i>
                 </span>
               </div>
-              <p className="help is-danger">This email is invalid</p>
+              {errors.PASSWORD && (
+                <p className="help is-danger">{errors.PASSWORD}</p>
+              )}
+              {errors.SAME_PASSWORDS && (
+                <p className="help is-danger">{errors.SAME_PASSWORDS}</p>
+              )}
             </div>
             <div className="field">
               <label className="label">Powtórz hasło</label>
               <div className="control has-icons-left has-icons-right">
                 <input
-                  className="input is-danger"
-                  type="email"
+                  className={`input ${
+                    errors.PASSWORD ||
+                    errors.SAME_PASSWORDS ||
+                    errors.ALL_FIELDS_FILLED
+                      ? "is-danger"
+                      : ""
+                  }`}
+                  type="password"
                   placeholder="Powtórz hasło do konta"
+                  name="confirmPassword"
+                  value={credentials.confirmPassword}
+                  onChange={handleChange}
                 />
                 <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
-                <span className="icon is-small is-right">
-                  <i className="fas fa-exclamation-triangle"></i>
+                  <i className="fas fa-lock"></i>
                 </span>
               </div>
-              <p className="help is-danger">This email is invalid</p>
+              {errors.SAME_PASSWORDS && (
+                <p className="help is-danger">{errors.SAME_PASSWORDS}</p>
+              )}
             </div>
             <ReCAPTCHA
               sitekey={process.env.RECAPTCHA_SITE_KEY}
-              onChange={() => setRecaptcha(true)}
+              onChange={(value) => setRecaptcha(value)}
               className="margin-auto is-block mb-4"
             />
 

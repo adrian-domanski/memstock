@@ -57,10 +57,6 @@
       "model": "comment",
       "via": "user"
     },
-    "mem": {
-      "model": "mem",
-      "via": "user"
-    },
     "rank": {
       "type": "integer",
       "default": 0
@@ -75,6 +71,10 @@
       ],
       "plugin": "upload",
       "required": false
+    },
+    "mems": {
+      "collection": "mem",
+      "via": "user"
     }
   }
 }
