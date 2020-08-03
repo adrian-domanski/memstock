@@ -7,8 +7,6 @@ import Loader from "../Loader";
 const MemList: React.FC = () => {
   const { data, loading } = useQuery(getMemsQuery);
 
-  console.log(data);
-
   return (
     <>
       {!loading ? (

@@ -80,7 +80,31 @@ export const Button: React.FC<Props> = styled.button.attrs({
   }
 `;
 
-export const Input: React.FC<Props> = styled.input.attrs({
+export const StyledSelect: React.FC<Props> = styled.div`
+  &&& {
+    select {
+      background: ${({ theme }) => theme.colors.dark800};
+      border-color: ${({ theme }) => theme.colors.dark800};
+      color: ${({ theme }) => theme.colors.white500};
+
+      ::placeholder {
+        color: ${({ theme }) => theme.colors.grey700};
+      }
+
+      :hover {
+        border-color: #5a5a5a;
+      }
+    }
+
+    :not(.is-multiple):not(.is-loading)::after {
+      border-color: ${({ theme }) => theme.colors.primary};
+    }
+  }
+`;
+
+export const Input: React.FC<
+  Props & { type: string; placeholder: string }
+> = styled.input.attrs({
   className: "input",
 })`
   background-color: ${({ theme }) => theme.colors.dark500};
@@ -105,4 +129,21 @@ export const Input: React.FC<Props> = styled.input.attrs({
 export const StyledTitle: React.FC<Props> = styled.h2`
   color: ${({ theme }) => theme.colors.primary};
   font-size: 1.8rem;
+`;
+
+export const StyledTitleWithLine = styled.h2`
+  color: ${({ theme }) => theme.colors.white500};
+  position: relative;
+  padding-left: 0.8rem;
+
+  :before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background: ${({ theme }) => theme.colors.primary};
+  }
 `;

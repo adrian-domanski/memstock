@@ -1,66 +1,103 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../components/layout/Layout";
 import {
-  PageWrapper,
-  ContentHeader,
   ContentBody,
   ContentFooter,
   LogoSubText,
   Button,
 } from "../utils/styled/components/components";
 import { Logo } from "../utils/styled/components/Navbar";
-import styled from "styled-components";
-import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
+import {
+  CustomPageWrapper,
+  CustomContentHeader,
+  ExtendedLogoWrapper,
+  StyledForm,
+} from "../utils/styled/pages/authPages";
+import validator from "validator";
+import { useMutation } from "@apollo/react-hooks";
+import { loginMutation } from "../queries/userQueries";
+import { AuthContext } from "../context/authContext";
+import { withRouter, SingletonRouter } from "next/router";
+import Alert from "../components/Alert";
 
-const CustomPageWrapper = styled(PageWrapper)`
-  max-width: ${({ theme }) => theme.pageMaxWidth};
-  margin-left: auto;
-  margin-right: auto;
-`;
+interface Props {
+  router: SingletonRouter;
+}
 
-const CustomContentHeader = styled(ContentHeader)`
-  height: auto;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 2rem 0;
-`;
+const LoginPage: React.FC<Props> = ({ router }) => {
+  const { dispatch } = useContext(AuthContext);
+  const [login] = useMutation(loginMutation);
+  const [alert, setAlert] = useState({ type: "", msg: "" });
+  const [errors, setErrors] = useState({
+    EMAIL: "",
+    PASSWORD: "",
+    ALL_FIELDS_FILLED: "",
+  });
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
 
-const ExtendedLogoWrapper = styled.div`
-  text-align: center;
-`;
+  const handleChange = ({
+    target: { value, id },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setCredentials({ ...credentials, [id]: value });
+  };
 
-const StyledForm = styled.form`
-  &&& {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    max-width: 700px;
-    margin: 3rem auto 0 auto;
+  const handleValidate = () => {
+    let currentErrors = {
+      EMAIL: "",
+      PASSWORD: "",
+      ALL_FIELDS_FILLED: "",
+    };
 
-    label {
-      color: ${({ theme }) => theme.colors.grey600};
-      font-weight: 500;
-    }
-
-    input {
-      background: ${({ theme }) => theme.colors.dark800};
-      border-color: ${({ theme }) => theme.colors.dark800};
-      color: ${({ theme }) => theme.colors.white500};
-
-      ::placeholder {
-        color: ${({ theme }) => theme.colors.grey700};
+    if (!credentials.email || !credentials.password) {
+      currentErrors = {
+        ...currentErrors,
+        ALL_FIELDS_FILLED: "Proszę podać login i hasło",
+      };
+    } else {
+      if (!validator.isEmail(credentials.email)) {
+        currentErrors = {
+          ...currentErrors,
+          EMAIL: "Niepoprawny adres email",
+        };
       }
     }
-  }
-`;
 
-const Logowanie: React.FC = () => {
-  const [recaptcha, setRecaptcha] = useState(false);
+    setErrors(currentErrors);
 
-  const handleChange = (value) => {
-    console.log(value);
+    for (let p in currentErrors) {
+      if (currentErrors[p]) return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (handleValidate()) {
+      setAlert({ msg: "Proszę czekać", type: "warning" });
+      try {
+        const { data } = await login({
+          variables: {
+            identifier: credentials.email,
+            password: credentials.password,
+          },
+        });
+
+        dispatch({
+          type: "LOGIN_SUCCESS",
+          payload: { user: data.login.user, token: data.login.jwt },
+        });
+
+        setAlert({ msg: "Zostałeś zalogowany", type: "success" });
+        router.push("/");
+      } catch (err) {
+        setAlert({ msg: "Nieprawidłowy login i/lub hasło", type: "danger" });
+        dispatch({ type: "LOGIN_ERROR" });
+      }
+    }
   };
 
   return (
@@ -77,50 +114,68 @@ const Logowanie: React.FC = () => {
           </ExtendedLogoWrapper>
         </CustomContentHeader>
         <ContentBody>
-          <StyledForm action="submit">
+          <StyledForm onSubmit={handleSubmit} action="submit">
+            {errors.ALL_FIELDS_FILLED && (
+              <div className="notification is-danger is-light">
+                {errors.ALL_FIELDS_FILLED}
+              </div>
+            )}
+
+            <Alert
+              alert={alert}
+              clearAlert={() => setAlert({ msg: "", type: "" })}
+            />
+
             <div className="field">
-              <label className="label">Email</label>
-              <div className="control has-icons-left has-icons-right">
+              <label className="label" htmlFor="email">
+                Email
+              </label>
+              <div className="control has-icons-left">
                 <input
-                  className="input is-danger"
+                  className={`input ${
+                    errors.EMAIL || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
+                  }`}
                   type="email"
+                  id="email"
                   placeholder="Twój adres email"
+                  value={credentials.email}
+                  onChange={handleChange}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-envelope"></i>
                 </span>
-                <span className="icon is-small is-right">
-                  <i className="fas fa-exclamation-triangle"></i>
-                </span>
               </div>
-              <p className="help is-danger">This email is invalid</p>
+              {errors.EMAIL && <p className="help is-danger">{errors.EMAIL}</p>}
             </div>
-            <div className="field">
-              <label className="label">Hasło</label>
-              <div className="control has-icons-left has-icons-right">
+            <div className="field mb-5">
+              <label className="label" htmlFor="password">
+                Hasło
+              </label>
+              <div className="control has-icons-left">
                 <input
-                  className="input is-danger"
-                  type="email"
+                  className={`input ${
+                    errors.ALL_FIELDS_FILLED ? "is-danger" : ""
+                  }`}
+                  type="password"
                   placeholder="Hasło do twojego konta"
+                  id="password"
+                  value={credentials.password}
+                  onChange={handleChange}
                 />
                 <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
-                <span className="icon is-small is-right">
-                  <i className="fas fa-exclamation-triangle"></i>
+                  <i className="fas fa-lock"></i>
                 </span>
               </div>
-              <p className="help is-danger">This email is invalid</p>
             </div>
 
-            <Button className="is-primary light margin-auto mb-5 mt-3 px-6">
+            <Button className="is-primary light margin-auto mb-5 px-6">
               Zaloguj
             </Button>
           </StyledForm>
         </ContentBody>
         <ContentFooter className="has-text-centered">
           Nie masz jeszcze konta?{" "}
-          <Link href="/rejestracja">
+          <Link href="/logowanie">
             <a className="has-text-primary has-text-weight-bold">
               Zarejestruj się
             </a>
@@ -131,4 +186,4 @@ const Logowanie: React.FC = () => {
   );
 };
 
-export default Logowanie;
+export default withRouter(LoginPage);

@@ -14,17 +14,11 @@ export default withApollo(
     const httpLink = createUploadLink({
       uri: dev
         ? "http://localhost:1337/graphql"
-        : "http://api.dev.adrian-domanski.pl/graphql",
+        : "http://localhost:1337/graphql",
     });
 
     const authLink = setContext((_, { headers }) => {
-      let token = "";
-
-      if (isServer()) {
-        token = cookie(ctx).token;
-      } else {
-        token = getCookie("token");
-      }
+      let token = isServer() ? cookie(ctx).token : getCookie("token");
 
       return {
         headers: {

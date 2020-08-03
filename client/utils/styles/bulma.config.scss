@@ -29,3 +29,8 @@ $radius: 0;
   border-color: $primary !important;
   box-shadow: none !important;
 }
+
+.radio:hover,
+.checkbox:hover {
+  color: #909090 !important;
+}

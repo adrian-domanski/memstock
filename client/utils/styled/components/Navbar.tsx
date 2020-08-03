@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { DefaultTheme } from "styled-components";
 import { Props } from "./components";
 
 export const Logo: React.FC<{ className?: string }> = styled.h1`
@@ -31,45 +31,46 @@ export const StyledNavbar: React.FC<Props> = styled.div`
   margin: 0 auto;
 
   ${({ theme }) => theme.media.tabletAndBelow} {
-      .navbar-burger {
-        height: unset;
-        color: ${({ theme }) => theme.colors.primary};
-        &.is-active span:nth-child(3) {
-          transform: translateY(-7px) rotate(-45deg);
+    .navbar-burger {
+      height: unset;
+      color: ${({ theme }) => theme.colors.primary};
+      &.is-active span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+      span {
+        height: 3px;
+        width: 20px;
+        left: calc(50% - 9px);
+        :nth-child(1) {
+          top: calc(50% - 7px);
         }
-        span {
-          height: 3px;
-          width: 20px;
-          left: calc(50% - 9px);
-          :nth-child(1) {
-            top: calc(50% - 7px);
-          }
-          :nth-child(3) {
-            top: calc(50% + 5px);
-          }
+        :nth-child(3) {
+          top: calc(50% + 5px);
         }
       }
+    }
 
-  @media screen and (max-width: 1023px) {
-    .navbar-menu {
-      .navbar-item.has-dropdown.is-hoverable,
-      .navbar-dropdown {
+    @media screen and (max-width: 1023px) {
+      .navbar-menu {
+        .navbar-item.has-dropdown.is-hoverable,
+        .navbar-dropdown {
+          padding: 0;
+
+          .navbar-link {
+            display: none;
+          }
+        }
+        background-color: ${({ theme }) => theme.colors.dark800};
+        text-align: center;
         padding: 0;
-
-        .navbar-link {
-          display: none;
-        }
-      }
-      background-color: ${({ theme }) => theme.colors.dark800};
-      text-align: center;
-      padding: 0;
-      .navbar-item {
-        color: #fff;
-        font-size: 1rem;
-        padding: 1.2rem 1rem;
-        :hover {
+        .navbar-item {
           color: #fff;
-          background-color: unset;
+          font-size: 1rem;
+          padding: 1.2rem 1rem;
+          :hover {
+            color: #fff;
+            background-color: unset;
+          }
         }
       }
     }
@@ -84,7 +85,9 @@ export const SecondaryNavbar: React.FC<Props> = styled.div`
   background: ${({ theme }) => theme.colors.dark600};
 `;
 
-export const NavbarLink: React.FC<Props> = styled.a.attrs({
+export const NavbarLink: React.FC<
+  Props & { onClick?: Function }
+> = styled.a.attrs({
   className: "navbar-item",
 })`
   &&& {
@@ -130,10 +133,11 @@ export const NavbarLink: React.FC<Props> = styled.a.attrs({
   }
 `;
 
-export const NavbarDropdown: React.FC<Props> = styled.div`
+export const NavbarDropdown: React.FC<
+  Props & { reverse?: boolean }
+> = styled.div`
   &&& {
     font-size: 1rem;
-    color: ${({ theme }) => theme.colors.primary};
 
     :hover {
       color: ${({ theme }) => theme.colors.primary};
@@ -164,11 +168,18 @@ export const NavbarDropdown: React.FC<Props> = styled.div`
 
     .navbar-link {
       font-size: 1rem;
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme, reverse }: any) =>
+        reverse ? theme.colors.accent : theme.colors.primary};
       background-color: unset;
 
       :after {
-        border-color: ${({ theme }) => theme.colors.accent};
+        border-color: ${({
+          theme,
+          reverse,
+        }: {
+          theme: DefaultTheme;
+          reverse: boolean;
+        }) => (reverse ? theme.colors.primary : theme.colors.accent)};
       }
 
       :focus {

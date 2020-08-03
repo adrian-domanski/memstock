@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Layout from "../components/layout/Layout";
 import MemList from "../components/Mem/MemList";
 import TopMems from "../components/Mem/TopMems";

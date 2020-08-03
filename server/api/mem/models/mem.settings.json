@@ -41,9 +41,17 @@
       "via": "mem"
     },
     "user": {
-      "via": "mems",
       "plugin": "users-permissions",
-      "model": "user"
+      "model": "user",
+      "via": "mems"
+    },
+    "isPublic": {
+      "type": "boolean",
+      "default": false
+    },
+    "isReported": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

@@ -53,10 +53,6 @@
       "plugin": "users-permissions",
       "configurable": false
     },
-    "comment": {
-      "model": "comment",
-      "via": "user"
-    },
     "rank": {
       "type": "integer",
       "default": 0
@@ -73,8 +69,12 @@
       "required": false
     },
     "mems": {
-      "collection": "mem",
-      "via": "user"
+      "via": "user",
+      "collection": "mem"
+    },
+    "comments": {
+      "via": "user",
+      "collection": "comment"
     }
   }
 }

@@ -10,9 +10,9 @@
   },
   "attributes": {
     "user": {
-      "via": "comment",
       "plugin": "users-permissions",
-      "model": "user"
+      "model": "user",
+      "via": "comments"
     },
     "content": {
       "type": "richtext",

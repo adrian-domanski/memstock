@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Layout from "../components/layout/Layout";
 import {
   ContentBody,
@@ -14,18 +14,23 @@ import {
   CustomContentHeader,
   ExtendedLogoWrapper,
   StyledForm,
-} from "../utils/styled/pages/rejestracja";
+} from "../utils/styled/pages/authPages";
 import validator from "validator";
-import { error } from "console";
+import { useMutation } from "@apollo/react-hooks";
+import { registerMutation } from "../queries/userQueries";
+import { AuthContext } from "../context/authContext";
+import Alert from "../components/Alert";
+import { withRouter } from "next/router";
 
-const rejestracja: React.FC = () => {
+interface Props {
+  router: SingletonRouter;
+}
+
+const RegisterPage: React.FC<Props> = ({ router }) => {
+  const { dispatch } = useContext(AuthContext);
+  const [alert, setAlert] = useState({ type: "", msg: "" });
+  const [register] = useMutation(registerMutation);
   const [recaptcha, setRecaptcha] = useState(false);
-  const [alerts, setAlerts] = useState<
-    {
-      msg: string;
-      type: "success" | "danger" | "";
-    }[]
-  >([]);
   const [errors, setErrors] = useState({
     USERNAME: "",
     EMAIL: "",
@@ -44,7 +49,6 @@ const rejestracja: React.FC = () => {
     target: { value, name },
   }: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials({ ...credentials, [name]: value });
-    console.log(credentials);
   };
 
   const handleValidate = () => {
@@ -70,7 +74,6 @@ const rejestracja: React.FC = () => {
       };
     } else {
       if (credentials.username.length < 3 || credentials.username.length > 16) {
-        console.log(true);
         currentErrors = {
           ...currentErrors,
           USERNAME: "Nazwa użytkownika musi zawierać od 3 do 16 znaków",
@@ -111,10 +114,29 @@ const rejestracja: React.FC = () => {
     return true;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!handleValidate()) {
-      //  Create user
+    if (handleValidate()) {
+      setAlert({ msg: "Proszę czekać", type: "warning" });
+      try {
+        const { data } = await register({
+          variables: {
+            username: credentials.username,
+            email: credentials.email,
+            password: credentials.password,
+          },
+        });
+
+        dispatch({
+          type: "REGISTER_SUCCESS",
+          payload: { user: data.register.user, token: data.register.jwt },
+        });
+        setAlert({ msg: "Konto zostało utworzone", type: "success" });
+        router.push("/");
+      } catch (err) {
+        setAlert({ msg: "Nieprawidłowy login i/lub hasło", type: "danger" });
+        dispatch({ type: "REGISTER_ERROR" });
+      }
     }
   };
 
@@ -138,8 +160,15 @@ const rejestracja: React.FC = () => {
                 {errors.ALL_FIELDS_FILLED}
               </div>
             )}
+
+            <Alert
+              alert={alert}
+              clearAlert={() => setAlert({ msg: "", type: "" })}
+            />
             <div className="field">
-              <label className="label">Nazwa użytkownika</label>
+              <label className="label" htmlFor="username">
+                Nazwa użytkownika
+              </label>
               <div className="control has-icons-left">
                 <input
                   className={`input ${
@@ -149,7 +178,7 @@ const rejestracja: React.FC = () => {
                   }`}
                   type="text"
                   placeholder="Nazwa użytkownika (widoczna publicznie)"
-                  name="username"
+                  id="username"
                   value={credentials.username}
                   onChange={handleChange}
                 />
@@ -162,14 +191,16 @@ const rejestracja: React.FC = () => {
               )}
             </div>
             <div className="field">
-              <label className="label">Email</label>
+              <label className="label" htmlFor="email">
+                Email
+              </label>
               <div className="control has-icons-left">
                 <input
                   className={`input ${
                     errors.EMAIL || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
                   }`}
                   type="email"
-                  name="email"
+                  id="email"
                   placeholder="Twój adres email"
                   value={credentials.email}
                   onChange={handleChange}
@@ -181,7 +212,9 @@ const rejestracja: React.FC = () => {
               {errors.EMAIL && <p className="help is-danger">{errors.EMAIL}</p>}
             </div>
             <div className="field">
-              <label className="label">Hasło</label>
+              <label className="label" htmlFor="password">
+                Hasło
+              </label>
               <div className="control has-icons-left">
                 <input
                   className={`input ${
@@ -193,7 +226,7 @@ const rejestracja: React.FC = () => {
                   }`}
                   type="password"
                   placeholder="Hasło do twojego konta"
-                  name="password"
+                  id="password"
                   value={credentials.password}
                   onChange={handleChange}
                 />
@@ -209,7 +242,9 @@ const rejestracja: React.FC = () => {
               )}
             </div>
             <div className="field">
-              <label className="label">Powtórz hasło</label>
+              <label className="label" htmlFor="confirmPassword">
+                Powtórz hasło
+              </label>
               <div className="control has-icons-left has-icons-right">
                 <input
                   className={`input ${
@@ -221,7 +256,7 @@ const rejestracja: React.FC = () => {
                   }`}
                   type="password"
                   placeholder="Powtórz hasło do konta"
-                  name="confirmPassword"
+                  id="confirmPassword"
                   value={credentials.confirmPassword}
                   onChange={handleChange}
                 />
@@ -255,4 +290,4 @@ const rejestracja: React.FC = () => {
   );
 };
 
-export default rejestracja;
+export default withRouter(RegisterPage);

@@ -1,5 +1,34 @@
 import gql from "graphql-tag";
 
+export const createMemMutation = gql`
+  mutation($title: String!, $categories: [ID]!, $image: ID!) {
+    createMem(
+      input: { data: { title: $title, categories: $categories, image: $image } }
+    ) {
+      mem {
+        id
+      }
+    }
+  }
+`;
+
+export const uploadFileMutation = gql`
+  mutation($file: Upload!) {
+    upload(file: $file) {
+      id
+    }
+  }
+`;
+
+export const getCategoriesQuery = gql`
+  query {
+    categories {
+      name
+      id
+    }
+  }
+`;
+
 export const getMemsQuery = gql`
   query {
     mems {
