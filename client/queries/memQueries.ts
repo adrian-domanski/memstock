@@ -30,8 +30,8 @@ export const getCategoriesQuery = gql`
 `;
 
 export const getMemsQuery = gql`
-  query {
-    mems {
+  query($limit: Int, $start: Int) {
+    mems(limit: $limit, start: $start) {
       id
       title
       categories {

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
-import imageCompression from "browser-image-compression";
+import Compressor from "compressorjs";
 import { isFileImage } from "../utils/helpers";
 
 export const StyledWrapper: React.FC<{ hasImage: boolean }> = styled.div`
@@ -23,12 +23,31 @@ export const StyledWrapper: React.FC<{ hasImage: boolean }> = styled.div`
   }
 `;
 
+const IconWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.4rem;
+  align-items: center;
+
+  i {
+    color: ${({ theme }) => theme.colors.primary};
+    font-size: 3rem;
+    margin-top: 2rem;
+  }
+`;
+
 interface Props {
   setFile: React.Dispatch<React.SetStateAction<File | Blob>>;
+  previewURL: string;
+  setPreviewURL: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const MyDropzone: React.FC<Props> = ({ setFile }) => {
-  const [previewURL, setPreviewURL] = useState("");
+const MyDropzone: React.FC<Props> = ({
+  setFile,
+  previewURL,
+  setPreviewURL,
+}) => {
   const [alert, setAlert] = useState({ msg: "", type: "" });
 
   const onDrop = useCallback(async (acceptedFiles) => {
@@ -40,12 +59,14 @@ const MyDropzone: React.FC<Props> = ({ setFile }) => {
     }
 
     try {
-      const compressedFile = await imageCompression(file, {
-        maxSizeMB: 0.001,
-        useWebWorker: true,
+      new Compressor(file, {
+        maxWidth: 800,
+        quality: 0.5,
+        success(result) {
+          setPreviewURL(URL.createObjectURL(result));
+          setFile(result);
+        },
       });
-      setPreviewURL(URL.createObjectURL(compressedFile));
-      setFile(compressedFile);
     } catch (err) {
       console.log(err);
     }
@@ -61,7 +82,10 @@ const MyDropzone: React.FC<Props> = ({ setFile }) => {
       ) : previewURL ? (
         <img src={previewURL} alt="Podgląd zdjęcia" />
       ) : (
-        <p>Przeciągnij plik lub kliknij tutaj, aby go wybrać</p>
+        <IconWrapper>
+          <p>Przeciągnij zdjęcie, lub kliknij tutaj</p>
+          <i className="fas fa-upload"></i>
+        </IconWrapper>
       )}
     </StyledWrapper>
   );

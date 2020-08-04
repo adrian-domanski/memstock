@@ -18,6 +18,7 @@ import {
   uploadFileMutation,
   createMemMutation,
 } from "../queries/memQueries";
+import Link from "next/link";
 
 const InlineButton = styled.button`
   &&& {
@@ -46,6 +47,8 @@ const AddMem = () => {
   const { data, loading } = useQuery(getCategoriesQuery);
   const [alert, setAlert] = useState({ msg: "", type: "" });
   const [title, setTitle] = useState("");
+  const [previewURL, setPreviewURL] = useState("");
+  const [uploadedLink, setUploadedLink] = useState("");
   const [categories, setCategories] = useState<string[]>([""]);
   const [file, setFile] = useState<File | Blob>(null);
 
@@ -54,7 +57,7 @@ const AddMem = () => {
 
     if (!title || !file) {
       return setAlert({
-        msg: "Proszę wypełnić wszystkie pola i wybać minimum 1 kategorię",
+        msg: "Proszę wypełnić wszystkie pola i wybrać minimum 1 kategorię",
         type: "danger",
       });
     }
@@ -62,20 +65,29 @@ const AddMem = () => {
     for (let value of categories) {
       if (!value)
         return setAlert({
-          msg: "Proszę wypełnić wszystkie pola i wybać minimum 1 kategorię",
+          msg: "Proszę wypełnić wszystkie pola i wybrać minimum 1 kategorię",
           type: "danger",
         });
     }
 
-    // Upload image
     try {
-      const { data } = await upload({ variables: { file } });
-      const uploadedImgID = data.upload.id;
-      const res = await createMem({
+      setAlert({ msg: "Proszę czekać...", type: "warning" });
+      const { data: uploadFileData } = await upload({ variables: { file } });
+      const uploadedImgID = uploadFileData.upload.id;
+      const { data: createMemData } = await createMem({
         variables: { title, categories, image: uploadedImgID },
       });
+      setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
+      setAlert({
+        msg:
+          "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
+        type: "success",
+      });
     } catch (err) {
-      console.log(err);
+      setAlert({
+        msg: "Wystąpił błąd, podczas dodawania zdjęcia",
+        type: "warning",
+      });
     }
   };
 
@@ -96,6 +108,16 @@ const AddMem = () => {
     }
   };
 
+  const clearFields = (e) => {
+    e.preventDefault();
+    setTitle("");
+    setCategories([""]);
+    setAlert({ msg: "", type: "" });
+    setFile(null);
+    setPreviewURL("");
+    setUploadedLink("");
+  };
+
   return (
     <Layout>
       <PageWrapper>
@@ -107,7 +129,11 @@ const AddMem = () => {
         <ContentBody>
           <div className="section columns">
             <div className="column is-6">
-              <MyDropzone setFile={setFile} />
+              <MyDropzone
+                previewURL={previewURL}
+                setPreviewURL={setPreviewURL}
+                setFile={setFile}
+              />
             </div>
             <div className="column is-6">
               <StyledForm
@@ -120,77 +146,108 @@ const AddMem = () => {
                   clearAlert={() => setAlert({ msg: "", type: "" })}
                 />
 
-                <div className="field">
-                  <label className="label" htmlFor="title">
-                    Tytuł mema
-                  </label>
-                  <div className="control has-icons-left">
-                    <input
-                      className="input"
-                      type="text"
-                      id="title"
-                      placeholder="Tytuł mema"
-                      value={title}
-                      onChange={handleChange}
-                    />
-                    <span className="icon is-small is-left">
-                      <i className="fas fa-envelope"></i>
-                    </span>
+                {uploadedLink && (
+                  <div className="notification is-info is-light">
+                    <button
+                      className="delete"
+                      onClick={() => setUploadedLink("")}
+                    ></button>
+                    <p>
+                      Link do twojego mema:&nbsp;
+                      <Link href={uploadedLink}>
+                        <a className="has-text-weight-bold">{`${process.env.CLIENT_URL}${uploadedLink}`}</a>
+                      </Link>
+                    </p>
                   </div>
-                </div>
-                <div className="field mb-5">
-                  <label className="label" htmlFor="password">
-                    Kategorie
-                  </label>
+                )}
 
-                  {categories.map((categorySelect, index) => (
-                    <StyledSelect
-                      key={index}
-                      className="select is-fullwidth mb-2"
-                    >
-                      <select
-                        value={categories[index]}
-                        name="select"
-                        onChange={(e) => handleCategoryChange(e, index)}
-                      >
-                        <option disabled value="">
-                          Wybierz kategorię
-                        </option>
-                        {!loading
-                          ? data.categories.map((category) => (
-                              <option key={category.id} value={category.id}>
-                                {category.name}
-                              </option>
-                            ))
-                          : null}
-                      </select>
-                    </StyledSelect>
-                  ))}
-                  {categories.length < 3 && (
-                    <InlineButton
-                      className="button has-text-primary"
-                      onClick={() => setCategories([...categories, ""])}
-                    >
-                      Dodaj kategorię (maksymalnie 3)
-                    </InlineButton>
-                  )}
-                  {categories.length > 1 && (
-                    <InlineButton
-                      className="button has-text-primary"
-                      onClick={() =>
-                        setCategories(
-                          categories.slice(0, categories.length - 1)
-                        )
-                      }
-                    >
-                      Usuń kategorię
-                    </InlineButton>
-                  )}
-                </div>
+                {!uploadedLink && (
+                  <>
+                    <div className="field">
+                      <label className="label" htmlFor="title">
+                        Tytuł mema
+                      </label>
+                      <div className="control has-icons-left">
+                        <input
+                          className="input"
+                          type="text"
+                          id="title"
+                          placeholder="Tytuł mema"
+                          value={title}
+                          onChange={handleChange}
+                        />
+                        <span className="icon is-small is-left">
+                          <i className="fas fa-envelope"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="field mb-5">
+                      <label className="label" htmlFor="password">
+                        Kategorie
+                      </label>
 
-                <Button className="is-primary light mb-5 px-6" type="submit">
-                  Dodaj mema
-                </Button>
+                      {categories.map((_, index) => (
+                        <StyledSelect
+                          key={index}
+                          className="select is-fullwidth mb-2"
+                        >
+                          <select
+                            value={categories[index]}
+                            name="select"
+                            onChange={(e) => handleCategoryChange(e, index)}
+                          >
+                            <option disabled value="">
+                              Wybierz kategorię
+                            </option>
+                            {!loading
+                              ? data.categories.map((category) => (
+                                  <option key={category.id} value={category.id}>
+                                    {category.name}
+                                  </option>
+                                ))
+                              : null}
+                          </select>
+                        </StyledSelect>
+                      ))}
+                      {categories.length < 3 && (
+                        <InlineButton
+                          className="button has-text-primary"
+                          type="button"
+                          onClick={() => setCategories([...categories, ""])}
+                        >
+                          Dodaj kategorię (maksymalnie 3)
+                        </InlineButton>
+                      )}
+                      {categories.length > 1 && (
+                        <InlineButton
+                          className="button has-text-primary"
+                          type="button"
+                          onClick={() =>
+                            setCategories(
+                              categories.slice(0, categories.length - 1)
+                            )
+                          }
+                        >
+                          Usuń kategorię
+                        </InlineButton>
+                      )}
+                    </div>
+                  </>
+                )}
+
+                {uploadedLink ? (
+                  <Button
+                    className="is-primary light mb-5 px-6"
+                    onClick={clearFields}
+                    type="button"
+                  >
+                    Dodaj następnego mema
+                  </Button>
+                ) : (
+                  <Button className="is-primary light mb-5 px-6" type="submit">
+                    Dodaj mema
+                  </Button>
+                )}
               </StyledForm>
             </div>
           </div>

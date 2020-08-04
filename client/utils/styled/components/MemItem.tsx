@@ -10,11 +10,16 @@ export const StyledMemItem = styled.article`
 
 export const MemItemHeader = styled.header`
   background: ${({ theme }) => theme.colors.dark700};
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 80px;
+  padding: 0.2rem 2rem;
+
+  .content-wrapper {
+    max-width: 800px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    align-items: center;
+    height: 80px;
+  }
 
   .options {
     cursor: pointer;
@@ -40,6 +45,7 @@ export const MemItemHeader = styled.header`
 
   .avatar {
     display: flex;
+
     img {
       border-radius: 50%;
       width: 50px;
@@ -61,8 +67,22 @@ export const MemItemHeader = styled.header`
 `;
 
 export const MemItemBody = styled.div`
-  padding: 1rem;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
   background: ${({ theme }) => theme.colors.dark600};
+
+  .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  figure {
+    img {
+      width: 100%;
+      display: block;
+    }
+  }
 
   .mem-title {
     color: ${({ theme }) => theme.colors.white500};
@@ -83,7 +103,11 @@ export const MemItemBody = styled.div`
 `;
 
 export const MemItemFooter = styled.footer`
-  padding: 1rem;
+  .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  padding: 1rem 2rem;
   background: ${({ theme }) => theme.colors.dark700};
 `;
 

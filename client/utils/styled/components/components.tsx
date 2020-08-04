@@ -36,9 +36,9 @@ export const PageWrapper: React.FC<Props> = styled.section.attrs({
   className: "section",
 })``;
 
-export const Button: React.FC<Props> = styled.button.attrs({
-  className: "button",
-})`
+export const Button = styled.button.attrs(({ className }) => ({
+  className: `button ${className}`,
+}))`
   &&& {
     background-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.dark700};
@@ -51,8 +51,7 @@ export const Button: React.FC<Props> = styled.button.attrs({
     overflow: hidden;
     font-size: 1.1rem;
     letter-spacing: 1px;
-
-    :hover {
+    imfdgpp :hover {
       background: ${({ theme }) => theme.colors.primaryDarker};
       color: black;
     }

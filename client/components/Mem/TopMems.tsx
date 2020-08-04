@@ -59,7 +59,9 @@ const TopMems: React.FC = () => {
       </PopularSectionHeader>
       <PopularSectionBody>
         {!loading ? (
-          data.mems.map((mem) => <MemTile key={mem.id} mem={mem} />)
+          data.mems.map(
+            (mem) => mem.image && <MemTile key={mem.id} mem={mem} />
+          )
         ) : (
           <Loader />
         )}
