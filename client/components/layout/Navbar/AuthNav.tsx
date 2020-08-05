@@ -6,29 +6,29 @@ import {
   NavbarLink,
 } from "../../../utils/styled/components/Navbar";
 
+const MyProfile = styled.figure`
+  display: flex;
+  align-items: center;
+  img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    max-height: unset;
+  }
+
+  figcaption {
+    color: ${({ theme }) => theme.colors.accent};
+  }
+`;
+
 const AuthNav: React.FC = () => {
   const {
     ctx: { user },
     dispatch,
   } = useContext(AuthContext);
-
-  const MyProfile = styled.figure`
-    display: flex;
-    align-items: center;
-    img {
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: block;
-      object-fit: cover;
-      object-position: center;
-      max-height: unset;
-    }
-
-    figcaption {
-      color: ${({ theme }) => theme.colors.accent};
-    }
-  `;
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT_SUCCESS" });

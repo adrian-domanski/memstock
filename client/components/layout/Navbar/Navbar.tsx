@@ -13,6 +13,7 @@ import Link from "next/link";
 import { withRouter, SingletonRouter } from "next/router";
 import { AuthContext } from "../../../context/authContext";
 import AuthNav from "./AuthNav";
+import { isPageAdmin } from "../../../utils/helpers";
 
 interface Props {
   router: SingletonRouter;
@@ -20,7 +21,7 @@ interface Props {
 
 const Navbar: React.FC<Props> = ({ router }) => {
   const {
-    ctx: { isAuth },
+    ctx: { isAuth, user },
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -115,19 +116,23 @@ const Navbar: React.FC<Props> = ({ router }) => {
                   </Link>
                 </div>
               </NavbarDropdown>
-              <NavbarDropdown className="navbar-item has-dropdown is-hoverable">
-                <a className="navbar-link">More</a>
+              {isAuth && isPageAdmin(user.role) && (
+                <NavbarDropdown className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link">More</a>
 
-                <div className="navbar-dropdown">
-                  <NavbarLink className="navbar-item">About</NavbarLink>
-                  <NavbarLink className="navbar-item">Jobs</NavbarLink>
-                  <NavbarLink className="navbar-item">Contact</NavbarLink>
-                  <hr className="navbar-divider" />
-                  <NavbarLink className="navbar-item">
-                    Report an issue
-                  </NavbarLink>
-                </div>
-              </NavbarDropdown>
+                  <div className="navbar-dropdown">
+                    <Link href="/cms/poczekalnia">
+                      <NavbarLink className="navbar-item">
+                        Poczekalnia
+                      </NavbarLink>
+                    </Link>
+                    <hr className="navbar-divider" />
+                    <NavbarLink className="navbar-item">
+                      Report an issue
+                    </NavbarLink>
+                  </div>
+                </NavbarDropdown>
+              )}
             </div>
             <div className="navbar-item is-hidden-desktop px-0 is-flex">
               {isAuth ? (

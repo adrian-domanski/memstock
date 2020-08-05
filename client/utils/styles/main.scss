@@ -41,3 +41,30 @@ body::-webkit-scrollbar-thumb {
 .margin-auto {
   margin: auto;
 }
+
+// Button link
+.button-link {
+  font-weight: 400;
+  color: $link;
+  background-color: transparent;
+  border-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    color: $link-hover;
+    text-decoration: none;
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  &:focus {
+    text-decoration: underline;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  &.button-text {
+    padding: 0;
+    height: unset;
+  }
+}

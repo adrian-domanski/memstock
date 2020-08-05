@@ -75,6 +75,7 @@ export const MemItemBody = styled.div`
   .content-wrapper {
     max-width: 800px;
     margin: 0 auto;
+    width: 100%;
   }
 
   figure {

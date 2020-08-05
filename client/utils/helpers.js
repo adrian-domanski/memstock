@@ -12,3 +12,11 @@ export const isFileImage = (file) => {
 
   return file && acceptedImageTypes.includes(file["type"]);
 };
+
+export const isPageAdmin = (role) => {
+  try {
+    if (role.name === "PageAdmin") return true;
+  } catch {
+    return false;
+  }
+};

@@ -12,6 +12,16 @@ export const createMemMutation = gql`
   }
 `;
 
+export const deleteMemMutation = gql`
+  mutation($id: ID!) {
+    deleteMem(input: { where: { id: $id } }) {
+      mem {
+        id
+      }
+    }
+  }
+`;
+
 export const uploadFileMutation = gql`
   mutation($file: Upload!) {
     upload(file: $file) {
@@ -29,9 +39,19 @@ export const getCategoriesQuery = gql`
   }
 `;
 
+export const updateMemMutation = gql`
+  mutation($input: updateMemInput!) {
+    updateMem(input: $input) {
+      mem {
+        id
+      }
+    }
+  }
+`;
+
 export const getMemsQuery = gql`
-  query($limit: Int, $start: Int) {
-    mems(limit: $limit, start: $start) {
+  query($limit: Int, $start: Int, $where: JSON, $sort: String) {
+    mems(limit: $limit, start: $start, where: $where, sort: $sort) {
       id
       title
       categories {

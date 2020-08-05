@@ -62,6 +62,7 @@ const MyDropzone: React.FC<Props> = ({
       new Compressor(file, {
         maxWidth: 800,
         quality: 0.5,
+        mimeType: "image/jpeg",
         success(result) {
           setPreviewURL(URL.createObjectURL(result));
           setFile(result);

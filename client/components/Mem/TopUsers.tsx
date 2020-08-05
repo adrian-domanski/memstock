@@ -9,6 +9,7 @@ import {
 import { useQuery } from "@apollo/react-hooks";
 import { getTopUsersQuery } from "../../queries/userQueries";
 import Loader from "../Loader";
+import Link from "next/link";
 
 const StyledPopularSection = styled.article`
   :not(:last-child) {
@@ -44,6 +45,15 @@ const RankingList = styled.ul`
 const RankingListItem = styled.li`
   font-size: 1.2rem;
 
+  a {
+    color: ${({ theme }) => theme.colors.accent};
+    transition: color 0.2s ease-in;
+
+    :hover {
+      color: #28908d;
+    }
+  }
+
   figure {
     display: flex;
     align-items: center;
@@ -73,19 +83,23 @@ const TopUsers: React.FC = () => {
           <RankingList>
             {data.users.map(({ username, rank, id, avatar }) => (
               <RankingListItem key={id}>
-                <figure>
-                  <img
-                    src={
-                      avatar
-                        ? `${process.env.SERVER_URL}${avatar.url}`
-                        : `/img/avatar-placeholder.jpg`
-                    }
-                    alt={`Zdjęcie profilowe użytkownika ${username}`}
-                  />
-                  <figcaption>
-                    {username} ({rank} pkt)
-                  </figcaption>
-                </figure>
+                <Link href="/uzytkownik/[user_id]" as={`/uzytkownik/${id}`}>
+                  <a>
+                    <figure>
+                      <img
+                        src={
+                          avatar
+                            ? `${process.env.SERVER_URL}${avatar.url}`
+                            : `/img/avatar-placeholder.jpg`
+                        }
+                        alt={`Zdjęcie profilowe użytkownika ${username}`}
+                      />
+                      <figcaption>
+                        {username} ({rank} pkt)
+                      </figcaption>
+                    </figure>
+                  </a>
+                </Link>
               </RankingListItem>
             ))}
           </RankingList>

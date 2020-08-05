@@ -29,10 +29,17 @@ module.exports = {
 
     const [mem] = await strapi.services.mem.find({
       id: ctx.params.id,
-      "user.id": ctx.state.user.id,
     });
 
-    if (!mem) {
+    if (
+      ctx.request.body.isPublic === true &&
+      ctx.state.user.role.name !== "PageAdmin"
+    ) {
+      return ctx.throw(401, "Access denied");
+    } else if (
+      mem.user.id !== ctx.state.user.id &&
+      ctx.state.user.role.name !== "PageAdmin"
+    ) {
       return ctx.throw(401, "Access denied");
     }
 
@@ -56,14 +63,23 @@ module.exports = {
 
     const [mem] = await strapi.services.mem.find({
       id: ctx.params.id,
-      "user.id": ctx.state.user.id,
     });
 
-    if (!mem) {
+    if (
+      mem.user.id !== ctx.state.user.id &&
+      ctx.state.user.role.name !== "PageAdmin"
+    ) {
       return ctx.throw(401, "Access denied");
     }
 
+    // Delete mem
     entity = await strapi.services.mem.delete({ id }, ctx.request.body);
+
+    // Delete image
+    const file = await strapi.plugins["upload"].services.upload.fetch({
+      id: mem.image.id,
+    });
+    await strapi.plugins["upload"].services.upload.remove(file);
 
     return sanitizeEntity(entity, { model: strapi.models.mem });
   },

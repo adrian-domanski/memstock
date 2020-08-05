@@ -13,6 +13,7 @@ declare module "styled-components" {
       success: "#48C774";
       primaryDarker: "#ad8108";
       accent: "#41B4B0";
+      accentDarker: "#28908d";
       danger: "#FF3860";
       dark800: "#252525";
       dark700: "#2B2B2B";

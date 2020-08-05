@@ -1,5 +1,30 @@
 import gql from "graphql-tag";
 
+export const getUserDetailsQuery = gql`
+  query($id: ID!) {
+    user(id: $id) {
+      username
+      avatar {
+        url
+      }
+      rank
+      mems(limit: 10, sort: "createdAt:DESC") {
+        id
+        title
+        categories {
+          id
+          name
+        }
+        image {
+          url
+        }
+        likes
+        dislikes
+      }
+    }
+  }
+`;
+
 export const getTopUsersQuery = gql`
   query {
     users(sort: "rank:DESC", limit: 5) {
@@ -26,6 +51,9 @@ export const registerMutation = gql`
           url
           formats
         }
+        role {
+          name
+        }
       }
       jwt
     }
@@ -43,6 +71,9 @@ export const loginMutation = gql`
           url
           formats
         }
+        role {
+          name
+        }
       }
       jwt
     }
@@ -58,6 +89,9 @@ export const getUserFromTokenQuery = gql`
       avatar {
         url
         formats
+      }
+      role {
+        name
       }
     }
   }

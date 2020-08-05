@@ -1,52 +1,80 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { useMutation } from "@apollo/react-hooks";
+import { updateMemMutation, deleteMemMutation } from "../../queries/memQueries";
 
 const FlexWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 
-const MemLikes = styled.div`
+const LikeButton = styled.button<{ memCheckActions?: boolean }>`
   &&& {
-    display: grid;
+    grid-area: like;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: ${({ theme }) => theme.colors.white500};
+    background: #24964c;
+    height: 100%;
+    width: ${({ memCheckActions }) => (memCheckActions ? "unset" : "40px")};
+    display: block;
+    padding: ${({ memCheckActions }) =>
+      memCheckActions ? "0.5rem 2rem" : "0"};
+    border: 0;
+    transition: background-color 0.2s ease;
+
+    :hover {
+      background-color: #2d864c;
+    }
+
+    :active {
+      background-color: #18793a;
+    }
+
+    :focus {
+      box-shadow: none;
+    }
+  }
+`;
+
+const DislikeButton = styled.button<{ memCheckActions?: boolean }>`
+  &&& {
+    grid-area: dislike;
+    background: ${({ theme }) => theme.colors.danger};
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: ${({ theme }) => theme.colors.white500};
+    height: 100%;
+    width: ${({ memCheckActions }) => (memCheckActions ? "unset" : "40px")};
+    display: block;
+    padding: ${({ memCheckActions }) =>
+      memCheckActions ? "0.5rem 2rem" : "0"};
+    border: 0;
+    transition: background-color 0.2s ease;
+
+    :hover {
+      background-color: #c72e4c;
+    }
+
+    :active {
+      background-color: #903245;
+    }
+
+    :focus {
+      box-shadow: none;
+    }
+  }
+`;
+
+const MemButtons = styled.div<{ memCheckActions?: boolean }>`
+  &&& {
+    display: ${({ memCheckActions }) => (memCheckActions ? "flex" : "grid")};
+    ${({ memCheckActions }) =>
+      memCheckActions && "justify-content: space-between; width:100%;"};
     grid-template-areas: "like counter dislike";
     grid-template-columns: 40px 80px 40px;
     grid-template-rows: 40px;
     gap: 8px;
-
-    .like {
-      grid-area: like;
-      background: #24964c;
-      font-weight: 400;
-      font-size: 2.5rem;
-      color: ${({ theme }) => theme.colors.white500};
-      height: 100%;
-      width: 40px;
-      display: block;
-      padding: 0;
-      border: 0;
-
-      :active {
-        background: #2d864c;
-      }
-    }
-
-    .dislike {
-      grid-area: dislike;
-      background: ${({ theme }) => theme.colors.danger};
-      font-weight: 400;
-      font-size: 2.5rem;
-      color: ${({ theme }) => theme.colors.white500};
-      height: 100%;
-      width: 40px;
-      display: block;
-      padding: 0;
-      border: 0;
-
-      :active {
-        background: #903245;
-      }
-    }
 
     .counter {
       grid-area: counter;
@@ -62,14 +90,6 @@ const MemLikes = styled.div`
 
       .divider {
         margin: 0 5px;
-      }
-    }
-
-    .like,
-    .dislike {
-      transition: background 0.1s ease-in-out;
-      :focus {
-        box-shadow: none;
       }
     }
 
@@ -95,23 +115,98 @@ const ShareButton = styled.button`
 interface Props {
   likes: number;
   dislikes: number;
+  memCheckActions: boolean;
+  memId: string;
+  updateMemList: <
+    TVars = {
+      limit: number;
+      start: number;
+      where: object;
+    }
+  >(
+    mapFn: (previousQueryResult: any, options: Pick<any, "variables">) => any
+  ) => void;
 }
 
-const MemActions: React.FC<Props> = ({ likes, dislikes }) => {
+const MemActions: React.FC<Props> = ({
+  likes,
+  dislikes,
+  memCheckActions = false,
+  memId,
+  updateMemList,
+}) => {
+  const [loading, setLoading] = useState({
+    publicMem: false,
+    deleteMem: false,
+  });
+  const [updateMem] = useMutation(updateMemMutation);
+  const [deleteMem] = useMutation(deleteMemMutation);
+
+  const handlePublicMem = async () => {
+    setLoading({ ...loading, publicMem: true });
+    await updateMem({
+      variables: { input: { where: { id: memId }, data: { isPublic: true } } },
+    });
+
+    updateMemList((prev) => {
+      return {
+        ...prev,
+        mems: prev.mems.filter((mem) => mem.id !== memId),
+      };
+    });
+    setLoading({ ...loading, publicMem: false });
+  };
+
+  const handleDeleteMem = async () => {
+    setLoading({ ...loading, deleteMem: true });
+    await deleteMem({ variables: { id: memId } });
+    updateMemList((prev) => {
+      return {
+        ...prev,
+        mems: prev.mems.filter((mem) => mem.id !== memId),
+      };
+    });
+    setLoading({ ...loading, deleteMem: false });
+  };
+
   return (
     <FlexWrapper>
-      <MemLikes>
-        <button className="button like">+</button>
-        <button className="button dislike">-</button>
-        <div className="counter">
-          <span className="likes">{likes}</span>
-          <span className="divider">/</span>
-          <span className="dislikes">{dislikes}</span>
-        </div>
-      </MemLikes>
-      <ShareButton className="button is-link">
-        <i className="fab fa-facebook-square"></i>Udostępnij
-      </ShareButton>
+      {!memCheckActions ? (
+        <>
+          <MemButtons>
+            <LikeButton className="button like">+</LikeButton>
+            <DislikeButton className="button dislike">-</DislikeButton>
+            <div className="counter">
+              <span className="likes">{likes}</span>
+              <span className="divider">/</span>
+              <span className="dislikes">{dislikes}</span>
+            </div>
+          </MemButtons>
+          <ShareButton className="button is-link">
+            <i className="fab fa-facebook-square"></i>Udostępnij
+          </ShareButton>
+        </>
+      ) : (
+        <MemButtons memCheckActions>
+          <DislikeButton
+            memCheckActions
+            onClick={handleDeleteMem}
+            className={`button dislike ${
+              loading.deleteMem ? "is-loading" : ""
+            }`}
+          >
+            Usuń
+          </DislikeButton>
+          <LikeButton
+            memCheckActions
+            onClick={handlePublicMem}
+            type="button"
+            className={`button like ${loading.publicMem ? "is-loading" : ""}`}
+          >
+            Akceptuj
+          </LikeButton>
+        </MemButtons>
+      )}
     </FlexWrapper>
   );
 };
