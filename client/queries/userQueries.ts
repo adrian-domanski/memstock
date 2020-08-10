@@ -1,5 +1,23 @@
 import gql from "graphql-tag";
 
+export const updateUserMutation = gql`
+  mutation($input: updateUserInput!) {
+    updateUser(input: $input) {
+      user {
+        avatar {
+          url
+        }
+      }
+    }
+  }
+`;
+
+export const countUsersQuery = gql`
+  query($where: JSON!) {
+    countUsers(where: $where)
+  }
+`;
+
 export const getUserDetailsQuery = gql`
   query($id: ID!) {
     user(id: $id) {
@@ -8,6 +26,7 @@ export const getUserDetailsQuery = gql`
         url
       }
       rank
+      createdAt
       mems(limit: 10, sort: "createdAt:DESC") {
         id
         title
@@ -49,7 +68,6 @@ export const registerMutation = gql`
         username
         avatar {
           url
-          formats
         }
         role {
           name

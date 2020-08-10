@@ -13,6 +13,7 @@ export const theme: DefaultTheme = {
     danger: "#FF3860",
     dark700: "#2B2B2B",
     dark800: "#252525",
+    dark900: "#1d1d1d",
     dark600: "#2E2E2E",
     dark500: "#4a4a4a",
     white500: "#E9E9E9",

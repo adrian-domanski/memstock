@@ -1,15 +1,14 @@
+import { useQuery } from "@apollo/react-hooks";
+import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
-import MemActions from "./MemActions";
-import {
-  StyledTitle,
-  ContentFooter,
-  Button,
-} from "../../utils/styled/components/components";
-import { useQuery } from "@apollo/react-hooks";
 import { getTopUsersQuery } from "../../queries/userQueries";
+import {
+  Button,
+  ContentFooter,
+  StyledTitle,
+} from "../../utils/styled/components/components";
 import Loader from "../Loader";
-import Link from "next/link";
 
 const StyledPopularSection = styled.article`
   :not(:last-child) {
@@ -61,6 +60,7 @@ const RankingListItem = styled.li`
 
     img {
       width: 40px;
+      height: 40px;
       border-radius: 50%;
     }
 

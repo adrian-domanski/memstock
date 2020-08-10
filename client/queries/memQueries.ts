@@ -61,6 +61,9 @@ export const getMemsQuery = gql`
       user {
         username
         rank
+        avatar {
+          url
+        }
       }
       image {
         url

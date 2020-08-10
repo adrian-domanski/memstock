@@ -4,6 +4,8 @@ import { useQuery } from "@apollo/react-hooks";
 import { getMemsQuery } from "../../queries/memQueries";
 import Loader from "../Loader";
 import InfiniteScroll from "react-infinite-scroller";
+import { ContentBody } from "../../utils/styled/components/components";
+import { Mem } from "../../utils/types";
 
 interface Props {
   where?: object;
@@ -54,16 +56,22 @@ const MemList: React.FC<Props> = ({
           loadMore={fetchMoreResults}
           loader={<Loader key={0} />}
         >
-          {data.mems.map(
-            (mem) =>
-              mem.image && (
-                <MemItem
-                  key={mem.id}
-                  mem={mem}
-                  memForCheck={memsForCheck}
-                  updateMemList={updateQuery}
-                />
-              )
+          {data.mems.length ? (
+            data.mems.map(
+              (mem: Mem) =>
+                mem.image && (
+                  <MemItem
+                    key={mem.id}
+                    mem={mem}
+                    memForCheck={memsForCheck}
+                    updateMemList={updateQuery}
+                  />
+                )
+            )
+          ) : (
+            <ContentBody className="is-size-4 has-text-centered py-5">
+              Brak wyników
+            </ContentBody>
           )}
         </InfiniteScroll>
       ) : (

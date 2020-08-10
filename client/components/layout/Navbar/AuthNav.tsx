@@ -1,6 +1,7 @@
+import Link from "next/link";
 import React, { useContext } from "react";
-import { AuthContext } from "../../../context/authContext";
 import styled from "styled-components";
+import { AuthContext } from "../../../context/authContext";
 import {
   NavbarDropdown,
   NavbarLink,
@@ -39,7 +40,7 @@ const AuthNav: React.FC = () => {
       <img
         src={
           user.avatar
-            ? `${process.env.SERVER_URL}${user.avatar.formats.thumbnail.url}`
+            ? `${process.env.SERVER_URL}${user.avatar.url}`
             : "/img/avatar-placeholder.jpg"
         }
         alt={`Zdjęcie profilowe użytkownika ${user.username}`}
@@ -52,9 +53,9 @@ const AuthNav: React.FC = () => {
           <a className="navbar-link">{user.username}</a>
 
           <div className="navbar-dropdown">
-            <NavbarLink className="navbar-item">About</NavbarLink>
-            <NavbarLink className="navbar-item">Jobs</NavbarLink>
-            <NavbarLink className="navbar-item">Contact</NavbarLink>
+            <Link href="/uzytkownik/[user_id]" as={`/uzytkownik/${user.id}`}>
+              <NavbarLink className="navbar-item">Mój profil</NavbarLink>
+            </Link>
             <hr className="navbar-divider" />
             <NavbarLink
               className="navbar-item has-text-danger"

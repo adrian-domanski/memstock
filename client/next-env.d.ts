@@ -5,42 +5,43 @@ import "styled-components";
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    pageMaxWidth: "1000px";
-    pageWideSectionMaxWidth: "1400px";
-    boxShadow: "5px 5px 20px 0px rgba(0, 0, 0, 0.1)";
+    pageMaxWidth: string;
+    pageWideSectionMaxWidth: string;
+    boxShadow: string;
     colors: {
-      primary: "#D69D00";
-      success: "#48C774";
-      primaryDarker: "#ad8108";
-      accent: "#41B4B0";
-      accentDarker: "#28908d";
-      danger: "#FF3860";
-      dark800: "#252525";
-      dark700: "#2B2B2B";
-      dark600: "#2E2E2E";
-      dark500: "#4a4a4a";
-      white500: "#E9E9E9";
-      grey500: "#cccccc";
-      grey600: "#a5a5a5";
-      grey700: "#6b6b6b";
+      primary: string;
+      success: string;
+      primaryDarker: string;
+      accent: string;
+      accentDarker: string;
+      danger: string;
+      dark900: string;
+      dark800: string;
+      dark700: string;
+      dark600: string;
+      dark500: string;
+      white500: string;
+      grey500: string;
+      grey600: string;
+      grey700: string;
     };
     fontSize: {
       desktop: {
-        title: "2rem";
-        subtitle: "1.5rem";
-        normal: "1.1rem";
+        title: string;
+        subtitle: string;
+        normal: string;
       };
       mobile: {
-        normal: "1rem";
-        titleMobile: "1.5rem";
-        subtitleMobile: "1.1rem";
+        normal: string;
+        titleMobile: string;
+        subtitleMobile: string;
       };
     };
     media: {
-      desktop: "@media screen and (min-width: 1024px)";
-      tablet: "@media screen and (min-width: 769px)";
-      mobile: "@media screen and (max-width: 768px)";
-      tabletAndBelow: "@media screen and (max-width: 1023px)";
+      desktop: string;
+      tablet: string;
+      mobile: string;
+      tabletAndBelow: string;
     };
   }
 }

@@ -1,19 +1,19 @@
-import React, { useEffect, useContext } from "react";
+import Link from "next/link";
+import { SingletonRouter, withRouter } from "next/router";
+import React, { useContext, useEffect } from "react";
+import { AuthContext } from "../../../context/authContext";
+import { isPageAdmin } from "../../../utils/helpers";
+import { Button, Input } from "../../../utils/styled/components/components";
 import {
+  Logo,
   NavbarDropdown,
   NavbarLink,
   PrimaryNavbar,
+  SearchBar,
   SecondaryNavbar,
   StyledNavbar,
-  SearchBar,
-  Logo,
 } from "../../../utils/styled/components/Navbar";
-import { Button, Input } from "../../../utils/styled/components/components";
-import Link from "next/link";
-import { withRouter, SingletonRouter } from "next/router";
-import { AuthContext } from "../../../context/authContext";
 import AuthNav from "./AuthNav";
-import { isPageAdmin } from "../../../utils/helpers";
 
 interface Props {
   router: SingletonRouter;
@@ -84,24 +84,6 @@ const Navbar: React.FC<Props> = ({ router }) => {
                   Strona Główna
                 </NavbarLink>
               </Link>
-              <Link href="/memy">
-                <NavbarLink
-                  className={`navbar-item ${
-                    router.pathname === "/memy" && "active"
-                  }`}
-                >
-                  Memy
-                </NavbarLink>
-              </Link>
-              <Link href="/filmy">
-                <NavbarLink
-                  className={`navbar-item ${
-                    router.pathname === "/filmy" && "active"
-                  }`}
-                >
-                  Filmy
-                </NavbarLink>
-              </Link>
               <NavbarDropdown className="navbar-item has-dropdown is-hoverable">
                 <a className="navbar-link">Dodaj</a>
 
@@ -118,7 +100,7 @@ const Navbar: React.FC<Props> = ({ router }) => {
               </NavbarDropdown>
               {isAuth && isPageAdmin(user.role) && (
                 <NavbarDropdown className="navbar-item has-dropdown is-hoverable">
-                  <a className="navbar-link">More</a>
+                  <a className="navbar-link">Admin</a>
 
                   <div className="navbar-dropdown">
                     <Link href="/cms/poczekalnia">
@@ -126,10 +108,6 @@ const Navbar: React.FC<Props> = ({ router }) => {
                         Poczekalnia
                       </NavbarLink>
                     </Link>
-                    <hr className="navbar-divider" />
-                    <NavbarLink className="navbar-item">
-                      Report an issue
-                    </NavbarLink>
                   </div>
                 </NavbarDropdown>
               )}

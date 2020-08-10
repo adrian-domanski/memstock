@@ -20,3 +20,21 @@ export const isPageAdmin = (role) => {
     return false;
   }
 };
+
+export const getRankName = (rank: number) => {
+  if (rank < 500) return "Początkujący śmieszek";
+  else if (rank < 1000) return "Śmieszek";
+  else if (rank < 1500) return "Fanatyk wędkarstwa";
+  else if (rank < 2000) return "Fanatyk leczo";
+  else {
+    return "Kozak totalny";
+  }
+};
+
+export const formatDate = (date: Date) => {
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  return `${day}.${month}.${year}`;
+};

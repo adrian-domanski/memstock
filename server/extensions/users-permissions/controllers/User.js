@@ -35,4 +35,31 @@ module.exports = {
 
     ctx.body = sanitizeUser(extendedUser);
   },
+
+  // Update
+  async update(ctx) {
+    const { id } = ctx.params;
+
+    const user = await strapi
+      .query("user", "users-permissions")
+      .findOne({ _id: ctx.state.user.id });
+
+    if (user.id !== ctx.state.user.id) {
+      return ctx.throw(401, "Access denied");
+    }
+
+    const updatedUser = await strapi
+      .query("user", "users-permissions")
+      .update({ id }, ctx.request.body);
+
+    // Delete old image
+    if (user.avatar) {
+      const file = await strapi.plugins["upload"].services.upload.fetch({
+        id: user.avatar.id,
+      });
+      await strapi.plugins["upload"].services.upload.remove(file);
+    }
+
+    ctx.body = sanitizeUser(updatedUser);
+  },
 };

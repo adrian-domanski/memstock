@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import {
-  ContentHeader,
-  ContentBody,
   Button,
+  ContentBody,
+  ContentHeader,
 } from "../../utils/styled/components/components";
 
 const CommentsSection = styled.section.attrs({ className: "section" })`
@@ -61,6 +61,10 @@ const StyledTextArea = styled.textarea`
   }
 `;
 
+const StyledContentBody = styled(ContentBody)`
+  background: ${({ theme }) => theme.colors.dark800};
+`;
+
 interface Props {
   comments: Array<{
     id: string;
@@ -90,24 +94,28 @@ const MemComments: React.FC<Props> = ({ comments }) => {
         Dodaj komentarz
       </Button>
       <CommentsSectionTitle>Komentarze</CommentsSectionTitle>
-      {comments.map((comment) => (
-        <article key={comment.id}>
-          <CustomContentHeader>
-            <Avatar
-              src={
-                comment.user.avatar
-                  ? `${process.env.SERVER_URL}${comment.user.avatar.url}`
-                  : "/img/avatar-placeholder.jpg"
-              }
-              alt={`Zdjęcie użytkownika ${comment.user.username}`}
-            ></Avatar>
-            <span className="username">{comment.user.username}</span>
-          </CustomContentHeader>
-          <CustomContentBody className="py-5">
-            {comment.content}
-          </CustomContentBody>
-        </article>
-      ))}
+      {comments.length ? (
+        comments.map((comment) => (
+          <article key={comment.id}>
+            <CustomContentHeader>
+              <Avatar
+                src={
+                  comment.user.avatar
+                    ? `${process.env.SERVER_URL}${comment.user.avatar.url}`
+                    : "/img/avatar-placeholder.jpg"
+                }
+                alt={`Zdjęcie użytkownika ${comment.user.username}`}
+              ></Avatar>
+              <span className="username">{comment.user.username}</span>
+            </CustomContentHeader>
+            <CustomContentBody className="py-5">
+              {comment.content}
+            </CustomContentBody>
+          </article>
+        ))
+      ) : (
+        <StyledContentBody>Brak komentarzy</StyledContentBody>
+      )}
     </CommentsSection>
   );
 };

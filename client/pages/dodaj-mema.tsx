@@ -45,12 +45,13 @@ const AddMem = () => {
   const [upload] = useMutation(uploadFileMutation);
   const [createMem] = useMutation(createMemMutation);
   const { data, loading } = useQuery(getCategoriesQuery);
-  const [alert, setAlert] = useState({ msg: "", type: "" });
+
   const [title, setTitle] = useState("");
+  const [alert, setAlert] = useState({ msg: "", type: "" });
   const [previewURL, setPreviewURL] = useState("");
   const [uploadedLink, setUploadedLink] = useState("");
-  const [categories, setCategories] = useState<string[]>([""]);
   const [file, setFile] = useState<File | Blob>(null);
+  const [categories, setCategories] = useState<string[]>([""]);
 
   const handleSubmit = async (e: React.FormEvent<Element>) => {
     e.preventDefault();

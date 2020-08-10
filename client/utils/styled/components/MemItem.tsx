@@ -49,6 +49,8 @@ export const MemItemHeader = styled.header`
     img {
       border-radius: 50%;
       width: 50px;
+      height: 50px;
+      object-position: center;
     }
     figcaption {
       padding-left: 0.8rem;
@@ -114,15 +116,16 @@ export const MemItemFooter = styled.footer`
 
 export const StyledDropdown = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadow};
+  padding-top: 0;
   .dropdown-content {
-    background-color: ${({ theme }) => theme.colors.dark700};
+    background-color: ${({ theme }) => theme.colors.dark800};
   }
 
   .dropdown-item {
     color: ${({ theme }) => theme.colors.white500};
 
     :hover {
-      background-color: ${({ theme }) => theme.colors.dark800};
+      background-color: ${({ theme }) => theme.colors.dark900};
       color: ${({ theme }) => theme.colors.white500};
     }
   }

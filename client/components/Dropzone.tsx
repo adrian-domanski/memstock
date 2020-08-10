@@ -1,7 +1,7 @@
+import Compressor from "compressorjs";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
-import Compressor from "compressorjs";
 import { isFileImage } from "../utils/helpers";
 
 export const StyledWrapper: React.FC<{ hasImage: boolean }> = styled.div`
@@ -76,7 +76,11 @@ const MyDropzone: React.FC<Props> = ({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <StyledWrapper hasImage={!!previewURL} {...getRootProps()}>
+    <StyledWrapper
+      className="image-wrapper"
+      hasImage={!!previewURL}
+      {...getRootProps()}
+    >
       <input {...getInputProps({ multiple: false })} />
       {isDragActive ? (
         <p>No puszczaj, postaram się złapać!</p>

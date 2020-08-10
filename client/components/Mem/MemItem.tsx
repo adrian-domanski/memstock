@@ -1,34 +1,24 @@
-import React, { useState, useContext } from "react";
-import MemActions from "./MemActions";
+import { useMutation } from "@apollo/react-hooks";
+import Link from "next/link";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../context/authContext";
+import { deleteMemMutation } from "../../queries/memQueries";
+import { getRankName, isPageAdmin } from "../../utils/helpers";
 import {
-  StyledMemItem,
-  MemItemHeader,
-  StyledDropdown,
   MemItemBody,
   MemItemFooter,
+  MemItemHeader,
+  StyledDropdown,
+  StyledMemItem,
 } from "../../utils/styled/components/MemItem";
-import Link from "next/link";
-import { WatchQueryOptions, useMutation } from "@apollo/react-hooks";
-import { AuthContext } from "../../context/authContext";
-import { isPageAdmin } from "../../utils/helpers";
-import { deleteMemMutation } from "../../queries/memQueries";
+import { Mem } from "../../utils/types";
 import Modal from "../Modal";
+import MemActions from "./MemActions";
 
 interface Props {
-  mem: any;
+  mem: Mem;
   memForCheck?: boolean;
-  updateMemList?: <
-    TVars = {
-      limit: number;
-      start: number;
-      where: object;
-    }
-  >(
-    mapFn: (
-      previousQueryResult: any,
-      options: Pick<WatchQueryOptions<TVars>, "variables">
-    ) => any
-  ) => void;
+  updateMemList?: (prev) => void;
 }
 
 const MemItem: React.FC<Props> = ({
@@ -78,12 +68,16 @@ const MemItem: React.FC<Props> = ({
         <div className="content-wrapper">
           <figure className="avatar">
             <img
-              src="/img/avatar-placeholder.jpg"
-              alt="Domyślne zdjęcie użytkownika, który nie ustawił swojego zdjęcia."
+              src={
+                mem.user.avatar
+                  ? `${process.env.SERVER_URL}${user.avatar.url}`
+                  : "/img/avatar-placeholder.jpg"
+              }
+              alt={`Zdjęcie profilowe użytkownika ${mem.user.username}`}
             />
             <figcaption>
               <div className="user-name">{mem.user.username}</div>
-              <div className="user-rank">{mem.user.rank}</div>
+              <div className="user-rank">{getRankName(mem.user.rank)}</div>
             </figcaption>
           </figure>
           <div

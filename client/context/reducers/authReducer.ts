@@ -1,3 +1,5 @@
+import { User } from "../../utils/types";
+
 type ActionTypes =
   | "REGISTER_SUCCESS"
   | "LOGIN_SUCCESS"
@@ -5,7 +7,8 @@ type ActionTypes =
   | "LOGOUT_SUCCESS"
   | "REGISTER_ERROR"
   | "LOGIN_ERROR"
-  | "AUTH_ERROR";
+  | "AUTH_ERROR"
+  | "UPDATE_USER";
 
 export interface IAction {
   type: ActionTypes;
@@ -13,7 +16,7 @@ export interface IAction {
 }
 
 export interface IState {
-  user: any;
+  user: User | null;
   isAuth: boolean;
   token: string;
 }
@@ -43,6 +46,14 @@ export const authReducer = (state: IState, action: IAction) => {
         isAuth: false,
         user: null,
         token: null,
+      };
+    case "UPDATE_USER":
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          ...action.payload,
+        },
       };
     default:
       return state;
