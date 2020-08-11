@@ -9,11 +9,11 @@ import {
   NavbarDropdown,
   NavbarLink,
   PrimaryNavbar,
-  SearchBar,
   SecondaryNavbar,
   StyledNavbar,
 } from "../../../utils/styled/components/Navbar";
 import AuthNav from "./AuthNav";
+import SearchBar from "./SearchBar";
 
 interface Props {
   router: SingletonRouter;
@@ -130,16 +130,7 @@ const Navbar: React.FC<Props> = ({ router }) => {
                 </div>
               )}
             </div>
-            <SearchBar className="field is-grouped">
-              <p className="control is-expanded mr-0">
-                <Input type="text" placeholder="Szukaj mema..." />
-              </p>
-              <p className="control">
-                <a className="button is-primary">
-                  <i className="fa fa-search" aria-hidden="true"></i>
-                </a>
-              </p>
-            </SearchBar>
+            <SearchBar />
           </div>
         </StyledNavbar>
       </PrimaryNavbar>

@@ -1,7 +1,7 @@
+import { useMutation } from "@apollo/react-hooks";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useMutation } from "@apollo/react-hooks";
-import { updateMemMutation, deleteMemMutation } from "../../queries/memQueries";
+import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -12,7 +12,7 @@ const LikeButton = styled.button<{ memCheckActions?: boolean }>`
   &&& {
     grid-area: like;
     font-weight: 400;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: ${({ theme }) => theme.colors.white500};
     background: #24964c;
     height: 100%;
@@ -42,7 +42,7 @@ const DislikeButton = styled.button<{ memCheckActions?: boolean }>`
     grid-area: dislike;
     background: ${({ theme }) => theme.colors.danger};
     font-weight: 400;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: ${({ theme }) => theme.colors.white500};
     height: 100%;
     width: ${({ memCheckActions }) => (memCheckActions ? "unset" : "40px")};
@@ -169,13 +169,65 @@ const MemActions: React.FC<Props> = ({
     setLoading({ ...loading, deleteMem: false });
   };
 
+  const handleMemAction = async (type: "LIKE" | "DISLIKE") => {
+    const userVotes = localStorage.getItem("votes")
+      ? JSON.parse(localStorage.getItem("votes"))
+      : [];
+
+    const actionsOnThisMedia = userVotes.filter(
+      (vote) => vote.mediaId === memId
+    );
+
+    let updateData = {};
+
+    if (type === "LIKE" && !actionsOnThisMedia.length) {
+      updateData = { likes: likes + 1 };
+    } else if (type === "DISLIKE" && !actionsOnThisMedia.length) {
+      updateData = { dislikes: dislikes + 1 };
+    } else if (actionsOnThisMedia.length) {
+      const [action] = actionsOnThisMedia;
+      if (action.type === "LIKE" && type === "DISLIKE") {
+        updateData = { likes: likes - 1, dislikes: dislikes + 1 };
+      } else if (action.type === "DISLIKE" && type === "LIKE") {
+        updateData = { likes: likes + 1, dislikes: dislikes - 1 };
+      } else if (action.type === type) return;
+    }
+
+    localStorage.setItem(
+      "votes",
+      JSON.stringify([
+        ...userVotes.filter((votes) => votes.mediaId !== memId),
+        { mediaId: memId, type },
+      ])
+    );
+
+    try {
+      const data = await updateMem({
+        variables: { input: { where: { id: memId }, data: updateData } },
+      });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <FlexWrapper>
       {!memCheckActions ? (
         <>
           <MemButtons>
-            <LikeButton className="button like">+</LikeButton>
-            <DislikeButton className="button dislike">-</DislikeButton>
+            <LikeButton
+              className="button like"
+              onClick={() => handleMemAction("LIKE")}
+            >
+              <i className="fas fa-thumbs-up"></i>
+            </LikeButton>
+            <DislikeButton
+              className="button dislike"
+              onClick={() => handleMemAction("DISLIKE")}
+            >
+              <i className="fas fa-thumbs-down"></i>
+            </DislikeButton>
             <div className="counter">
               <span className="likes">{likes}</span>
               <span className="divider">/</span>

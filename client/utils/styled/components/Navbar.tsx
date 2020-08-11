@@ -13,6 +13,7 @@ export const Logo: React.FC<{ className?: string }> = styled.h1`
 
 export const SearchBar: React.FC<Props> = styled.div`
   width: 282px;
+  position: relative;
 
   ${({ theme }) => theme.media.tabletAndBelow} {
     width: unset;

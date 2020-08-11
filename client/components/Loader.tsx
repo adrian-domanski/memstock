@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const LoaderWrapper = styled.div`
-  min-height: 200px;
+  height: 200px;
+  margin: 0 auto;
   .my-loader,
   .my-loader:before,
   .my-loader:after {

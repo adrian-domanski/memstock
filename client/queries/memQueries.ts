@@ -74,6 +74,15 @@ export const getMemsQuery = gql`
   }
 `;
 
+export const getSearchHintsQuery = gql`
+  query($limit: Int, $where: JSON, $sort: String) {
+    mems(limit: $limit, where: $where, sort: $sort) {
+      id
+      title
+    }
+  }
+`;
+
 export const getMemDetailsQuery = gql`
   query($id: ID!) {
     mem(id: $id) {
@@ -86,6 +95,9 @@ export const getMemDetailsQuery = gql`
       user {
         username
         rank
+        avatar {
+          url
+        }
       }
       image {
         url

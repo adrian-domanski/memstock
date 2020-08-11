@@ -102,9 +102,12 @@ export const PageWrapper: React.FC<Props> = styled.section.attrs({
   className: "section",
 })``;
 
-export const Button = styled.button.attrs(({ className }) => ({
-  className: `button ${className}`,
-}))`
+export const Button = styled.button.attrs(
+  ({ className, as }: { className: string; as: string }) => ({
+    className: `button ${className}`,
+    as,
+  })
+)`
   &&& {
     background-color: ${({ theme }) => theme.colors.primary};
     color: ${({ theme }) => theme.colors.dark700};
@@ -167,11 +170,10 @@ export const StyledSelect: React.FC<Props> = styled.div`
   }
 `;
 
-export const Input: React.FC<
-  Props & { type: string; placeholder: string }
-> = styled.input.attrs({
+export const Input = styled.input.attrs({
   className: "input",
 })`
+  width: unset;
   background-color: ${({ theme }) => theme.colors.dark500};
   border: none;
   color: ${({ theme }) => theme.colors.white500};
@@ -194,6 +196,7 @@ export const Input: React.FC<
 export const StyledTitle: React.FC<Props> = styled.h2`
   color: ${({ theme }) => theme.colors.primary};
   font-size: 1.8rem;
+  width: 100%;
 `;
 
 export const StyledTitleWithLine = styled.h2`

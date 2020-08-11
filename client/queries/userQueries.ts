@@ -1,12 +1,13 @@
 import gql from "graphql-tag";
 
-export const updateUserMutation = gql`
-  mutation($input: updateUserInput!) {
-    updateUser(input: $input) {
-      user {
-        avatar {
-          url
-        }
+export const getUsersQuery = gql`
+  query($limit: Int, $start: Int, $where: JSON, $sort: String) {
+    users(limit: $limit, start: $start, where: $where, sort: $sort) {
+      id
+      username
+      rank
+      avatar {
+        url
       }
     }
   }
@@ -18,40 +19,13 @@ export const countUsersQuery = gql`
   }
 `;
 
-export const getUserDetailsQuery = gql`
-  query($id: ID!) {
-    user(id: $id) {
-      username
-      avatar {
-        url
-      }
-      rank
-      createdAt
-      mems(limit: 10, sort: "createdAt:DESC") {
-        id
-        title
-        categories {
-          id
-          name
-        }
-        image {
+export const updateUserMutation = gql`
+  mutation($input: updateUserInput!) {
+    updateUser(input: $input) {
+      user {
+        avatar {
           url
         }
-        likes
-        dislikes
-      }
-    }
-  }
-`;
-
-export const getTopUsersQuery = gql`
-  query {
-    users(sort: "rank:DESC", limit: 5) {
-      id
-      rank
-      username
-      avatar {
-        url
       }
     }
   }
@@ -110,6 +84,32 @@ export const getUserFromTokenQuery = gql`
       }
       role {
         name
+      }
+    }
+  }
+`;
+
+export const getUserDetailsQuery = gql`
+  query($id: ID!) {
+    user(id: $id) {
+      username
+      avatar {
+        url
+      }
+      rank
+      createdAt
+      mems(limit: 10, sort: "createdAt:DESC") {
+        id
+        title
+        categories {
+          id
+          name
+        }
+        image {
+          url
+        }
+        likes
+        dislikes
       }
     }
   }

@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Amaranth&family=Montserrat:wght@400;500&display=swap");
 $primary: #d69d00;
+$accent: #41b4b0;
+$accentDarker: #28908d;
+$link: $accent;
 $family-sans-serif: BlinkMacSystemFont, -apple-system, "Montserrat", "Roboto",
   "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
   "Helvetica", "Arial", sans-serif;
@@ -33,4 +36,10 @@ $radius: 0;
 .radio:hover,
 .checkbox:hover {
   color: #909090 !important;
+}
+
+.is-link {
+  :hover {
+    color: $accentDarker;
+  }
 }

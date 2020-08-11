@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/react-hooks";
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
-import { getTopUsersQuery } from "../../queries/userQueries";
+import { getUsersQuery } from "../../queries/userQueries";
 import {
   Button,
   ContentFooter,
@@ -10,7 +10,7 @@ import {
 } from "../../utils/styled/components/components";
 import Loader from "../Loader";
 
-const StyledPopularSection = styled.article`
+export const StyledPopularSection = styled.article`
   :not(:last-child) {
     margin-bottom: 1.5rem;
   }
@@ -18,7 +18,7 @@ const StyledPopularSection = styled.article`
   box-shadow: ${({ theme }) => theme.boxShadow};
 `;
 
-const PopularSectionHeader = styled.header`
+export const PopularSectionHeader = styled.header`
   background: ${({ theme }) => theme.colors.dark700};
   padding: 1rem 2rem;
   text-align: center;
@@ -31,17 +31,17 @@ const PopularSectionHeader = styled.header`
   }
 `;
 
-const PopularSectionBody = styled.div`
+export const PopularSectionBody = styled.div`
   background: ${({ theme }) => theme.colors.dark600};
   padding: 1rem 0;
 `;
 
-const RankingList = styled.ul`
+export const RankingList = styled.ul`
   text-align: center;
   line-height: 3;
 `;
 
-const RankingListItem = styled.li`
+export const RankingListItem = styled.li`
   font-size: 1.2rem;
 
   a {
@@ -71,7 +71,7 @@ const RankingListItem = styled.li`
 `;
 
 const TopUsers: React.FC = () => {
-  const { data, loading } = useQuery(getTopUsersQuery);
+  const { data, loading } = useQuery(getUsersQuery);
 
   return (
     <StyledPopularSection>
@@ -108,7 +108,11 @@ const TopUsers: React.FC = () => {
         )}
       </PopularSectionBody>
       <ContentFooter>
-        <Button className="is-primary margin-auto light">Zobacz ranking</Button>
+        <Link href="/ranking">
+          <Button as="a" className="is-primary margin-auto light">
+            Zobacz ranking
+          </Button>
+        </Link>
       </ContentFooter>
     </StyledPopularSection>
   );
