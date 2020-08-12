@@ -1,17 +1,17 @@
 import { useQuery } from "@apollo/react-hooks";
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 import { getUserFromTokenQuery } from "../queries/userQueries";
-import { User } from "../utils/types";
 import { authReducer, IAction, IState } from "./reducers/authReducer";
 
 interface IAuthContext {
-  ctx: { user: User; isAuth: boolean; token: string };
+  ctx: IState;
   dispatch: React.Dispatch<IAction>;
 }
 
 let initState: IState = {
   user: null,
   isAuth: false,
+  votes: [],
   token: null,
 };
 
@@ -28,10 +28,18 @@ const AuthContextProvider: React.FC<{
       user: data.me,
       isAuth: true,
       token,
+      votes: [],
     };
   }
-
   const [ctx, dispatch] = useReducer(authReducer, initState);
+
+  useEffect(() => {
+    if (localStorage.getItem("votes")) {
+      const parsedVotes = JSON.parse(localStorage.getItem("votes"));
+      dispatch({ type: "GET_VOTES", payload: parsedVotes });
+    }
+  }, []);
+
   return (
     <AuthContext.Provider value={{ ctx, dispatch }}>
       {children}

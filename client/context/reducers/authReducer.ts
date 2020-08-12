@@ -8,17 +8,25 @@ type ActionTypes =
   | "REGISTER_ERROR"
   | "LOGIN_ERROR"
   | "AUTH_ERROR"
-  | "UPDATE_USER";
+  | "UPDATE_USER"
+  | "GET_VOTES"
+  | "USER_NEW_VOTE";
 
 export interface IAction {
   type: ActionTypes;
   payload?: any;
 }
 
+export interface Vote {
+  mediaId: string;
+  type: "LIKE" | "DISLIKE";
+}
+
 export interface IState {
   user: User | null;
   isAuth: boolean;
   token: string;
+  votes: Vote[];
 }
 
 export const authReducer = (state: IState, action: IAction) => {
@@ -34,6 +42,7 @@ export const authReducer = (state: IState, action: IAction) => {
         action.payload.token
       }; domain=${domain}; path=/; expires=${now.toUTCString()}`;
       return {
+        ...state,
         isAuth: true,
         user: action.payload.user,
         token: action.payload.token,
@@ -43,6 +52,7 @@ export const authReducer = (state: IState, action: IAction) => {
     case "LOGIN_ERROR":
       document.cookie = `token=""; domain=${domain}; path=/; expires=${new Date().toUTCString()}`;
       return {
+        ...state,
         isAuth: false,
         user: null,
         token: null,
@@ -54,6 +64,38 @@ export const authReducer = (state: IState, action: IAction) => {
           ...state.user,
           ...action.payload,
         },
+      };
+    case "GET_VOTES":
+      return {
+        ...state,
+        votes: action.payload,
+      };
+    case "USER_NEW_VOTE":
+      let updatedVotes;
+      if (
+        state.votes.some(
+          (vote) =>
+            vote.mediaId === action.payload.mediaId &&
+            vote.type === action.payload.type
+        )
+      ) {
+        console.log("x");
+        updatedVotes = state.votes.filter(
+          (vote) => vote.mediaId !== action.payload.mediaId
+        );
+      } else {
+        updatedVotes = [
+          ...state.votes.filter(
+            (vote) => vote.mediaId !== action.payload.mediaId
+          ),
+          action.payload,
+        ];
+      }
+
+      localStorage.setItem("votes", JSON.stringify(updatedVotes));
+      return {
+        ...state,
+        votes: [...updatedVotes],
       };
     default:
       return state;

@@ -1,7 +1,10 @@
 import { useMutation } from "@apollo/react-hooks";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import { AuthContext } from "../../context/authContext";
+import { Vote } from "../../context/reducers/authReducer";
 import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
+import { Mem } from "../../utils/types";
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -34,6 +37,10 @@ const LikeButton = styled.button<{ memCheckActions?: boolean }>`
     :focus {
       box-shadow: none;
     }
+
+    &.is-active i {
+      color: #2a4433;
+    }
   }
 `;
 
@@ -62,6 +69,10 @@ const DislikeButton = styled.button<{ memCheckActions?: boolean }>`
 
     :focus {
       box-shadow: none;
+    }
+
+    &.is-active i {
+      color: #46262c;
     }
   }
 `;
@@ -117,13 +128,7 @@ interface Props {
   dislikes: number;
   memCheckActions: boolean;
   memId: string;
-  updateMemList: <
-    TVars = {
-      limit: number;
-      start: number;
-      where: object;
-    }
-  >(
+  updateMemList: (
     mapFn: (previousQueryResult: any, options: Pick<any, "variables">) => any
   ) => void;
 }
@@ -135,12 +140,25 @@ const MemActions: React.FC<Props> = ({
   memId,
   updateMemList,
 }) => {
+  const {
+    ctx: { votes },
+    dispatch,
+  } = useContext(AuthContext);
   const [loading, setLoading] = useState({
     publicMem: false,
     deleteMem: false,
   });
+  const [userAction, setUserAction] = useState<Vote>();
   const [updateMem] = useMutation(updateMemMutation);
   const [deleteMem] = useMutation(deleteMemMutation);
+
+  useEffect(() => {
+    const [actionOnThisMedia] = votes.filter((vote) => vote.mediaId === memId);
+
+    if (actionOnThisMedia) {
+      setUserAction(actionOnThisMedia);
+    } else setUserAction(null);
+  }, [votes]);
 
   const handlePublicMem = async () => {
     setLoading({ ...loading, publicMem: true });
@@ -170,41 +188,51 @@ const MemActions: React.FC<Props> = ({
   };
 
   const handleMemAction = async (type: "LIKE" | "DISLIKE") => {
-    const userVotes = localStorage.getItem("votes")
-      ? JSON.parse(localStorage.getItem("votes"))
-      : [];
+    let updateData: { likes: number; dislikes: number } = { likes, dislikes };
 
-    const actionsOnThisMedia = userVotes.filter(
-      (vote) => vote.mediaId === memId
-    );
-
-    let updateData = {};
-
-    if (type === "LIKE" && !actionsOnThisMedia.length) {
-      updateData = { likes: likes + 1 };
-    } else if (type === "DISLIKE" && !actionsOnThisMedia.length) {
-      updateData = { dislikes: dislikes + 1 };
-    } else if (actionsOnThisMedia.length) {
-      const [action] = actionsOnThisMedia;
-      if (action.type === "LIKE" && type === "DISLIKE") {
+    if (type === "LIKE" && !userAction) {
+      updateData = { likes: likes + 1, dislikes };
+    } else if (type === "DISLIKE" && !userAction) {
+      updateData = { dislikes: dislikes + 1, likes };
+    } else if (userAction) {
+      if (userAction.type === "LIKE" && type === "DISLIKE") {
         updateData = { likes: likes - 1, dislikes: dislikes + 1 };
-      } else if (action.type === "DISLIKE" && type === "LIKE") {
+      } else if (userAction.type === "DISLIKE" && type === "LIKE") {
         updateData = { likes: likes + 1, dislikes: dislikes - 1 };
-      } else if (action.type === type) return;
-    }
+      } else if (userAction.type === "DISLIKE" && type === "DISLIKE") {
+        updateData = { likes, dislikes: dislikes - 1 };
+      } else if (userAction.type === "LIKE" && type === "LIKE") {
+        updateData = { likes: likes - 1, dislikes };
+      }
+    } else return;
 
-    localStorage.setItem(
-      "votes",
-      JSON.stringify([
-        ...userVotes.filter((votes) => votes.mediaId !== memId),
-        { mediaId: memId, type },
-      ])
-    );
+    if (updateData.likes < 0 || updateData.dislikes < 0) return;
+
+    dispatch({ type: "USER_NEW_VOTE", payload: { mediaId: memId, type } });
+
+    console.log({ mediaId: memId, type });
 
     try {
       const data = await updateMem({
         variables: { input: { where: { id: memId }, data: updateData } },
       });
+
+      updateMemList((prev) => {
+        return {
+          ...prev,
+          mems: prev.mems.map((mem: Mem) => {
+            if (mem.id === memId)
+              return {
+                ...mem,
+                likes: updateData.likes,
+                dislikes: updateData.dislikes,
+              };
+            else return mem;
+          }),
+        };
+      });
+      setLoading({ ...loading, deleteMem: false });
+
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -217,13 +245,25 @@ const MemActions: React.FC<Props> = ({
         <>
           <MemButtons>
             <LikeButton
-              className="button like"
+              className={`button like ${
+                userAction &&
+                userAction.mediaId === memId &&
+                userAction.type === "LIKE"
+                  ? "is-active"
+                  : ""
+              }`}
               onClick={() => handleMemAction("LIKE")}
             >
               <i className="fas fa-thumbs-up"></i>
             </LikeButton>
             <DislikeButton
-              className="button dislike"
+              className={`button dislike ${
+                userAction &&
+                userAction.mediaId === memId &&
+                userAction.type === "DISLIKE"
+                  ? "is-active"
+                  : ""
+              }`}
               onClick={() => handleMemAction("DISLIKE")}
             >
               <i className="fas fa-thumbs-down"></i>
