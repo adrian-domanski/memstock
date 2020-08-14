@@ -1,4 +1,4 @@
-import { User } from "../../utils/types";
+import { UserType } from "../../utils/types";
 
 type ActionTypes =
   | "REGISTER_SUCCESS"
@@ -23,7 +23,7 @@ export interface Vote {
 }
 
 export interface IState {
-  user: User | null;
+  user: UserType | null;
   isAuth: boolean;
   token: string;
   votes: Vote[];

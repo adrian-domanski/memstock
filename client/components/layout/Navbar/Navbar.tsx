@@ -108,6 +108,11 @@ const Navbar: React.FC<Props> = ({ router }) => {
                         Poczekalnia
                       </NavbarLink>
                     </Link>
+                    <Link href="/cms/zgloszenia">
+                      <NavbarLink className="navbar-item">
+                        Zgłoszenia
+                      </NavbarLink>
+                    </Link>
                   </div>
                 </NavbarDropdown>
               )}

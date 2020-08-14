@@ -50,8 +50,7 @@
       "default": false
     },
     "isReported": {
-      "type": "boolean",
-      "default": false
+      "type": "boolean"
     }
   }
 }

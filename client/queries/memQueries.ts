@@ -58,6 +58,7 @@ export const getMemsQuery = gql`
         id
         name
       }
+      isReported
       user {
         username
         rank
@@ -83,6 +84,18 @@ export const getSearchHintsQuery = gql`
   }
 `;
 
+export const addCommentMutation = gql`
+  mutation($userId: ID!, $content: String!, $memId: ID!) {
+    createComment(
+      input: { data: { user: $userId, content: $content, mem: $memId } }
+    ) {
+      comment {
+        id
+      }
+    }
+  }
+`;
+
 export const getMemDetailsQuery = gql`
   query($id: ID!) {
     mem(id: $id) {
@@ -104,10 +117,12 @@ export const getMemDetailsQuery = gql`
       }
       likes
       dislikes
-      comments {
+      comments(sort: "createdAt:DESC") {
         id
+        createdAt
         content
         user {
+          id
           username
           avatar {
             url

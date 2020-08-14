@@ -1,35 +1,23 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import {
   Button,
   ContentBody,
   ContentHeader,
 } from "../../utils/styled/components/components";
+import { CommentType } from "../../utils/types";
+import { AuthContext } from "../../context/authContext";
+import Comment from "./Comment";
+import Link from "next/link";
+import { useMutation } from "@apollo/react-hooks";
+import {
+  addCommentMutation,
+  getMemDetailsQuery,
+} from "../../queries/memQueries";
+import Alert from "../Alert";
 
 const CommentsSection = styled.section.attrs({ className: "section" })`
   background: ${({ theme }) => theme.colors.dark600};
-`;
-
-const Avatar: React.FC<{ src: string; alt: string }> = styled.img`
-  border-radius: 50%;
-  width: 40px;
-`;
-
-const CustomContentHeader = styled(ContentHeader)`
-  justify-content: flex-start;
-  background-color: ${({ theme }) => theme.colors.dark800};
-
-  .username {
-    padding-left: 0.6rem;
-    font-weight: 500;
-    font-size: 1.1rem;
-    color: ${({ theme }) => theme.colors.primary};
-  }
-`;
-
-const CustomContentBody = styled(ContentBody)`
-  background-color: ${({ theme }) => theme.colors.dark700};
-  padding: 1rem 2rem;
 `;
 
 const CommentsSectionTitle = styled.h1`
@@ -66,52 +54,89 @@ const StyledContentBody = styled(ContentBody)`
 `;
 
 interface Props {
-  comments: Array<{
-    id: string;
-    content: string;
-    user: {
-      username: string;
-      avatar: {
-        url: string;
-      } | null;
-    };
-  }>;
+  comments: Array<CommentType>;
+  memId: string;
 }
 
-const MemComments: React.FC<Props> = ({ comments }) => {
+const MemComments: React.FC<Props> = ({ comments, memId }) => {
+  const {
+    ctx: { user },
+  } = useContext(AuthContext);
+
+  const [alert, setAlert] = useState({ msg: "", type: "" });
+  const [comment, setComment] = useState("");
+  const [addComment] = useMutation(addCommentMutation);
+
+  const handleSubmitNewComment = async (e) => {
+    e.preventDefault();
+    if (!comment) return;
+    try {
+      await addComment({
+        variables: { userId: user.id, content: comment, memId },
+        refetchQueries: [
+          { query: getMemDetailsQuery, variables: { id: memId } },
+        ],
+      });
+      setComment("");
+    } catch (err) {
+      setAlert({
+        type: "danger",
+        msg: "Wystąpił błąd podczas dodawania komentarza",
+      });
+    }
+  };
+
+  const handleCommentChange = ({ target: { value } }) => setComment(value);
+
   return (
     <CommentsSection>
-      <CommentsSectionTitle>Co o tym sądzisz?</CommentsSectionTitle>
-      <div className="field">
-        <div className="control">
-          <StyledTextArea
-            className="textarea mb-3"
-            placeholder="Napisz kilka słów, zachowując kulturę wypowiedzi i takie tam..."
-          ></StyledTextArea>
-        </div>
-      </div>
-      <Button className="is-primary light mb-5 px-5 is-small">
-        Dodaj komentarz
-      </Button>
+      {user ? (
+        <>
+          <CommentsSectionTitle>Co o tym sądzisz?</CommentsSectionTitle>
+          <Alert
+            alert={alert}
+            clearAlert={() => setAlert({ msg: "", type: "" })}
+          />
+          <form action="submit" onSubmit={handleSubmitNewComment}>
+            <div className="field">
+              <div className="control">
+                <StyledTextArea
+                  value={comment}
+                  onChange={handleCommentChange}
+                  className="textarea mb-5"
+                  placeholder="Napisz kilka słów, zachowując kulturę wypowiedzi i takie tam..."
+                ></StyledTextArea>
+              </div>
+            </div>
+            {comment && (
+              <Button
+                className="is-primary light mb-5 px-5 is-small"
+                type="submit"
+              >
+                Dodaj komentarz
+              </Button>
+            )}
+          </form>
+        </>
+      ) : (
+        <>
+          <CommentsSectionTitle>Co o tym sądzisz?</CommentsSectionTitle>
+          <StyledContentBody className="mb-5">
+            <Link href="/logowanie">
+              <a className="is-link">Zaloguj się</a>
+            </Link>{" "}
+            lub{" "}
+            <Link href="/rejestracja">
+              <a className="is-link">zarejestruj</a>
+            </Link>
+            , aby dodać komentarz
+          </StyledContentBody>
+        </>
+      )}
       <CommentsSectionTitle>Komentarze</CommentsSectionTitle>
       {comments.length ? (
         comments.map((comment) => (
-          <article key={comment.id}>
-            <CustomContentHeader>
-              <Avatar
-                src={
-                  comment.user.avatar
-                    ? `${process.env.SERVER_URL}${comment.user.avatar.url}`
-                    : "/img/avatar-placeholder.jpg"
-                }
-                alt={`Zdjęcie użytkownika ${comment.user.username}`}
-              ></Avatar>
-              <span className="username">{comment.user.username}</span>
-            </CustomContentHeader>
-            <CustomContentBody className="py-5">
-              {comment.content}
-            </CustomContentBody>
-          </article>
+          <Comment key={comment.id} comment={comment} />
         ))
       ) : (
         <StyledContentBody>Brak komentarzy</StyledContentBody>

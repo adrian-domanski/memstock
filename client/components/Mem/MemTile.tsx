@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Link from "next/link";
+import { MemType } from "../../utils/types";
 
 const StyledMemItem = styled.article`
   background: ${({ theme }) => theme.colors.dark600};
@@ -30,7 +32,7 @@ const MemItemBody = styled.div`
 `;
 
 interface Props {
-  mem: any;
+  mem: MemType;
 }
 
 const MemTile: React.FC<Props> = ({ mem }) => {
@@ -39,12 +41,20 @@ const MemTile: React.FC<Props> = ({ mem }) => {
       <MemItemBody>
         <div className="section py-3">
           <figure>
-            <img
-              src={`${process.env.SERVER_URL}${mem.image.url}`}
-              alt={mem.title}
-            />
+            <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
+              <a>
+                <img
+                  src={`${process.env.SERVER_URL}${mem.image.url}`}
+                  alt={mem.title}
+                />
+              </a>
+            </Link>
             <figcaption>
-              <h3 className="mem-title">{mem.title}</h3>
+              <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
+                <a>
+                  <h3 className="mem-title">{mem.title}</h3>
+                </a>
+              </Link>
               <ul className="mem-categories mb-3">
                 {mem.categories.map(({ name, id }) => (
                   <li key={id}>#{name}</li>

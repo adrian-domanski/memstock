@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { AuthContext } from "../../context/authContext";
 import { Vote } from "../../context/reducers/authReducer";
 import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
-import { Mem } from "../../utils/types";
+import { MemType, mediaCheckTypes } from "../../utils/types";
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -126,7 +126,7 @@ const ShareButton = styled.button`
 interface Props {
   likes: number;
   dislikes: number;
-  memCheckActions: boolean;
+  memCheckActions: mediaCheckTypes;
   memId: string;
   updateMemList: (
     mapFn: (previousQueryResult: any, options: Pick<any, "variables">) => any
@@ -136,7 +136,7 @@ interface Props {
 const MemActions: React.FC<Props> = ({
   likes,
   dislikes,
-  memCheckActions = false,
+  memCheckActions = mediaCheckTypes.NO_CHECK,
   memId,
   updateMemList,
 }) => {
@@ -147,6 +147,7 @@ const MemActions: React.FC<Props> = ({
   const [loading, setLoading] = useState({
     publicMem: false,
     deleteMem: false,
+    unReportMem: false,
   });
   const [userAction, setUserAction] = useState<Vote>();
   const [updateMem] = useMutation(updateMemMutation);
@@ -159,6 +160,23 @@ const MemActions: React.FC<Props> = ({
       setUserAction(actionOnThisMedia);
     } else setUserAction(null);
   }, [votes]);
+
+  const handleRejectReport = async () => {
+    setLoading({ ...loading, unReportMem: true });
+    await updateMem({
+      variables: {
+        input: { where: { id: memId }, data: { isReported: false } },
+      },
+    });
+
+    updateMemList((prev) => {
+      return {
+        ...prev,
+        mems: prev.mems.filter((mem) => mem.id !== memId),
+      };
+    });
+    setLoading({ ...loading, unReportMem: false });
+  };
 
   const handlePublicMem = async () => {
     setLoading({ ...loading, publicMem: true });
@@ -210,17 +228,15 @@ const MemActions: React.FC<Props> = ({
 
     dispatch({ type: "USER_NEW_VOTE", payload: { mediaId: memId, type } });
 
-    console.log({ mediaId: memId, type });
-
     try {
-      const data = await updateMem({
+      await updateMem({
         variables: { input: { where: { id: memId }, data: updateData } },
       });
 
       updateMemList((prev) => {
         return {
           ...prev,
-          mems: prev.mems.map((mem: Mem) => {
+          mems: prev.mems.map((mem: MemType) => {
             if (mem.id === memId)
               return {
                 ...mem,
@@ -232,8 +248,6 @@ const MemActions: React.FC<Props> = ({
         };
       });
       setLoading({ ...loading, deleteMem: false });
-
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -241,7 +255,47 @@ const MemActions: React.FC<Props> = ({
 
   return (
     <FlexWrapper>
-      {!memCheckActions ? (
+      {memCheckActions === mediaCheckTypes.FOR_PUBLICATION ? (
+        <MemButtons memCheckActions>
+          <DislikeButton
+            memCheckActions
+            onClick={handleDeleteMem}
+            className={`button dislike ${
+              loading.deleteMem ? "is-loading" : ""
+            }`}
+          >
+            Usuń
+          </DislikeButton>
+          <LikeButton
+            memCheckActions
+            onClick={handlePublicMem}
+            type="button"
+            className={`button like ${loading.publicMem ? "is-loading" : ""}`}
+          >
+            Akceptuj
+          </LikeButton>
+        </MemButtons>
+      ) : memCheckActions === mediaCheckTypes.FOR_REPORT ? (
+        <MemButtons memCheckActions>
+          <DislikeButton
+            memCheckActions
+            onClick={handleDeleteMem}
+            className={`button dislike ${
+              loading.deleteMem ? "is-loading" : ""
+            }`}
+          >
+            Usuń
+          </DislikeButton>
+          <LikeButton
+            memCheckActions
+            onClick={handleRejectReport}
+            type="button"
+            className={`button like ${loading.publicMem ? "is-loading" : ""}`}
+          >
+            Fałszywe zgłoszenie
+          </LikeButton>
+        </MemButtons>
+      ) : (
         <>
           <MemButtons>
             <LikeButton
@@ -278,26 +332,6 @@ const MemActions: React.FC<Props> = ({
             <i className="fab fa-facebook-square"></i>Udostępnij
           </ShareButton>
         </>
-      ) : (
-        <MemButtons memCheckActions>
-          <DislikeButton
-            memCheckActions
-            onClick={handleDeleteMem}
-            className={`button dislike ${
-              loading.deleteMem ? "is-loading" : ""
-            }`}
-          >
-            Usuń
-          </DislikeButton>
-          <LikeButton
-            memCheckActions
-            onClick={handlePublicMem}
-            type="button"
-            className={`button like ${loading.publicMem ? "is-loading" : ""}`}
-          >
-            Akceptuj
-          </LikeButton>
-        </MemButtons>
       )}
     </FlexWrapper>
   );

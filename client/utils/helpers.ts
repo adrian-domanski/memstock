@@ -31,10 +31,24 @@ export const getRankName = (rank: number) => {
   }
 };
 
-export const formatDate = (date: Date) => {
+interface formatDateOptions {
+  getExactTime: boolean;
+}
+
+export const formatDate = (date: Date, options?: formatDateOptions) => {
   const day = date.getDate();
   const month = date.getMonth();
   const year = date.getFullYear();
+
+  if (options && options.getExactTime) {
+    let hours: number | string = date.getHours();
+    let minutes: number | string = date.getMinutes();
+
+    if (hours < 10) hours = `0${hours}`;
+    if (minutes < 10) minutes = `0${minutes}`;
+
+    return `${hours}:${minutes} | ${day}.${month}.${year}`;
+  }
 
   return `${day}.${month}.${year}`;
 };

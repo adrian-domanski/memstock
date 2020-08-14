@@ -24,23 +24,27 @@ module.exports = {
   // Update
   async update(ctx) {
     const { id } = ctx.params;
+    const user = ctx.state.user;
 
     let entity;
 
-    const [mem] = await strapi.services.mem.find({
-      id: ctx.params.id,
-    });
-
     if (
       ctx.request.body.isPublic === true &&
-      ctx.state.user.role.name !== "PageAdmin"
+      (!user || user.role.name !== "PageAdmin")
     ) {
       return ctx.throw(401, "Access denied");
+    } else if (!user || user.role.name !== "PageAdmin") {
+      const allowedProperties = ["likes", "dislikes", "isReported"];
+      for (let prop in ctx.request.body) {
+        if (!allowedProperties.includes(prop)) {
+          return ctx.throw(401, "Access denied");
+        }
+      }
     } else if (
-      mem.user.id !== ctx.state.user.id &&
-      ctx.state.user.role.name !== "PageAdmin"
+      ctx.is("multipart") &&
+      (!user || user.role.name !== "PageAdmin")
     ) {
-      return ctx.throw(401, "Access denied");
+      return ctx.throw(401, "Access denies");
     }
 
     if (ctx.is("multipart")) {

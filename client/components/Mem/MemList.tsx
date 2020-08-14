@@ -5,17 +5,17 @@ import { getMemsQuery } from "../../queries/memQueries";
 import Loader from "../Loader";
 import InfiniteScroll from "react-infinite-scroller";
 import { ContentBody } from "../../utils/styled/components/components";
-import { Mem } from "../../utils/types";
+import { MemType, mediaCheckTypes } from "../../utils/types";
 
 interface Props {
   where?: object;
-  memsForCheck?: boolean;
+  memsForCheck?: mediaCheckTypes;
   sort?: string;
 }
 
 const MemList: React.FC<Props> = ({
   where = { isPublic: true },
-  memsForCheck = false,
+  memsForCheck,
   sort = "createdAt:DESC",
 }) => {
   const MEMS_FETCH_MORE_AMOUNT = 10;
@@ -58,7 +58,7 @@ const MemList: React.FC<Props> = ({
         >
           {data.mems.length ? (
             data.mems.map(
-              (mem: Mem) =>
+              (mem: MemType) =>
                 mem.image && (
                   <MemItem
                     key={mem.id}

@@ -27,7 +27,7 @@ const MemDetails: React.FC<Props> = ({ router }) => {
           <div className="column is-8-desktop">
             {!loading ? <MemItem mem={data.mem} /> : <Loader />}
             {!loading ? (
-              <MemComments comments={data.mem.comments} />
+              <MemComments memId={memId} comments={data.mem.comments} />
             ) : (
               <Loader />
             )}

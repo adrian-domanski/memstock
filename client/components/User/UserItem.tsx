@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
-import { User } from "../../utils/types";
+import { UserType } from "../../utils/types";
 import { RankingListItem } from "../Mem/TopUsers";
 
 const StyledRankingListItem = styled(RankingListItem)`
@@ -23,7 +23,7 @@ const StyledRankingListItem = styled(RankingListItem)`
 `;
 
 interface Props {
-  user: User;
+  user: UserType;
   index: number;
 }
 

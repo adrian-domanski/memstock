@@ -9,20 +9,20 @@ import {
 } from "../../utils/styled/components/components";
 import { mediaCheckTypes } from "../../utils/types";
 
-const WaitingForAccept: React.FC = () => {
+const ReportedMedia: React.FC = () => {
   return (
     <Layout>
       <div className="columns mt-5 mb-6">
         <div className="column is-8-desktop">
           <ContentHeader className="mb-4">
             <StyledTitleWithLine className="is-size-4">
-              Poczekalnia - do zatwierdzenia
+              Zgłoszenia - do sprawdzenia
             </StyledTitleWithLine>
           </ContentHeader>
           <MemList
-            where={{ isPublic: false }}
+            where={{ isReported: true }}
             sort={"createdAt:DESC"}
-            memsForCheck={mediaCheckTypes.FOR_PUBLICATION}
+            memsForCheck={mediaCheckTypes.FOR_REPORT}
           />
         </div>
         <div className="column is-4-desktop">
@@ -34,4 +34,4 @@ const WaitingForAccept: React.FC = () => {
   );
 };
 
-export default WaitingForAccept;
+export default ReportedMedia;

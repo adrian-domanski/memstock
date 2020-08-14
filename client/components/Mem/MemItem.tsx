@@ -2,7 +2,7 @@ import { useMutation } from "@apollo/react-hooks";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext";
-import { deleteMemMutation } from "../../queries/memQueries";
+import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
 import { getRankName, isPageAdmin } from "../../utils/helpers";
 import {
   MemItemBody,
@@ -10,30 +10,38 @@ import {
   MemItemHeader,
   StyledDropdown,
   StyledMemItem,
+  Avatar,
 } from "../../utils/styled/components/MemItem";
-import { Mem } from "../../utils/types";
+import { MemType, mediaCheckTypes } from "../../utils/types";
 import Modal from "../Modal";
 import MemActions from "./MemActions";
 
 interface Props {
-  mem: Mem;
-  memForCheck?: boolean;
+  mem: MemType;
+  memForCheck?: mediaCheckTypes;
   updateMemList?: (prev) => void;
 }
 
 const MemItem: React.FC<Props> = ({
   mem,
-  memForCheck = false,
+  memForCheck = mediaCheckTypes.NO_CHECK,
   updateMemList,
 }) => {
   const {
     ctx: { user, isAuth },
   } = useContext(AuthContext);
 
-  const [loading, setLoading] = useState({ deleteMem: false });
-  const [modals, setModals] = useState({ deleteModal: false });
+  const [loading, setLoading] = useState({
+    deleteMem: false,
+    reportMem: false,
+  });
+  const [modals, setModals] = useState({
+    deleteModal: false,
+    reportModal: false,
+  });
   const [isOptionsActive, setIsOptionsActive] = useState(false);
   const [deleteMem] = useMutation(deleteMemMutation);
+  const [updateMem] = useMutation(updateMemMutation);
 
   const handleDeleteMem = async () => {
     try {
@@ -51,6 +59,22 @@ const MemItem: React.FC<Props> = ({
     }
   };
 
+  const handleReportMem = async () => {
+    setLoading({ ...loading, reportMem: true });
+    try {
+      await updateMem({
+        variables: {
+          input: { where: { id: mem.id }, data: { isReported: true } },
+        },
+      });
+      setModals({ ...modals, reportModal: false });
+    } catch {
+      console.log("Wystąpił błąd podczas zgłaszania mema");
+    } finally {
+      setLoading({ ...loading, reportMem: false });
+    }
+  };
+
   return (
     <StyledMemItem>
       <Modal
@@ -64,13 +88,32 @@ const MemItem: React.FC<Props> = ({
           </p>
         }
       />
+
+      <Modal
+        isOpen={modals.reportModal}
+        actionClose={() => setModals({ ...modals, reportModal: false })}
+        actionSubmit={handleReportMem}
+        actionProgress={loading.reportMem}
+        title="Zgłoszenie zdjęcia"
+        body={
+          <>
+            <p>
+              Czy uważasz, że ta grafika narusza zasady udostępniania treści w
+              internecie?
+            </p>
+            <p className="has-text-danger mt-3">
+              Bezpodstawne zgłaszanie może zakończyć się blokadą konta!
+            </p>
+          </>
+        }
+      />
       <MemItemHeader>
         <div className="content-wrapper">
-          <figure className="avatar">
+          <Avatar>
             <img
               src={
                 mem.user.avatar
-                  ? `${process.env.SERVER_URL}${user.avatar.url}`
+                  ? `${process.env.SERVER_URL}${mem.user.avatar.url}`
                   : "/img/avatar-placeholder.jpg"
               }
               alt={`Zdjęcie profilowe użytkownika ${mem.user.username}`}
@@ -79,7 +122,7 @@ const MemItem: React.FC<Props> = ({
               <div className="user-name">{mem.user.username}</div>
               <div className="user-rank">{getRankName(mem.user.rank)}</div>
             </figcaption>
-          </figure>
+          </Avatar>
           <div
             className="options"
             onClick={() => {
@@ -115,10 +158,19 @@ const MemItem: React.FC<Props> = ({
                   <a href="#" className="dropdown-item">
                     Other dropdown item
                   </a>
-                  <hr className="dropdown-divider" />
-                  <a href="#" className="dropdown-item has-text-danger">
-                    Zgłoś grafikę
-                  </a>
+                  {mem.isReported === null && (
+                    <>
+                      <hr className="dropdown-divider" />
+                      <button
+                        onClick={() =>
+                          setModals({ ...modals, reportModal: true })
+                        }
+                        className="button-link dropdown-item has-text-danger"
+                      >
+                        Zgłoś grafikę
+                      </button>
+                    </>
+                  )}
                   {isAuth &&
                     (isPageAdmin(user.role) || mem.user.id === user.id) && (
                       <>

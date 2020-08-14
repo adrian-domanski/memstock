@@ -39,7 +39,8 @@ $radius: 0;
 }
 
 .is-link {
-  :hover {
+  transition: color 0.1s ease-in-out;
+  &:hover {
     color: $accentDarker;
   }
 }

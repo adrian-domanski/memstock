@@ -4,7 +4,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import styled from "styled-components";
 import { getUsersQuery } from "../../queries/userQueries";
 import { ContentBody } from "../../utils/styled/components/components";
-import { User } from "../../utils/types";
+import { UserType } from "../../utils/types";
 import Loader from "../Loader";
 import UserItem from "./UserItem";
 
@@ -59,7 +59,7 @@ const UserList: React.FC<Props> = ({ where = {}, sort = "rank:DESC" }) => {
           <ContentBody className="is-size-4 py-5">
             {data.users.length ? (
               <StyledList>
-                {data.users.map((user: User, index: number) => (
+                {data.users.map((user: UserType, index: number) => (
                   <UserItem key={user.id} index={index} user={user} />
                 ))}
               </StyledList>

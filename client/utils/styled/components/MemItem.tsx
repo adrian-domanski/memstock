@@ -42,28 +42,28 @@ export const MemItemHeader = styled.header`
       }
     }
   }
+`;
 
-  .avatar {
-    display: flex;
+export const Avatar = styled.figure`
+  display: flex;
 
-    img {
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      object-position: center;
+  img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    object-position: center;
+  }
+  figcaption {
+    padding-left: 0.8rem;
+
+    .user-name {
+      color: ${({ theme }) => theme.colors.primary};
+      font-size: 1.1rem;
     }
-    figcaption {
-      padding-left: 0.8rem;
 
-      .user-name {
-        color: ${({ theme }) => theme.colors.primary};
-        font-size: 1.1rem;
-      }
-
-      .user-rank {
-        color: ${({ theme }) => theme.colors.accent};
-        font-size: 0.9rem;
-      }
+    .user-rank {
+      color: ${({ theme }) => theme.colors.accent};
+      font-size: 0.9rem;
     }
   }
 `;
