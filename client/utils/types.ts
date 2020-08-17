@@ -122,3 +122,12 @@ export interface CommentType {
   user: UserType;
   id: string;
 }
+
+export interface MemGeneratorTemplate {
+  id: string;
+  name: string;
+  url: string;
+  width: number;
+  height: number;
+  box_count: number;
+}

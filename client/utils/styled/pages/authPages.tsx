@@ -1,13 +1,13 @@
 import styled, { StyledComponent, DefaultTheme } from "styled-components";
-import { Props, PageWrapper, ContentHeader } from "../components/components";
+import { Props, ContentHeader } from "../components/components";
 
-export const CustomPageWrapper: React.FC<Props> = styled(PageWrapper)`
+export const CustomPageWrapper = styled.div.attrs({ className: "section" })`
   max-width: ${({ theme }) => theme.pageMaxWidth};
   margin-left: auto;
   margin-right: auto;
 `;
 
-export const CustomContentHeader: React.FC<Props> = styled(ContentHeader)`
+export const CustomContentHeader = styled(ContentHeader)`
   height: auto;
   display: flex;
   justify-content: center;
@@ -15,13 +15,11 @@ export const CustomContentHeader: React.FC<Props> = styled(ContentHeader)`
   padding: 2rem 0;
 `;
 
-export const ExtendedLogoWrapper: React.FC<Props> = styled.div`
+export const ExtendedLogoWrapper = styled.div`
   text-align: center;
 `;
 
-export const StyledForm: React.FC<
-  Props & { action: string; onSubmit: (e: React.FormEvent) => void }
-> = styled.form`
+export const StyledForm = styled.form`
   display: flex;
   justify-content: center;
   flex-direction: column;

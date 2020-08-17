@@ -98,10 +98,6 @@ export const ContentFooter: React.FC<Props> = styled.footer`
   }
 `;
 
-export const PageWrapper: React.FC<Props> = styled.section.attrs({
-  className: "section",
-})``;
-
 export const Button = styled.button.attrs(
   ({ className, as }: { className: string; as: string }) => ({
     className: `button ${className}`,

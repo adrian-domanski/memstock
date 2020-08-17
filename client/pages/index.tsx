@@ -6,7 +6,6 @@ import TopMems from "../components/Mem/TopMems";
 import TopUsers from "../components/Mem/TopUsers";
 import {
   ContentHeader,
-  PageWrapper,
   StyledTitle,
 } from "../utils/styled/components/components";
 
@@ -36,28 +35,18 @@ const index: React.FC<Props> = ({ router }) => {
   }, [params]);
 
   return (
-    <Layout>
-      <PageWrapper>
-        <div className="columns">
-          <div className="column is-8-desktop">
-            {whereFilter.title_contains && (
-              <ContentHeader className="mb-4">
-                <StyledTitle>
-                  Wyniki wyszukiwania dla frazy:{" "}
-                  <span className="has-text-link">
-                    "{whereFilter.title_contains}"
-                  </span>
-                </StyledTitle>
-              </ContentHeader>
-            )}
-            <MemList where={whereFilter} />
-          </div>
-          <div className="column is-4-desktop">
-            <TopMems />
-            <TopUsers />
-          </div>
-        </div>
-      </PageWrapper>
+    <Layout topUsers popularMems>
+      {whereFilter.title_contains && (
+        <ContentHeader className="mb-4">
+          <StyledTitle>
+            Wyniki wyszukiwania dla frazy:{" "}
+            <span className="has-text-link">
+              "{whereFilter.title_contains}"
+            </span>
+          </StyledTitle>
+        </ContentHeader>
+      )}
+      <MemList where={whereFilter} />
     </Layout>
   );
 };

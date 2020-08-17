@@ -1,23 +1,26 @@
 import React, { useState } from "react";
-import Layout from "../components/layout/Layout";
+import Layout from "../../components/layout/Layout";
 import {
   ContentHeader,
   StyledTitleWithLine,
   ContentBody,
   Button,
   StyledSelect,
-} from "../utils/styled/components/components";
-import Alert from "../components/Alert";
+} from "../../utils/styled/components/components";
+import Alert from "../../components/Alert";
 import styled from "styled-components";
-import MyDropzone from "../components/Dropzone";
+import MyDropzone from "../../components/Dropzone";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
   getCategoriesQuery,
   uploadFileMutation,
   createMemMutation,
-} from "../queries/memQueries";
+} from "../../queries/memQueries";
 import Link from "next/link";
-import { StyledForm } from "../utils/styled/pages/authPages";
+import { StyledForm } from "../../utils/styled/pages/authPages";
+import MemTemplates from "../../components/Mem/MemTemplates";
+import { MemGeneratorTemplate } from "../../utils/types";
+import { NextPage } from "next";
 
 const InlineButton = styled.button`
   &&& {
@@ -40,7 +43,14 @@ const InlineButton = styled.button`
   }
 `;
 
-const AddMem = () => {
+interface Props {
+  templates: {
+    memes: MemGeneratorTemplate[];
+  };
+}
+
+const MemGenerator: NextPage<Props> = ({ templates }) => {
+  console.log(templates);
   const [upload] = useMutation(uploadFileMutation);
   const [createMem] = useMutation(createMemMutation);
   const { data, loading } = useQuery(getCategoriesQuery);
@@ -122,7 +132,7 @@ const AddMem = () => {
     <Layout>
       <ContentHeader>
         <StyledTitleWithLine className="is-size-4">
-          Dodawanie własnego mema
+          Generator memów
         </StyledTitleWithLine>
       </ContentHeader>
       <ContentBody>
@@ -251,8 +261,16 @@ const AddMem = () => {
           </div>
         </div>
       </ContentBody>
+
+      <MemTemplates templates={templates} />
     </Layout>
   );
 };
 
-export default AddMem;
+MemGenerator.getInitialProps = async () => {
+  const res = await fetch(`https://api.imgflip.com/get_memes`);
+  const json = await res.json();
+  return { templates: json.data };
+};
+
+export default MemGenerator;

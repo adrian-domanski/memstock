@@ -23,6 +23,7 @@ import {
 import {
   MemItemHeader as UserInfo,
   StyledDropdown,
+  Avatar,
 } from "../../utils/styled/components/MemItem";
 
 const UserContentHeader = styled(UserInfo).attrs({ as: "div" })`
@@ -143,29 +144,22 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                 <div className="content-wrapper">
                   {!userLoading ? (
                     <>
-                      <figure className="avatar">
-                        <div
-                          className="avatar-wrapper"
-                          onClick={() => setIsUpdateAvatarModalOpen(true)}
-                        >
-                          <img
-                            src={
-                              userData.user.avatar
-                                ? `${process.env.SERVER_URL}${userData.user.avatar.url}`
-                                : "/img/avatar-placeholder.jpg"
-                            }
-                            alt="Domyślne zdjęcie użytkownika, który nie ustawił swojego zdjęcia."
-                          />
-                        </div>
+                      <Avatar>
+                        <img
+                          src={
+                            user.avatar
+                              ? `${process.env.SERVER_URL}${user.avatar.url}`
+                              : "/img/avatar-placeholder.jpg"
+                          }
+                          alt={`Zdjęcie profilowe użytkownika ${user.username}`}
+                        />
                         <figcaption>
-                          <div className="user-name">
-                            {userData.user.username}
-                          </div>
+                          <div className="user-name">{user.username}</div>
                           <div className="user-rank">
-                            {getRankName(userData.user.rank)}
+                            {getRankName(user.rank)}
                           </div>
                         </figcaption>
-                      </figure>
+                      </Avatar>
                       <div
                         className="options"
                         onClick={() => {

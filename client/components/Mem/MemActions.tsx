@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/authContext";
 import { Vote } from "../../context/reducers/authReducer";
 import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
 import { MemType, mediaCheckTypes } from "../../utils/types";
+import { FacebookProvider, Like, ShareButton } from "react-facebook";
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -115,7 +116,7 @@ const MemButtons = styled.div<{ memCheckActions?: boolean }>`
   }
 `;
 
-const ShareButton = styled.button`
+const StyledShareButton = styled(ShareButton)`
   display: flex;
   align-items: center;
   i {
@@ -328,9 +329,14 @@ const MemActions: React.FC<Props> = ({
               <span className="dislikes">{dislikes}</span>
             </div>
           </MemButtons>
-          <ShareButton className="button is-link">
-            <i className="fab fa-facebook-square"></i>Udostępnij
-          </ShareButton>
+          <FacebookProvider appId="621710562109715">
+            <StyledShareButton
+              className="button is-link"
+              href="http://adrian-6148dd9d.localhost.run/mem/5f365315b6496918801cc98c"
+            >
+              Udostępnij
+            </StyledShareButton>
+          </FacebookProvider>
         </>
       )}
     </FlexWrapper>

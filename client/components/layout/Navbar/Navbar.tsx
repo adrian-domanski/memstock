@@ -88,9 +88,11 @@ const Navbar: React.FC<Props> = ({ router }) => {
                 <a className="navbar-link">Dodaj</a>
 
                 <div className="navbar-dropdown">
-                  <NavbarLink className="navbar-item">
-                    Generator memów
-                  </NavbarLink>
+                  <Link href="/generator-memow">
+                    <NavbarLink className="navbar-item">
+                      Generator memów
+                    </NavbarLink>
+                  </Link>
                   <Link href="/dodaj-mema">
                     <NavbarLink className="navbar-item">
                       Własnego mema
