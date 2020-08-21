@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {
   Button,
   ContentBody,
-  ContentHeader,
+  StyledTextArea,
 } from "../../utils/styled/components/components";
 import { CommentType } from "../../utils/types";
 import { AuthContext } from "../../context/authContext";
@@ -36,16 +36,6 @@ const CommentsSectionTitle = styled.h1`
     height: 100%;
     width: 5px;
     background-color: ${({ theme }) => theme.colors.primary};
-  }
-`;
-
-const StyledTextArea = styled.textarea`
-  background: ${({ theme }) => theme.colors.dark800};
-  border-color: ${({ theme }) => theme.colors.dark800};
-  color: ${({ theme }) => theme.colors.white500};
-
-  ::placeholder {
-    color: ${({ theme }) => theme.colors.grey700};
   }
 `;
 

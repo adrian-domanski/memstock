@@ -98,6 +98,16 @@ export const ContentFooter: React.FC<Props> = styled.footer`
   }
 `;
 
+export const StyledTextArea = styled.textarea`
+  background: ${({ theme }) => theme.colors.dark800};
+  border-color: ${({ theme }) => theme.colors.dark800};
+  color: ${({ theme }) => theme.colors.white500};
+
+  ::placeholder {
+    color: ${({ theme }) => theme.colors.grey700};
+  }
+`;
+
 export const Button = styled.button.attrs(
   ({ className, as }: { className: string; as: string }) => ({
     className: `button ${className}`,

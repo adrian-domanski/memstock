@@ -1,47 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Layout from "../../components/layout/Layout";
 import {
   ContentHeader,
   StyledTitleWithLine,
   ContentBody,
   Button,
-  StyledSelect,
+  StyledTextArea,
 } from "../../utils/styled/components/components";
 import Alert from "../../components/Alert";
-import styled from "styled-components";
 import MyDropzone from "../../components/Dropzone";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import {
-  getCategoriesQuery,
-  uploadFileMutation,
-  createMemMutation,
-} from "../../queries/memQueries";
-import Link from "next/link";
 import { StyledForm } from "../../utils/styled/pages/authPages";
 import MemTemplates from "../../components/Mem/MemTemplates";
 import { MemGeneratorTemplate } from "../../utils/types";
 import { NextPage } from "next";
+import { v4 as uuidv4 } from "uuid";
 
-const InlineButton = styled.button`
-  &&& {
-    background: unset;
-    border: none;
-    padding: 0;
-    display: block;
-    justify-content: flex-start;
-
-    :hover {
-      color: ${({ theme }) => theme.colors.primaryDarker};
-    }
-
-    :active,
-    :focus {
-      outline: none;
-      box-shadow: unset;
-      border: none;
-    }
-  }
-`;
+export interface ITextField {
+  id: string;
+  x: number;
+  y: number;
+  value: string;
+  fontSizeRatio: string;
+}
 
 interface Props {
   templates: {
@@ -50,82 +30,61 @@ interface Props {
 }
 
 const MemGenerator: NextPage<Props> = ({ templates }) => {
-  console.log(templates);
-  const [upload] = useMutation(uploadFileMutation);
-  const [createMem] = useMutation(createMemMutation);
-  const { data, loading } = useQuery(getCategoriesQuery);
-
-  const [title, setTitle] = useState("");
+  const canvasRef: React.MutableRefObject<HTMLCanvasElement> = useRef(null);
+  const [textFields, setTextFields] = useState<ITextField[]>(() => {
+    let state = [];
+    if (canvasRef.current) {
+      console.log(canvasRef);
+      state = [
+        {
+          id: uuidv4(),
+          fontSizeRatio: "0.15",
+          value: "",
+          x: canvasRef.current.width / 2,
+          y: canvasRef.current.height / 2,
+        },
+      ];
+    }
+    return state;
+  });
   const [alert, setAlert] = useState({ msg: "", type: "" });
   const [previewURL, setPreviewURL] = useState("");
   const [uploadedLink, setUploadedLink] = useState("");
   const [file, setFile] = useState<File | Blob>(null);
-  const [categories, setCategories] = useState<string[]>([""]);
+
+  const handleChange = ({
+    target: { name, value, dataset },
+  }: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    let currentTextFields = textFields;
+    switch (name) {
+      case "textField":
+        currentTextFields.forEach((textField) => {
+          if (textField.id === dataset.id) textField.value = value;
+        });
+        return setTextFields([...currentTextFields]);
+      case "textFieldFontRange":
+        currentTextFields.forEach((textField) => {
+          if (textField.id === dataset.id) textField.fontSizeRatio = value;
+        });
+        return setTextFields([...currentTextFields]);
+      default:
+        return;
+    }
+  };
+
+  const handleAddTextField = () => {
+    const newTextField: ITextField = {
+      id: uuidv4(),
+      fontSizeRatio: "0.15",
+      value: "",
+      x: canvasRef.current.width / 2,
+      y: canvasRef.current.height / 2,
+    };
+    setTextFields([...textFields, newTextField]);
+  };
 
   const handleSubmit = async (e: React.FormEvent<Element>) => {
     e.preventDefault();
-
-    if (!title || !file) {
-      return setAlert({
-        msg: "Proszę wypełnić wszystkie pola i wybrać minimum 1 kategorię",
-        type: "danger",
-      });
-    }
-
-    for (let value of categories) {
-      if (!value)
-        return setAlert({
-          msg: "Proszę wypełnić wszystkie pola i wybrać minimum 1 kategorię",
-          type: "danger",
-        });
-    }
-
-    try {
-      setAlert({ msg: "Proszę czekać...", type: "warning" });
-      const { data: uploadFileData } = await upload({ variables: { file } });
-      const uploadedImgID = uploadFileData.upload.id;
-      const { data: createMemData } = await createMem({
-        variables: { title, categories, image: uploadedImgID },
-      });
-      setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
-      setAlert({
-        msg:
-          "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
-        type: "success",
-      });
-    } catch (err) {
-      setAlert({
-        msg: "Wystąpił błąd, podczas dodawania zdjęcia",
-        type: "warning",
-      });
-    }
-  };
-
-  const handleChange = ({
-    target: { value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(value);
-  };
-
-  const handleCategoryChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-    index: number
-  ) => {
-    let currentCategories = [...categories];
-    if (!currentCategories.includes(e.target.value)) {
-      currentCategories[index] = e.target.value;
-      setCategories(currentCategories);
-    }
-  };
-
-  const clearFields = (e) => {
-    e.preventDefault();
-    setTitle("");
-    setCategories([""]);
-    setAlert({ msg: "", type: "" });
-    setFile(null);
-    setPreviewURL("");
-    setUploadedLink("");
   };
 
   return (
@@ -141,7 +100,13 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
             <MyDropzone
               previewURL={previewURL}
               setPreviewURL={setPreviewURL}
+              disabled
               setFile={setFile}
+              canvasProps={{
+                textFields,
+                setTextFields,
+                canvasRef,
+              }}
             />
           </div>
           <div className="column is-6">
@@ -155,114 +120,61 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
                 clearAlert={() => setAlert({ msg: "", type: "" })}
               />
 
-              {uploadedLink && (
-                <div className="notification is-info is-light">
-                  <button
-                    className="delete"
-                    onClick={() => setUploadedLink("")}
-                  ></button>
-                  <p>
-                    Link do twojego mema:&nbsp;
-                    <Link href={uploadedLink}>
-                      <a className="has-text-weight-bold">{`${process.env.CLIENT_URL}${uploadedLink}`}</a>
-                    </Link>
-                  </p>
+              {textFields.map((field, i) => (
+                <div key={field.id} className="field">
+                  <label className="label" htmlFor={`textField-${field.id}`}>
+                    Pole tekstowe numer {i + 1}
+                  </label>
+                  <StyledTextArea
+                    className="textarea"
+                    id={`textField-${field.id}`}
+                    name="textField"
+                    data-id={field.id}
+                    placeholder="Dodatkowe pole tekstowe"
+                    value={field.value}
+                    onChange={handleChange}
+                  />
+                  <label
+                    className="label mt-4"
+                    htmlFor={`textFieldRange-${field.id}`}
+                  >
+                    Wielkość czcionki:
+                  </label>
+                  <input
+                    type="range"
+                    id={`textFieldRange-${field.id}`}
+                    data-id={field.id}
+                    className="range"
+                    name="textFieldFontRange"
+                    min="0.05"
+                    max="0.25"
+                    value={field.fontSizeRatio}
+                    onChange={handleChange}
+                    step="0.01"
+                  />
                 </div>
-              )}
+              ))}
 
-              {!uploadedLink && (
-                <>
-                  <div className="field">
-                    <label className="label" htmlFor="title">
-                      Tytuł mema
-                    </label>
-                    <div className="control has-icons-left">
-                      <input
-                        className="input"
-                        type="text"
-                        id="title"
-                        placeholder="Tytuł mema"
-                        value={title}
-                        onChange={handleChange}
-                      />
-                      <span className="icon is-small is-left">
-                        <i className="fas fa-envelope"></i>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="field mb-5">
-                    <label className="label" htmlFor="password">
-                      Kategorie
-                    </label>
-
-                    {categories.map((_, index) => (
-                      <StyledSelect
-                        key={index}
-                        className="select is-fullwidth mb-2"
-                      >
-                        <select
-                          value={categories[index]}
-                          name="select"
-                          onChange={(e) => handleCategoryChange(e, index)}
-                        >
-                          <option disabled value="">
-                            Wybierz kategorię
-                          </option>
-                          {!loading
-                            ? data.categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                  {category.name}
-                                </option>
-                              ))
-                            : null}
-                        </select>
-                      </StyledSelect>
-                    ))}
-                    {categories.length < 3 && (
-                      <InlineButton
-                        className="button has-text-primary"
-                        type="button"
-                        onClick={() => setCategories([...categories, ""])}
-                      >
-                        Dodaj kategorię (maksymalnie 3)
-                      </InlineButton>
-                    )}
-                    {categories.length > 1 && (
-                      <InlineButton
-                        className="button has-text-primary"
-                        type="button"
-                        onClick={() =>
-                          setCategories(
-                            categories.slice(0, categories.length - 1)
-                          )
-                        }
-                      >
-                        Usuń kategorię
-                      </InlineButton>
-                    )}
-                  </div>
-                </>
-              )}
-
-              {uploadedLink ? (
-                <Button
-                  className="is-primary light mb-5 px-6"
-                  onClick={clearFields}
-                  type="button"
-                >
-                  Dodaj następnego mema
-                </Button>
-              ) : (
-                <Button className="is-primary light mb-5 px-6" type="submit">
-                  Dodaj mema
-                </Button>
-              )}
+              <Button
+                className="is-primary is-fullwidth is-block light mb-5 px-6"
+                onClick={handleAddTextField}
+                type="button"
+              >
+                Dodaj pole tekstowe
+              </Button>
+              <button className="button is-link px-6" type="submit">
+                Generuj mema
+              </button>
             </StyledForm>
           </div>
         </div>
       </ContentBody>
 
-      <MemTemplates templates={templates} />
+      <MemTemplates
+        setPreviewURL={setPreviewURL}
+        previewURL={previewURL}
+        templates={templates}
+      />
     </Layout>
   );
 };
