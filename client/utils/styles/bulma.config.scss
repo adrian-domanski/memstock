@@ -6,7 +6,6 @@ $link: $accent;
 $family-sans-serif: BlinkMacSystemFont, -apple-system, "Montserrat", "Roboto",
   "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
   "Helvetica", "Arial", sans-serif;
-$radius: 0;
 
 .select select:hover,
 .textarea:hover,
@@ -43,4 +42,10 @@ $radius: 0;
   &:hover {
     color: $accentDarker;
   }
+}
+
+.is-vertical-center {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
 }

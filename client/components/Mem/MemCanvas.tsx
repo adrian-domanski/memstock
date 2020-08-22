@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ITextField } from "../../pages/generator-memow";
+import { v4 as uuidv4 } from "uuid";
+import styled from "styled-components";
+
+const StyledCanvas = styled.canvas`
+  &&& {
+    width: 100%;
+    display: block;
+  }
+`;
 
 export interface CanvasProps {
   textFields: ITextField[];
@@ -8,48 +17,66 @@ export interface CanvasProps {
 }
 
 interface Props {
-  className: string;
   canvasProps: CanvasProps;
-  previewURL?: string;
+  canvasBaseImage: string;
 }
 
 const MemCanvas: React.FC<Props> = ({
-  className,
   canvasProps: { textFields, setTextFields, canvasRef },
-  previewURL,
+  canvasBaseImage,
 }) => {
   const [ctx, setContext] = useState<CanvasRenderingContext2D>(null);
   const [image, setImage] = useState<HTMLImageElement>(null);
+  const [selectedTextId, setSelectedTextId] = useState<string>(null);
   const [memConfig, setMemConfig] = useState({
     textPadding: 25,
-    lineHeight: 12,
-    lineWidthRatio: 22,
     getFontSize: (fontRatio: number) => fontRatio * canvasRef.current.width,
   });
-  const [selectedTextId, setSelectedTextIndex] = useState<string>(null);
 
   useEffect(() => {
     setContext(canvasRef.current.getContext("2d"));
   }, []);
 
   useEffect(() => {
-    if (previewURL) {
+    if (canvasBaseImage) {
       const image = new Image();
-      image.src = previewURL;
+      image.crossOrigin = "anonymous";
+      image.src = canvasBaseImage;
       image.onload = () => {
         setImage(image);
         canvasRef.current.height = image.height;
         canvasRef.current.width = image.width;
+
+        setTextFields([
+          {
+            fontSizeRatio: 0.1,
+            id: uuidv4(),
+            value: `Przeciągnij mnie \n w dowolne miejsce`,
+            x: canvasRef.current.width / 2,
+            y: memConfig.getFontSize(0.15) / 2,
+            blackText: false,
+            strokeSizeRatio: 0.03,
+          },
+          {
+            fontSizeRatio: 0.1,
+            id: uuidv4(),
+            value: "Tekst na dole",
+            x: canvasRef.current.width / 2,
+            y: canvasRef.current.height - memConfig.getFontSize(0.15) / 2,
+            blackText: false,
+            strokeSizeRatio: 0.03,
+          },
+        ]);
       };
     }
-  }, [previewURL]);
+  }, [canvasBaseImage]);
 
   useEffect(() => {
     if (image) {
       clearCanvas();
       ctx.drawImage(image, 0, 0);
-      ctx.fillStyle = "white";
-      ctx.strokeStyle = "black";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
       textFields.forEach((textField) => drawText(textField));
     }
   }, [image, textFields]);
@@ -59,9 +86,10 @@ const MemCanvas: React.FC<Props> = ({
 
   const drawText = (textField: ITextField) => {
     const canvas = canvasRef.current;
-    const fontSize = memConfig.getFontSize(+textField.fontSizeRatio);
+    const fontSize = memConfig.getFontSize(textField.fontSizeRatio);
     ctx.font = `${fontSize}px Impact`;
-    ctx.lineWidth = fontSize / memConfig.lineWidthRatio;
+    ctx.fillStyle = textField.blackText ? "black" : "white";
+    ctx.lineWidth = fontSize * textField.strokeSizeRatio;
     let splitedText = textField.value.split("\n");
     splitedText.forEach((line, i) => {
       ctx.fillText(
@@ -70,12 +98,14 @@ const MemCanvas: React.FC<Props> = ({
         textField.y + i * fontSize,
         canvas.width - memConfig.textPadding
       );
-      ctx.strokeText(
-        line,
-        textField.x,
-        textField.y + i * fontSize,
-        canvas.width - memConfig.textPadding
-      );
+      if (!textField.blackText && textField.strokeSizeRatio > 0) {
+        ctx.strokeText(
+          line,
+          textField.x,
+          textField.y + i * fontSize,
+          canvas.width - memConfig.textPadding
+        );
+      }
     });
   };
 
@@ -84,7 +114,7 @@ const MemCanvas: React.FC<Props> = ({
     y: number,
     currentTextField: ITextField
   ) => {
-    const fontSize = memConfig.getFontSize(+currentTextField.fontSizeRatio);
+    const fontSize = memConfig.getFontSize(currentTextField.fontSizeRatio);
     let longestLine = "";
     let splitedText = currentTextField.value.split("\n");
     splitedText.forEach((line) => {
@@ -93,10 +123,10 @@ const MemCanvas: React.FC<Props> = ({
     const { width } = ctx.measureText(longestLine);
 
     return (
-      x >= currentTextField.x &&
-      x <= currentTextField.x + width &&
-      y >= currentTextField.y - fontSize &&
-      y <= currentTextField.y + fontSize * (splitedText.length - 1)
+      x >= currentTextField.x - width / 2 &&
+      x <= currentTextField.x + width / 2 &&
+      y >= currentTextField.y - fontSize / 2 &&
+      y <= currentTextField.y + (fontSize * splitedText.length - fontSize / 2)
     );
   };
 
@@ -121,7 +151,7 @@ const MemCanvas: React.FC<Props> = ({
     const mousePosition = getMousePosition(e);
     textFields.forEach((textField) => {
       if (isActionInsideText(mousePosition.x, mousePosition.y, textField)) {
-        setSelectedTextIndex(textField.id);
+        setSelectedTextId(textField.id);
       }
     });
   };
@@ -130,7 +160,7 @@ const MemCanvas: React.FC<Props> = ({
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
     e.preventDefault();
-    setSelectedTextIndex(null);
+    setSelectedTextId(null);
   };
 
   const handleMouseMove = (
@@ -139,34 +169,35 @@ const MemCanvas: React.FC<Props> = ({
     e.preventDefault();
     if (selectedTextId === null) return;
     const currentTextFields = textFields;
-    const selectedText = currentTextFields.find(
-      (textField) => textField.id === selectedTextId
-    );
-    if (!selectedText) return;
-    const fontSize = memConfig.getFontSize(+selectedText.fontSizeRatio);
-    const mousePosition = getMousePosition(e);
-    let longestLine = "";
-    let splitedText = selectedText.value.split("\n");
-    splitedText.forEach((line) => {
-      if (line.length > longestLine.length) longestLine = line;
+    currentTextFields.find((textField) => {
+      console.log(textField);
+      if (textField.id === selectedTextId) {
+        const fontSize = memConfig.getFontSize(+textField.fontSizeRatio);
+        const mousePosition = getMousePosition(e);
+        let longestLine = "";
+        let splitedText = textField.value.split("\n");
+        splitedText.forEach((line) => {
+          if (line.length > longestLine.length) longestLine = line;
+        });
+        const { width } = ctx.measureText(longestLine);
+
+        const dx = mousePosition.x - (textField.x - width / 2) - width / 2;
+        const dy =
+          mousePosition.y -
+          (textField.y + (fontSize * splitedText.length) / 2) +
+          fontSize / 2;
+
+        textField.x += dx;
+        textField.y += dy;
+        return true;
+      }
     });
-    const { width } = ctx.measureText(longestLine);
 
-    const dx = mousePosition.x - selectedText.x - width / 2;
-    const dy =
-      mousePosition.y -
-      selectedText.y -
-      ((splitedText.length - 2) * fontSize) / 2;
-
-    selectedText.x += dx;
-    selectedText.y += dy;
-
-    setTextFields([...textFields, selectedText]);
+    setTextFields([...currentTextFields]);
   };
 
   return (
-    <canvas
-      className={className}
+    <StyledCanvas
       onMouseDown={handleMouseDown}
       onMouseUp={handleStopDragging}
       onMouseOut={handleStopDragging}

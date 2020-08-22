@@ -3,7 +3,6 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import { isFileImage } from "../utils/helpers";
-import MemCanvas, { CanvasProps } from "./Mem/MemCanvas";
 
 export const StyledWrapper: React.FC<{ hasImage: boolean }> = styled.div`
   border: ${({ hasImage }: { hasImage: boolean }) =>
@@ -21,6 +20,7 @@ export const StyledWrapper: React.FC<{ hasImage: boolean }> = styled.div`
 
   .img-preview {
     width: 100%;
+    display: block;
   }
 
   :hover {
@@ -46,16 +46,12 @@ interface Props {
   setFile: React.Dispatch<React.SetStateAction<File | Blob>>;
   previewURL: string;
   setPreviewURL: React.Dispatch<React.SetStateAction<string>>;
-  canvasProps?: CanvasProps;
-  disabled?: boolean;
 }
 
 const MyDropzone: React.FC<Props> = ({
   setFile,
   previewURL,
   setPreviewURL,
-  canvasProps,
-  disabled = false,
 }) => {
   const [alert, setAlert] = useState({ msg: "", type: "" });
 
@@ -90,14 +86,14 @@ const MyDropzone: React.FC<Props> = ({
       hasImage={!!previewURL}
       {...getRootProps()}
     >
-      <input disabled={disabled} {...getInputProps({ multiple: false })} />
+      <input {...getInputProps({ multiple: false })} />
       {isDragActive ? (
         <p>No puszczaj, postaram się złapać!</p>
       ) : previewURL ? (
-        <MemCanvas
+        <img
+          src={previewURL}
+          alt="Podgląd wysyłanego zdjęcia"
           className="img-preview"
-          previewURL={previewURL}
-          canvasProps={canvasProps}
         />
       ) : (
         <IconWrapper>

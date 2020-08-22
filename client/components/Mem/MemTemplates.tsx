@@ -38,8 +38,8 @@ const StyledTemplate = styled.div`
 `;
 
 interface Props {
-  setPreviewURL: React.Dispatch<React.SetStateAction<string>>;
-  previewURL: string;
+  setCanvasBaseImage: React.Dispatch<React.SetStateAction<string>>;
+  canvasBaseImage: string;
   templates: {
     memes: MemGeneratorTemplate[];
   };
@@ -49,8 +49,8 @@ const TEMPLATES_PER_LOAD = 12;
 
 const MemTemplates: React.FC<Props> = ({
   templates,
-  setPreviewURL,
-  previewURL,
+  setCanvasBaseImage: setPreviewURL,
+  canvasBaseImage: previewURL,
 }) => {
   const [pagination, setPagination] = useState({
     from: 0,

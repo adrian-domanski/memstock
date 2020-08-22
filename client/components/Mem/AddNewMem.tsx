@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Layout from "../../components/layout/Layout";
 import {
   ContentHeader,
   StyledTitleWithLine,
@@ -7,15 +6,15 @@ import {
   Button,
   StyledSelect,
 } from "../../utils/styled/components/components";
-import Alert from "../../components/Alert";
-import styled from "styled-components";
-import MyDropzone from "../../components/Dropzone";
-import { useQuery, useMutation } from "@apollo/react-hooks";
 import {
   getCategoriesQuery,
   uploadFileMutation,
   createMemMutation,
 } from "../../queries/memQueries";
+import Alert from "../../components/Alert";
+import styled from "styled-components";
+import MyDropzone from "../../components/Dropzone";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import Link from "next/link";
 import { StyledForm } from "../../utils/styled/pages/authPages";
 
@@ -40,7 +39,12 @@ const InlineButton = styled.button`
   }
 `;
 
-const AddNewMem = () => {
+interface IProps {
+  generatedMem?: File | Blob;
+  download?: boolean;
+}
+
+const AddNewMem: React.FC<IProps> = (props) => {
   const [upload] = useMutation(uploadFileMutation);
   const [createMem] = useMutation(createMemMutation);
   const { data, loading } = useQuery(getCategoriesQuery);
@@ -49,7 +53,7 @@ const AddNewMem = () => {
   const [alert, setAlert] = useState({ msg: "", type: "" });
   const [previewURL, setPreviewURL] = useState("");
   const [uploadedLink, setUploadedLink] = useState("");
-  const [file, setFile] = useState<File | Blob>(null);
+  const [file, setFile] = useState<File | Blob>(props.generatedMem ?? null);
   const [categories, setCategories] = useState<string[]>([""]);
 
   const handleSubmit = async (e: React.FormEvent<Element>) => {
@@ -65,7 +69,7 @@ const AddNewMem = () => {
     for (let value of categories) {
       if (!value)
         return setAlert({
-          msg: "Proszę wypełnić wszystkie pola i wybrać minimum 1 kategorię",
+          msg: "Proszę wybrać minimum 1 kategorię",
           type: "danger",
         });
     }
@@ -91,7 +95,7 @@ const AddNewMem = () => {
     }
   };
 
-  const handleChange = ({
+  const handleChangeTitle = ({
     target: { value },
   }: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(value);
@@ -128,11 +132,19 @@ const AddNewMem = () => {
       <ContentBody>
         <div className="section columns">
           <div className="column is-6">
-            <MyDropzone
-              previewURL={previewURL}
-              setPreviewURL={setPreviewURL}
-              setFile={setFile}
-            />
+            {props.generatedMem ? (
+              <img
+                className="is-block is-fullwidth"
+                src={URL.createObjectURL(props.generatedMem)}
+                alt="Wygenerowany mem"
+              />
+            ) : (
+              <MyDropzone
+                previewURL={previewURL}
+                setPreviewURL={setPreviewURL}
+                setFile={setFile}
+              />
+            )}
           </div>
           <div className="column is-6">
             <StyledForm
@@ -173,7 +185,7 @@ const AddNewMem = () => {
                         id="title"
                         placeholder="Tytuł mema"
                         value={title}
-                        onChange={handleChange}
+                        onChange={handleChangeTitle}
                       />
                       <span className="icon is-small is-left">
                         <i className="fas fa-envelope"></i>
@@ -234,6 +246,15 @@ const AddNewMem = () => {
                 </>
               )}
 
+              {props.download && file && (
+                <a
+                  className="button is-link mb-3"
+                  href={URL.createObjectURL(file)}
+                  download
+                >
+                  Pobierz
+                </a>
+              )}
               {uploadedLink ? (
                 <Button
                   className="is-primary light mb-5 px-6"
