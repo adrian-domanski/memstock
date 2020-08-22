@@ -17,6 +17,7 @@ import AddNewMem from "../../components/Mem/AddNewMem";
 import styled from "styled-components";
 import { isFileImage } from "../../utils/helpers";
 import MemCanvas from "../../components/Mem/MemCanvas";
+import Compressor from "compressorjs";
 
 const StyledFileButton = styled.div`
   width: 100%;
@@ -106,8 +107,21 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
   const handleSubmit = async (e: React.FormEvent<Element>) => {
     e.preventDefault();
     canvasRef.current.toBlob(
-      (blob) => {
+      async (blob) => {
         setGeneratedMem(blob);
+
+        try {
+          new Compressor(blob, {
+            maxWidth: 800,
+            quality: 0.5,
+            mimeType: "image/jpeg",
+            success(result) {
+              setGeneratedMem(result);
+            },
+          });
+        } catch (err) {
+          console.log(err);
+        }
       },
       "image/jpeg",
       0.8

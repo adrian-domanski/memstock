@@ -52,8 +52,8 @@ module.exports = {
       .query("user", "users-permissions")
       .update({ id }, ctx.request.body);
 
-    // Delete old image
-    if (user.avatar) {
+    // Remove old avatar if update occured
+    if (ctx.request.body.avatar && user.avatar) {
       const file = await strapi.plugins["upload"].services.upload.fetch({
         id: user.avatar.id,
       });

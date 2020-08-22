@@ -7,6 +7,7 @@ export const getUsersQuery = gql`
       username
       rank
       avatar {
+        id
         url
       }
     }
@@ -23,7 +24,9 @@ export const updateUserMutation = gql`
   mutation($input: updateUserInput!) {
     updateUser(input: $input) {
       user {
+        id
         avatar {
+          id
           url
         }
       }
@@ -41,9 +44,11 @@ export const registerMutation = gql`
         rank
         username
         avatar {
+          id
           url
         }
         role {
+          id
           name
         }
       }
@@ -60,10 +65,12 @@ export const loginMutation = gql`
         rank
         username
         avatar {
+          id
           url
           formats
         }
         role {
+          id
           name
         }
       }
@@ -79,10 +86,12 @@ export const getUserFromTokenQuery = gql`
       rank
       username
       avatar {
+        id
         url
         formats
       }
       role {
+        id
         name
       }
     }
@@ -92,8 +101,10 @@ export const getUserFromTokenQuery = gql`
 export const getUserDetailsQuery = gql`
   query($id: ID!) {
     user(id: $id) {
+      id
       username
       avatar {
+        id
         url
       }
       rank
@@ -106,6 +117,7 @@ export const getUserDetailsQuery = gql`
           name
         }
         image {
+          id
           url
         }
         likes

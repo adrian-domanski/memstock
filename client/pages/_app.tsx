@@ -1,13 +1,12 @@
-import React from "react";
-import App from "next/app";
-import withApollo from "../lib/withApollo";
 import { getDataFromTree } from "@apollo/react-ssr";
 import cookies from "next-cookies";
+import App from "next/app";
+import React from "react";
 import { ThemeProvider } from "styled-components";
 import AuthContextProvider from "../context/authContext";
+import withApollo from "../lib/withApollo";
 import { theme } from "../utils/styled/theme";
 import "../utils/styles/main.scss";
-import { isServer, getCookie } from "../utils/helpers";
 
 class MyApp extends App<
   Readonly<any> &

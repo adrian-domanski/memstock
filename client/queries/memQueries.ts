@@ -60,13 +60,16 @@ export const getMemsQuery = gql`
       }
       isReported
       user {
+        id
         username
         rank
         avatar {
+          id
           url
         }
       }
       image {
+        id
         url
       }
       likes
@@ -106,13 +109,16 @@ export const getMemDetailsQuery = gql`
         name
       }
       user {
+        id
         username
         rank
         avatar {
+          id
           url
         }
       }
       image {
+        id
         url
       }
       likes
@@ -125,6 +131,7 @@ export const getMemDetailsQuery = gql`
           id
           username
           avatar {
+            id
             url
           }
         }
@@ -135,7 +142,7 @@ export const getMemDetailsQuery = gql`
 
 export const getTopMems = gql`
   query {
-    mems(sort: "likes:DESC", limit: 3) {
+    mems(sort: "likes:DESC", limit: 3, where: { isPublic: true }) {
       id
       title
       categories {
@@ -143,10 +150,12 @@ export const getTopMems = gql`
         name
       }
       user {
+        id
         username
         rank
       }
       image {
+        id
         url
       }
       likes

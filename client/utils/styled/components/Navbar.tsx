@@ -15,6 +15,16 @@ export const SearchBar: React.FC<Props> = styled.div`
   width: 282px;
   position: relative;
 
+  input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
   ${({ theme }) => theme.media.tabletAndBelow} {
     width: unset;
     max-width: 350px;

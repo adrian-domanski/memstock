@@ -17,13 +17,12 @@ import { formatDate, getRankName } from "../../utils/helpers";
 import {
   ContentBody,
   ContentFooter,
-  PageWrapper,
   StyledTabs,
 } from "../../utils/styled/components/components";
 import {
+  Avatar,
   MemItemHeader as UserInfo,
   StyledDropdown,
-  Avatar,
 } from "../../utils/styled/components/MemItem";
 
 const UserContentHeader = styled(UserInfo).attrs({ as: "div" })`
@@ -136,158 +135,147 @@ const UserDetails: React.FC<Props> = ({ router }) => {
         isOpen={isUpdateAvatarModalOpen}
         actionClose={() => setIsUpdateAvatarModalOpen(false)}
       />
-      <PageWrapper>
-        <div className="columns">
-          <div className="column is-8-desktop">
-            <div className="user-informations">
-              <UserContentHeader>
-                <div className="content-wrapper">
-                  {!userLoading ? (
-                    <>
-                      <Avatar>
-                        <img
-                          src={
-                            user.avatar
-                              ? `${process.env.SERVER_URL}${user.avatar.url}`
-                              : "/img/avatar-placeholder.jpg"
-                          }
-                          alt={`Zdjęcie profilowe użytkownika ${user.username}`}
-                        />
-                        <figcaption>
-                          <div className="user-name">{user.username}</div>
-                          <div className="user-rank">
-                            {getRankName(user.rank)}
-                          </div>
-                        </figcaption>
-                      </Avatar>
-                      <div
-                        className="options"
-                        onClick={() => {
-                          setIsOptionsActive(true);
-                        }}
-                        onMouseLeave={() => {
-                          setIsOptionsActive(false);
-                        }}
-                      >
-                        <div
-                          className={`dropdown ${
-                            isOptionsActive ? "is-active" : ""
-                          }`}
-                        >
-                          <div className="dropdown-trigger">
-                            <i
-                              aria-haspopup="true"
-                              aria-controls="dropdown-menu"
-                              className={`button fas fa-ellipsis-h ${
-                                isOptionsActive ? "active" : ""
-                              }`}
-                            ></i>
-                          </div>
-                          <StyledDropdown
-                            className="dropdown-menu"
-                            id="dropdown-menu"
-                            role="menu"
-                          >
-                            <div className="dropdown-content">
-                              {userId === user.id && (
-                                <button
-                                  onClick={() =>
-                                    setIsUpdateAvatarModalOpen(true)
-                                  }
-                                  className="button button-link dropdown-item"
-                                >
-                                  Aktualizuj profil
-                                </button>
-                              )}
-
-                              <a href="#" className="dropdown-item">
-                                Other dropdown item
-                              </a>
-                              <hr className="dropdown-divider" />
-                              <a
-                                href="#"
-                                className="dropdown-item has-text-danger"
-                              >
-                                Zgłoś grafikę
-                              </a>
-                            </div>
-                          </StyledDropdown>
+      <div className="columns">
+        <div className="column is-8-desktop">
+          <div className="user-informations">
+            <UserContentHeader>
+              <div className="content-wrapper">
+                {!userLoading ? (
+                  <>
+                    <Avatar>
+                      <img
+                        src={
+                          userData.user.avatar
+                            ? `${process.env.SERVER_URL}${userData.user.avatar.url}`
+                            : "/img/avatar-placeholder.jpg"
+                        }
+                        alt={`Zdjęcie profilowe użytkownika ${userData.user.username}`}
+                      />
+                      <figcaption>
+                        <div className="user-name">
+                          {userData.user.username}
                         </div>
+                        <div className="user-rank">
+                          {getRankName(userData.user.rank)}
+                        </div>
+                      </figcaption>
+                    </Avatar>
+                    <div
+                      className="options"
+                      onClick={() => {
+                        setIsOptionsActive(true);
+                      }}
+                      onMouseLeave={() => {
+                        setIsOptionsActive(false);
+                      }}
+                    >
+                      <div
+                        className={`dropdown ${
+                          isOptionsActive ? "is-active" : ""
+                        }`}
+                      >
+                        <div className="dropdown-trigger">
+                          <i
+                            aria-haspopup="true"
+                            aria-controls="dropdown-menu"
+                            className={`button fas fa-ellipsis-h ${
+                              isOptionsActive ? "active" : ""
+                            }`}
+                          ></i>
+                        </div>
+                        <StyledDropdown
+                          className="dropdown-menu"
+                          id="dropdown-menu"
+                          role="menu"
+                        >
+                          <div className="dropdown-content">
+                            {userId === user.id && (
+                              <button
+                                onClick={() => setIsUpdateAvatarModalOpen(true)}
+                                className="button button-link dropdown-item"
+                              >
+                                Aktualizuj profil
+                              </button>
+                            )}
+
+                            <a href="#" className="dropdown-item">
+                              Other dropdown item
+                            </a>
+                            <hr className="dropdown-divider" />
+                            <a
+                              href="#"
+                              className="dropdown-item has-text-danger"
+                            >
+                              Zgłoś grafikę
+                            </a>
+                          </div>
+                        </StyledDropdown>
                       </div>
+                    </div>
+                  </>
+                ) : (
+                  <Loader />
+                )}
+              </div>
+            </UserContentHeader>
+            <ContentBody>
+              <ul>
+                <div className="content-wrapper">
+                  {!userLoading && !countUsersLoading ? (
+                    <>
+                      <li>
+                        <span className="has-text-primary">
+                          Miejsce w rankingu:
+                        </span>{" "}
+                        {countUsersData.countUsers + 1}
+                      </li>
+                      <li>
+                        <span className="has-text-primary">Punktów:</span>{" "}
+                        {userData.user.rank}
+                      </li>
+                      <li>
+                        <span className="has-text-primary">
+                          Data dołączenia:
+                        </span>{" "}
+                        {formatDate(new Date(userData.user.createdAt))}
+                      </li>
                     </>
                   ) : (
                     <Loader />
                   )}
                 </div>
-              </UserContentHeader>
-              <ContentBody>
+              </ul>
+            </ContentBody>
+            <ContentFooter>
+              <StyledTabs className="tabs is-accent">
                 <ul>
-                  <div className="content-wrapper">
-                    {!userLoading && !countUsersLoading ? (
-                      <>
-                        <li>
-                          <span className="has-text-primary">
-                            Miejsce w rankingu:
-                          </span>{" "}
-                          {countUsersData.countUsers + 1}
-                        </li>
-                        <li>
-                          <span className="has-text-primary">Punktów:</span>{" "}
-                          {userData.user.rank}
-                        </li>
-                        <li>
-                          <span className="has-text-primary">
-                            Data dołączenia:
-                          </span>{" "}
-                          {formatDate(new Date(userData.user.createdAt))}
-                        </li>
-                      </>
-                    ) : (
-                      <Loader />
-                    )}
-                  </div>
+                  <li
+                    className={`${selectedTab === "mems" ? "is-active" : ""}`}
+                    onClick={() => setSelectedTab("mems")}
+                  >
+                    <a>Memy</a>
+                  </li>
+                  <li
+                    className={`${
+                      selectedTab === "favourite" ? "is-active" : ""
+                    }`}
+                    onClick={() => setSelectedTab("favourite")}
+                  >
+                    <a>Ulubione</a>
+                  </li>
                 </ul>
-              </ContentBody>
-              <ContentFooter>
-                <StyledTabs className="tabs is-accent">
-                  <ul>
-                    {/* <li
-                      className={`${selectedTab === "all" ? "is-active" : ""}`}
-                      onClick={() => setSelectedTab("all")}
-                    >
-                      <a>Wszystko</a>
-                    </li> */}
-                    <li
-                      className={`${selectedTab === "mems" ? "is-active" : ""}`}
-                      onClick={() => setSelectedTab("mems")}
-                    >
-                      <a>Memy</a>
-                    </li>
-                    {/* <li className={`${selectedTab === "films" ? "is-active" : ""}`} onClick={()=>setSelectedTab('films')}>
-                    <a>Filmy</a>
-                  </li> */}
-                    <li
-                      className={`${
-                        selectedTab === "favourite" ? "is-active" : ""
-                      }`}
-                      onClick={() => setSelectedTab("favourite")}
-                    >
-                      <a>Ulubione</a>
-                    </li>
-                  </ul>
-                </StyledTabs>
-              </ContentFooter>
-            </div>
-            <div className="user-content mt-5">
-              <MemList where={{ user: { id: userId }, isPublic: true }} />
-            </div>
+              </StyledTabs>
+            </ContentFooter>
           </div>
-          <div className="column is-4-desktop">
-            <TopMems />
-            <TopUsers />
+          <div className="user-content mt-5">
+            <MemList where={{ user: { id: userId }, isPublic: true }} />
           </div>
         </div>
-      </PageWrapper>
+        <div className="column is-4-desktop">
+          <TopMems />
+          <TopUsers />
+        </div>
+      </div>
     </Layout>
   );
 };

@@ -82,6 +82,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
         variables: { title, categories, image: uploadedImgID },
       });
       setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
+
       setAlert({
         msg:
           "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
@@ -112,7 +113,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
     }
   };
 
-  const clearFields = (e) => {
+  const clearFields = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     setTitle("");
     setCategories([""]);
@@ -134,7 +135,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
           <div className="column is-6">
             {props.generatedMem ? (
               <img
-                className="is-block is-fullwidth"
+                className="image is-fullwidth"
                 src={URL.createObjectURL(props.generatedMem)}
                 alt="Wygenerowany mem"
               />

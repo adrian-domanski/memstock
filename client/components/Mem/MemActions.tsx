@@ -6,6 +6,7 @@ import { Vote } from "../../context/reducers/authReducer";
 import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
 import { MemType, mediaCheckTypes } from "../../utils/types";
 import { FacebookProvider, Like, ShareButton } from "react-facebook";
+import { updateUserMutation } from "../../queries/userQueries";
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -128,7 +129,7 @@ interface Props {
   likes: number;
   dislikes: number;
   memCheckActions: mediaCheckTypes;
-  memId: string;
+  mem: MemType;
   updateMemList: (
     mapFn: (previousQueryResult: any, options: Pick<any, "variables">) => any
   ) => void;
@@ -138,7 +139,7 @@ const MemActions: React.FC<Props> = ({
   likes,
   dislikes,
   memCheckActions = mediaCheckTypes.NO_CHECK,
-  memId,
+  mem,
   updateMemList,
 }) => {
   const {
@@ -153,9 +154,10 @@ const MemActions: React.FC<Props> = ({
   const [userAction, setUserAction] = useState<Vote>();
   const [updateMem] = useMutation(updateMemMutation);
   const [deleteMem] = useMutation(deleteMemMutation);
+  const [updateUser] = useMutation(updateUserMutation);
 
   useEffect(() => {
-    const [actionOnThisMedia] = votes.filter((vote) => vote.mediaId === memId);
+    const [actionOnThisMedia] = votes.filter((vote) => vote.mediaId === mem.id);
 
     if (actionOnThisMedia) {
       setUserAction(actionOnThisMedia);
@@ -166,14 +168,14 @@ const MemActions: React.FC<Props> = ({
     setLoading({ ...loading, unReportMem: true });
     await updateMem({
       variables: {
-        input: { where: { id: memId }, data: { isReported: false } },
+        input: { where: { id: mem.id }, data: { isReported: false } },
       },
     });
 
     updateMemList((prev) => {
       return {
         ...prev,
-        mems: prev.mems.filter((mem) => mem.id !== memId),
+        mems: prev.mems.filter((mem) => mem.id !== mem.id),
       };
     });
     setLoading({ ...loading, unReportMem: false });
@@ -182,13 +184,22 @@ const MemActions: React.FC<Props> = ({
   const handlePublicMem = async () => {
     setLoading({ ...loading, publicMem: true });
     await updateMem({
-      variables: { input: { where: { id: memId }, data: { isPublic: true } } },
+      variables: { input: { where: { id: mem.id }, data: { isPublic: true } } },
+    });
+
+    await updateUser({
+      variables: {
+        input: {
+          where: { id: mem.user.id },
+          data: { rank: mem.user.rank + 10 },
+        },
+      },
     });
 
     updateMemList((prev) => {
       return {
         ...prev,
-        mems: prev.mems.filter((mem) => mem.id !== memId),
+        mems: prev.mems.filter((mem) => mem.id !== mem.id),
       };
     });
     setLoading({ ...loading, publicMem: false });
@@ -196,11 +207,11 @@ const MemActions: React.FC<Props> = ({
 
   const handleDeleteMem = async () => {
     setLoading({ ...loading, deleteMem: true });
-    await deleteMem({ variables: { id: memId } });
+    await deleteMem({ variables: { id: mem.id } });
     updateMemList((prev) => {
       return {
         ...prev,
-        mems: prev.mems.filter((mem) => mem.id !== memId),
+        mems: prev.mems.filter((mem) => mem.id !== mem.id),
       };
     });
     setLoading({ ...loading, deleteMem: false });
@@ -227,18 +238,18 @@ const MemActions: React.FC<Props> = ({
 
     if (updateData.likes < 0 || updateData.dislikes < 0) return;
 
-    dispatch({ type: "USER_NEW_VOTE", payload: { mediaId: memId, type } });
+    dispatch({ type: "USER_NEW_VOTE", payload: { mediaId: mem.id, type } });
 
     try {
       await updateMem({
-        variables: { input: { where: { id: memId }, data: updateData } },
+        variables: { input: { where: { id: mem.id }, data: updateData } },
       });
 
       updateMemList((prev) => {
         return {
           ...prev,
           mems: prev.mems.map((mem: MemType) => {
-            if (mem.id === memId)
+            if (mem.id === mem.id)
               return {
                 ...mem,
                 likes: updateData.likes,
@@ -302,7 +313,7 @@ const MemActions: React.FC<Props> = ({
             <LikeButton
               className={`button like ${
                 userAction &&
-                userAction.mediaId === memId &&
+                userAction.mediaId === mem.id &&
                 userAction.type === "LIKE"
                   ? "is-active"
                   : ""
@@ -314,7 +325,7 @@ const MemActions: React.FC<Props> = ({
             <DislikeButton
               className={`button dislike ${
                 userAction &&
-                userAction.mediaId === memId &&
+                userAction.mediaId === mem.id &&
                 userAction.type === "DISLIKE"
                   ? "is-active"
                   : ""

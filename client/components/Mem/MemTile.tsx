@@ -1,6 +1,6 @@
+import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
-import Link from "next/link";
 import { MemType } from "../../utils/types";
 
 const StyledMemItem = styled.article`
@@ -12,6 +12,15 @@ const StyledMemItem = styled.article`
 
 const MemItemBody = styled.div`
   padding: 1rem;
+
+  figure {
+    img {
+      max-height: 400px;
+      width: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+  }
 
   .mem-title {
     color: ${({ theme }) => theme.colors.white500};

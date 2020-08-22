@@ -5,29 +5,26 @@ import TopUsers from "../components/Mem/TopUsers";
 import UserList from "../components/User/UserList";
 import {
   ContentHeader,
-  PageWrapper,
   StyledTitle,
 } from "../utils/styled/components/components";
 
 const UsersRank = () => {
   return (
     <Layout>
-      <PageWrapper>
-        <div className="columns">
-          <div className="column is-8-desktop">
-            <ContentHeader className="mb-4">
-              <StyledTitle className="has-text-centered">
-                Ranking użytkowników
-              </StyledTitle>
-            </ContentHeader>
-            <UserList />
-          </div>
-          <div className="column is-4-desktop">
-            <TopMems />
-            <TopUsers />
-          </div>
+      <div className="columns">
+        <div className="column is-8-desktop">
+          <ContentHeader className="mb-4">
+            <StyledTitle className="has-text-centered">
+              Ranking użytkowników
+            </StyledTitle>
+          </ContentHeader>
+          <UserList />
         </div>
-      </PageWrapper>
+        <div className="column is-4-desktop">
+          <TopMems />
+          <TopUsers />
+        </div>
+      </div>
     </Layout>
   );
 };

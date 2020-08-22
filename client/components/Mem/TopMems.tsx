@@ -41,7 +41,6 @@ const PopularSectionBody = styled.div`
 
     li {
       color: ${({ theme }) => theme.colors.primary};
-
       :not(:last-child) {
         margin-right: 5px;
       }

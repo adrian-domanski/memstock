@@ -1,31 +1,29 @@
 import React from "react";
 import styled from "styled-components";
 import {
-  StyledFooter,
   FooterContent,
+  StyledFooter,
 } from "../../utils/styled/components/Footer";
-import { Props } from "../../utils/styled/components/components";
 
-const PrimaryFooter: React.FC<Props> = styled.div`
+const PrimaryFooter = styled.div`
   background: ${({ theme }) => theme.colors.dark700};
   padding: 1rem;
 `;
 
-const SecondaryFooter: React.FC<Props> = styled.div`
+const SecondaryFooter = styled.div`
   background: ${({ theme }) => theme.colors.dark600};
 `;
 
-const WideWrapper: React.FC<Props> = styled.div`
+const WideWrapper = styled.div`
   max-width: ${({ theme }) => theme.pageWideSectionMaxWidth};
   width: 100%;
   margin: 0 auto;
 `;
 
-const GridList: React.FC<{ has2columns?: boolean }> = styled.ul`
+const GridList = styled.ul<{ has2columns?: boolean }>`
   display: grid;
-
-  grid-template-columns: ${(props: { has2columns?: boolean }) =>
-    props.has2columns ? "1fr 1fr" : "1fr"};
+  grid-template-columns: ${({ has2columns }) =>
+    has2columns ? "1fr 1fr" : "1fr"};
 `;
 
 const GridListItem = styled.li`
@@ -33,13 +31,13 @@ const GridListItem = styled.li`
   line-height: 2;
 `;
 
-const FooterTitle: React.FC<Props> = styled.h3.attrs({
+const FooterTitle = styled.h3.attrs({
   className: "title is-size-3-mobile",
 })`
   color: ${({ theme }) => theme.colors.primaryDarker};
 `;
 
-const Footer: React.FC<Props> = () => {
+const Footer: React.FC = () => {
   return (
     <StyledFooter className="has-text-centered-mobile">
       <SecondaryFooter>

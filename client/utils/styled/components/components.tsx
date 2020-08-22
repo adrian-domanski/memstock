@@ -8,6 +8,9 @@ export interface Props {
 
 export const StyledBreadcrumb = styled.nav`
   &&& {
+    background: ${({ theme }) => theme.colors.dark800};
+    padding: 1.5rem 2rem;
+
     li a {
       color: ${({ theme }) => theme.colors.accent};
       transition: color 0.1s ease;

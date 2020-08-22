@@ -15,12 +15,35 @@ import {
 import { MemType, mediaCheckTypes } from "../../utils/types";
 import Modal from "../Modal";
 import MemActions from "./MemActions";
+import styled from "styled-components";
 
 interface Props {
   mem: MemType;
   memForCheck?: mediaCheckTypes;
   updateMemList?: (prev) => void;
 }
+
+const StyledMemFigure = styled.figure`
+  a {
+    overflow: auto;
+    max-height: 1000px;
+    display: block;
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: #f5f5f5;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      background-color: #f5f5f5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #000000;
+    }
+  }
+`;
 
 const MemItem: React.FC<Props> = ({
   mem,
@@ -148,16 +171,11 @@ const MemItem: React.FC<Props> = ({
                 role="menu"
               >
                 <div className="dropdown-content">
-                  <a href="#" className="dropdown-item">
-                    Dropdown item
-                  </a>
-                  <a className="dropdown-item">Other dropdown item</a>
-                  <a href="#" className="dropdown-item">
-                    Active dropdown item
-                  </a>
-                  <a href="#" className="dropdown-item">
-                    Other dropdown item
-                  </a>
+                  <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
+                    <a href="#" className="dropdown-item">
+                      Zobacz więcej
+                    </a>
+                  </Link>
                   {mem.isReported === null && (
                     <>
                       <hr className="dropdown-divider" />
@@ -196,7 +214,7 @@ const MemItem: React.FC<Props> = ({
       </MemItemHeader>
       <MemItemBody>
         <div className="content-wrapper">
-          <figure>
+          <StyledMemFigure>
             <figcaption>
               <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
                 <a>
@@ -218,7 +236,7 @@ const MemItem: React.FC<Props> = ({
                 />
               </a>
             </Link>
-          </figure>
+          </StyledMemFigure>
         </div>
       </MemItemBody>
       <MemItemFooter>
@@ -228,7 +246,7 @@ const MemItem: React.FC<Props> = ({
             dislikes={mem.dislikes}
             memCheckActions={memForCheck}
             updateMemList={updateMemList}
-            memId={mem.id}
+            mem={mem}
           />
         </div>
       </MemItemFooter>

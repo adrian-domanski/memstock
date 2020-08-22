@@ -136,6 +136,7 @@ const MemTemplates: React.FC<Props> = ({
                       <TemplateButtons>
                         <a
                           target="_blank"
+                          download
                           href={template.url}
                           className="button is-warning is-light"
                         >

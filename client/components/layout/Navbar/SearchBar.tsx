@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { getSearchHintsQuery } from "../../../queries/memQueries";
 import { Input } from "../../../utils/styled/components/components";
 import { SearchBar as StyledSearchBar } from "../../../utils/styled/components/Navbar";
+import { MemType } from "../../../utils/types";
 
 const SearchResults = styled.ul`
   display: flex;
@@ -33,8 +34,9 @@ const SearchBar: React.FC = () => {
   useEffect(() => {
     return () => {
       if (closeHintsTimeout) clearTimeout(closeHintsTimeout);
+      setSearchFocus(false);
     };
-  });
+  }, []);
 
   const handleInputBlur = () => {
     setCloseHintsTimeout(setTimeout(() => setSearchFocus(false), 100));
@@ -54,9 +56,9 @@ const SearchBar: React.FC = () => {
       </p>
       <p className="control">
         <Link href={{ pathname: "/", query: { title: searchTerm } }}>
-          <a className="button is-primary">
+          <button className="button is-primary">
             <i className="fa fa-search" aria-hidden="true"></i>
-          </a>
+          </button>
         </Link>
       </p>
       {searchTerm && searchFocus && (
@@ -64,7 +66,7 @@ const SearchBar: React.FC = () => {
           {loading ? (
             <li>Wczytywanie...</li>
           ) : data.mems.length ? (
-            data.mems.map((mem) => (
+            data.mems.map((mem: MemType) => (
               <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`} key={mem.id}>
                 <a className="is-link">
                   <li>{mem.title}</li>
