@@ -14,8 +14,11 @@ export const StyledPopularSection = styled.article`
   :not(:last-child) {
     margin-bottom: 1.5rem;
   }
-
   box-shadow: ${({ theme }) => theme.boxShadow};
+
+  @media screen and (max-width: 1023px) {
+    display: none;
+  }
 `;
 
 export const PopularSectionHeader = styled.header`
@@ -81,7 +84,7 @@ const TopUsers: React.FC = () => {
       <PopularSectionBody>
         {!loading ? (
           <RankingList>
-            {data.users.map(({ username, rank, id, avatar }) => (
+            {data?.users?.map(({ username, rank, id, avatar }) => (
               <RankingListItem key={id}>
                 <Link href="/uzytkownik/[user_id]" as={`/uzytkownik/${id}`}>
                   <a>

@@ -1,23 +1,23 @@
-import React, { useState, useRef } from "react";
-import Layout from "../../components/layout/Layout";
-import {
-  ContentHeader,
-  StyledTitleWithLine,
-  ContentBody,
-  Button,
-  StyledTextArea,
-} from "../../utils/styled/components/components";
-import Alert from "../../components/Alert";
-import { StyledForm } from "../../utils/styled/pages/authPages";
-import MemTemplates from "../../components/Mem/MemTemplates";
-import { MemGeneratorTemplate } from "../../utils/types";
-import { NextPage } from "next";
-import { v4 as uuidv4 } from "uuid";
-import AddNewMem from "../../components/Mem/AddNewMem";
-import styled from "styled-components";
-import { isFileImage } from "../../utils/helpers";
-import MemCanvas from "../../components/Mem/MemCanvas";
 import Compressor from "compressorjs";
+import { NextPage } from "next";
+import React, { useRef, useState } from "react";
+import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
+import Alert from "../components/Alert";
+import Layout from "../components/layout/Layout";
+import AddNewMem from "../components/Mem/AddNewMem";
+import MemCanvas from "../components/Mem/MemCanvas";
+import MemTemplates from "../components/Mem/MemTemplates";
+import { isFileImage } from "../utils/helpers";
+import {
+  Button,
+  ContentBody,
+  ContentHeader,
+  StyledTextArea,
+  StyledTitleWithLine,
+} from "../utils/styled/components/components";
+import { StyledForm } from "../utils/styled/pages/authPages";
+import { MemGeneratorTemplate } from "../utils/types";
 
 const StyledFileButton = styled.div`
   width: 100%;
@@ -234,7 +234,7 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
                             step="0.01"
                           />
                         </div>
-                        <div className="column is-vertical-center">
+                        <div className="column is-vertical-centered">
                           <input
                             type="checkbox"
                             id={`textFieldBlackText-${field.id}`}

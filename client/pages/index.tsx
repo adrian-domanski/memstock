@@ -1,51 +1,53 @@
 import { SingletonRouter, withRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Layout from "../components/layout/Layout";
 import MemList from "../components/Mem/MemList";
-import TopMems from "../components/Mem/TopMems";
-import TopUsers from "../components/Mem/TopUsers";
+import { isObjectEmpty } from "../utils/helpers";
 import {
   ContentHeader,
   StyledTitle,
 } from "../utils/styled/components/components";
+import { IWhereFilter } from "../utils/types";
 
 interface Props {
   router: SingletonRouter;
 }
 
 const index: React.FC<Props> = ({ router }) => {
-  const [whereFilter, setWhereFilter] = useState({
-    isPublic: true,
-    title_contains: "",
-  });
   const params = router.query;
+  const whereFilter: IWhereFilter = { isPublic: true };
 
-  useEffect(() => {
-    if (params.title) {
-      setWhereFilter({
-        ...whereFilter,
-        title_contains: params.title.toString(),
-      });
-    } else {
-      setWhereFilter({
-        ...whereFilter,
-        title_contains: "",
-      });
-    }
-  }, [params]);
+  if (!isObjectEmpty(params)) {
+    if (params.title) whereFilter.title_contains = params.title.toString();
+    if (params.category)
+      whereFilter.categories = { name: params.category.toString() };
+  }
 
   return (
     <Layout topUsers popularMems>
-      {whereFilter.title_contains && (
+      {whereFilter.categories || whereFilter.title_contains ? (
         <ContentHeader className="mb-4">
           <StyledTitle>
-            Wyniki wyszukiwania dla frazy:{" "}
-            <span className="has-text-link">
-              "{whereFilter.title_contains}"
-            </span>
+            Wyniki wyszukiwania dla{" "}
+            {whereFilter.title_contains && (
+              <>
+                frazy:{" "}
+                <span className="has-text-link">
+                  "{whereFilter.title_contains}"
+                </span>
+              </>
+            )}
+            {whereFilter.categories && (
+              <>
+                kategorii:{" "}
+                <span className="has-text-link">
+                  "{whereFilter.categories.name}"
+                </span>
+              </>
+            )}
           </StyledTitle>
         </ContentHeader>
-      )}
+      ) : null}
       <MemList where={whereFilter} />
     </Layout>
   );

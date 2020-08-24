@@ -12,12 +12,10 @@ import { mediaCheckTypes } from "../../utils/types";
 const WaitingForAccept: React.FC = () => {
   return (
     <Layout>
-      <div className="columns mt-5 mb-6">
+      <div className="columns">
         <div className="column is-8-desktop">
           <ContentHeader className="mb-4">
-            <StyledTitleWithLine className="is-size-4">
-              Poczekalnia - do zatwierdzenia
-            </StyledTitleWithLine>
+            <StyledTitleWithLine>Poczekalnia memów</StyledTitleWithLine>
           </ContentHeader>
           <MemList
             where={{ isPublic: false }}

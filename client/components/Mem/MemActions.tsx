@@ -1,12 +1,12 @@
 import { useMutation } from "@apollo/react-hooks";
 import React, { useContext, useEffect, useState } from "react";
+import { FacebookProvider, ShareButton } from "react-facebook";
 import styled from "styled-components";
 import { AuthContext } from "../../context/authContext";
 import { Vote } from "../../context/reducers/authReducer";
 import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
-import { MemType, mediaCheckTypes } from "../../utils/types";
-import { FacebookProvider, Like, ShareButton } from "react-facebook";
 import { updateUserMutation } from "../../queries/userQueries";
+import { mediaCheckTypes, MemType } from "../../utils/types";
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -84,7 +84,7 @@ const MemButtons = styled.div<{ memCheckActions?: boolean }>`
     display: ${({ memCheckActions }) => (memCheckActions ? "flex" : "grid")};
     ${({ memCheckActions }) =>
       memCheckActions && "justify-content: space-between; width:100%;"};
-    grid-template-areas: "like counter dislike";
+    grid-template-areas: "dislike counter like";
     grid-template-columns: 40px 80px 40px;
     grid-template-rows: 40px;
     gap: 8px;
@@ -120,8 +120,16 @@ const MemButtons = styled.div<{ memCheckActions?: boolean }>`
 const StyledShareButton = styled(ShareButton)`
   display: flex;
   align-items: center;
-  i {
-    margin-right: 5px;
+  min-height: 40px;
+
+  span {
+    padding-right: 8px;
+  }
+
+  @media screen and (max-width: 998px) {
+    span {
+      display: none;
+    }
   }
 `;
 
@@ -343,9 +351,10 @@ const MemActions: React.FC<Props> = ({
           <FacebookProvider appId="621710562109715">
             <StyledShareButton
               className="button is-link"
-              href="http://adrian-6148dd9d.localhost.run/mem/5f365315b6496918801cc98c"
+              href="http://google.com"
             >
-              Udostępnij
+              <span>Udostępnij</span>
+              <i className="fas fa-share"></i>
             </StyledShareButton>
           </FacebookProvider>
         </>

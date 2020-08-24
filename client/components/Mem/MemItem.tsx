@@ -1,21 +1,21 @@
 import { useMutation } from "@apollo/react-hooks";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
+import styled from "styled-components";
 import { AuthContext } from "../../context/authContext";
 import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
 import { getRankName, isPageAdmin } from "../../utils/helpers";
 import {
+  Avatar,
   MemItemBody,
   MemItemFooter,
   MemItemHeader,
   StyledDropdown,
   StyledMemItem,
-  Avatar,
 } from "../../utils/styled/components/MemItem";
-import { MemType, mediaCheckTypes } from "../../utils/types";
+import { mediaCheckTypes, MemType } from "../../utils/types";
 import Modal from "../Modal";
 import MemActions from "./MemActions";
-import styled from "styled-components";
 
 interface Props {
   mem: MemType;
@@ -133,16 +133,30 @@ const MemItem: React.FC<Props> = ({
       <MemItemHeader>
         <div className="content-wrapper">
           <Avatar>
-            <img
-              src={
-                mem.user.avatar
-                  ? `${process.env.SERVER_URL}${mem.user.avatar.url}`
-                  : "/img/avatar-placeholder.jpg"
-              }
-              alt={`Zdjęcie profilowe użytkownika ${mem.user.username}`}
-            />
+            <Link
+              href="/uzytkownik/[user_id]"
+              as={`/uzytkownik/${mem.user.id}`}
+            >
+              <a>
+                <img
+                  src={
+                    mem.user.avatar
+                      ? `${process.env.SERVER_URL}${mem.user.avatar.url}`
+                      : "/img/avatar-placeholder.jpg"
+                  }
+                  alt={`Zdjęcie profilowe użytkownika ${mem.user.username}`}
+                />
+              </a>
+            </Link>
             <figcaption>
-              <div className="user-name">{mem.user.username}</div>
+              <Link
+                href="/uzytkownik/[user_id]"
+                as={`/uzytkownik/${mem.user.id}`}
+              >
+                <a>
+                  <div className="user-name">{mem.user.username}</div>
+                </a>
+              </Link>
               <div className="user-rank">{getRankName(mem.user.rank)}</div>
             </figcaption>
           </Avatar>
@@ -223,7 +237,16 @@ const MemItem: React.FC<Props> = ({
               </Link>
               <ul className="mem-categories mb-3">
                 {mem.categories.map(({ name, id }) => (
-                  <li key={id}>#{name}</li>
+                  <li key={id}>
+                    <Link
+                      href={{
+                        pathname: "/",
+                        query: { category: name },
+                      }}
+                    >
+                      <a className="is-link has-text-primary">#{name}</a>
+                    </Link>
+                  </li>
                 ))}
               </ul>
             </figcaption>

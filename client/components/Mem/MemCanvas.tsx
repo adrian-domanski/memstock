@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { ITextField } from "../../pages/generator-memow";
-import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
+import { ITextField } from "../../pages/generator-memow";
 
 const StyledCanvas = styled.canvas`
   &&& {

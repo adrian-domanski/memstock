@@ -51,12 +51,17 @@ const SearchBar: React.FC = () => {
           autoComplete="off"
           onFocus={() => setSearchFocus(true)}
           onBlur={handleInputBlur}
+          value={searchTerm}
           onChange={({ target }) => setSearchTerm(target.value)}
         />
       </p>
       <p className="control">
         <Link href={{ pathname: "/", query: { title: searchTerm } }}>
-          <button className="button is-primary">
+          <button
+            className="button is-primary"
+            type="button"
+            onClick={() => setSearchTerm("")}
+          >
             <i className="fa fa-search" aria-hidden="true"></i>
           </button>
         </Link>

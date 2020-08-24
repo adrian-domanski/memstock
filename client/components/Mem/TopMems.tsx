@@ -1,18 +1,25 @@
+import { useQuery } from "@apollo/react-hooks";
 import React from "react";
 import styled from "styled-components";
-import MemActions from "./MemActions";
-import { StyledTitle } from "../../utils/styled/components/components";
-import MemTile from "./MemTile";
-import { useQuery } from "@apollo/react-hooks";
 import { getTopMems } from "../../queries/memQueries";
+import { StyledTitle } from "../../utils/styled/components/components";
 import Loader from "../Loader";
+import MemTile from "./MemTile";
+import {
+  StyledMemItem,
+  MemItemBody,
+} from "../../utils/styled/components/MemItem";
+import { MemType } from "../../utils/types";
 
 const StyledPopularSection = styled.article`
   :not(:last-child) {
     margin-bottom: 1.5rem;
   }
-
   box-shadow: ${({ theme }) => theme.boxShadow};
+
+  @media screen and (max-width: 1023px) {
+    display: none;
+  }
 `;
 
 const PopularSectionHeader = styled.header`
@@ -58,11 +65,15 @@ const TopMems: React.FC = () => {
       </PopularSectionHeader>
       <PopularSectionBody>
         {!loading ? (
-          data.mems.map(
-            (mem) => mem.image && <MemTile key={mem.id} mem={mem} />
+          data?.mems?.map(
+            (mem: MemType) => mem.image && <MemTile key={mem.id} mem={mem} />
           )
         ) : (
-          <Loader />
+          <StyledMemItem>
+            <MemItemBody>
+              <Loader />
+            </MemItemBody>
+          </StyledMemItem>
         )}
       </PopularSectionBody>
     </StyledPopularSection>

@@ -1,11 +1,5 @@
-import styled, { StyledComponent, DefaultTheme } from "styled-components";
-import { Props, ContentHeader } from "../components/components";
-
-export const CustomPageWrapper = styled.div.attrs({ className: "section" })`
-  max-width: ${({ theme }) => theme.pageMaxWidth};
-  margin-left: auto;
-  margin-right: auto;
-`;
+import styled from "styled-components";
+import { ContentHeader } from "../components/components";
 
 export const CustomContentHeader = styled(ContentHeader)`
   height: auto;

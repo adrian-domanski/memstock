@@ -52,3 +52,6 @@ export const formatDate = (date: Date, options?: formatDateOptions) => {
 
   return `${day}.${month}.${year}`;
 };
+
+export const isObjectEmpty = (obj: {}) =>
+  Object.keys(obj).length === 0 && obj.constructor === Object;

@@ -1,11 +1,16 @@
-import React, { useState } from "react";
-import MemItem from "./MemItem";
 import { useQuery } from "@apollo/react-hooks";
-import { getMemsQuery } from "../../queries/memQueries";
-import Loader from "../Loader";
+import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
+import { getMemsQuery } from "../../queries/memQueries";
 import { ContentBody } from "../../utils/styled/components/components";
-import { MemType, mediaCheckTypes } from "../../utils/types";
+import { mediaCheckTypes, MemType } from "../../utils/types";
+import Loader from "../Loader";
+import MemItem from "./MemItem";
+import {
+  MemItemHeader,
+  MemItemBody,
+  MemItemFooter,
+} from "../../utils/styled/components/MemItem";
 
 interface Props {
   where?: object;
@@ -56,7 +61,7 @@ const MemList: React.FC<Props> = ({
           loadMore={fetchMoreResults}
           loader={<Loader key={0} />}
         >
-          {data.mems.length ? (
+          {data?.mems?.length ? (
             data.mems.map(
               (mem: MemType) =>
                 mem.image && (
@@ -69,13 +74,19 @@ const MemList: React.FC<Props> = ({
                 )
             )
           ) : (
-            <ContentBody className="is-size-4 has-text-centered py-5">
+            <ContentBody className="is-size-4-desktop is-size-5-mobile  has-text-centered py-5">
               Brak wyników
             </ContentBody>
           )}
         </InfiniteScroll>
       ) : (
-        <Loader />
+        <>
+          <MemItemHeader />
+          <MemItemBody>
+            <Loader />
+          </MemItemBody>
+          <MemItemFooter />
+        </>
       )}
     </>
   );

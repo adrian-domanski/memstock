@@ -8,13 +8,13 @@ import {
 import { CommentType } from "../../utils/types";
 import { AuthContext } from "../../context/authContext";
 import Comment from "./Comment";
-import Link from "next/link";
 import { useMutation } from "@apollo/react-hooks";
 import {
   addCommentMutation,
   getMemDetailsQuery,
 } from "../../queries/memQueries";
 import Alert from "../Alert";
+import LoginOrRegister from "../User/LoginOrRegister";
 
 const CommentsSection = styled.section.attrs({ className: "section" })`
   background: ${({ theme }) => theme.colors.dark600};
@@ -111,16 +111,7 @@ const MemComments: React.FC<Props> = ({ comments, memId }) => {
       ) : (
         <>
           <CommentsSectionTitle>Co o tym sądzisz?</CommentsSectionTitle>
-          <StyledContentBody className="mb-5">
-            <Link href="/logowanie">
-              <a className="is-link">Zaloguj się</a>
-            </Link>{" "}
-            lub{" "}
-            <Link href="/rejestracja">
-              <a className="is-link">zarejestruj</a>
-            </Link>
-            , aby dodać komentarz
-          </StyledContentBody>
+          <LoginOrRegister className="mb-5" customText="dodać komentarz" />
         </>
       )}
       <CommentsSectionTitle>Komentarze</CommentsSectionTitle>

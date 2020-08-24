@@ -131,3 +131,9 @@ export interface MemGeneratorTemplate {
   height: number;
   box_count: number;
 }
+
+export interface IWhereFilter {
+  isPublic: boolean;
+  title_contains?: string;
+  categories?: { name: string };
+}

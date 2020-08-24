@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import { useMutation, useQuery } from "@apollo/react-hooks";
+import Link from "next/link";
+import React, { useState, useContext } from "react";
+import styled from "styled-components";
+import Alert from "../../components/Alert";
+import MyDropzone from "../../components/Dropzone";
 import {
-  ContentHeader,
-  StyledTitleWithLine,
-  ContentBody,
-  Button,
-  StyledSelect,
-} from "../../utils/styled/components/components";
-import {
+  createMemMutation,
   getCategoriesQuery,
   uploadFileMutation,
-  createMemMutation,
 } from "../../queries/memQueries";
-import Alert from "../../components/Alert";
-import styled from "styled-components";
-import MyDropzone from "../../components/Dropzone";
-import { useQuery, useMutation } from "@apollo/react-hooks";
-import Link from "next/link";
+import {
+  Button,
+  ContentBody,
+  ContentHeader,
+  StyledSelect,
+  StyledTitleWithLine,
+} from "../../utils/styled/components/components";
 import { StyledForm } from "../../utils/styled/pages/authPages";
+import { AuthContext } from "../../context/authContext";
+import LoginOrRegister from "../User/LoginOrRegister";
 
 const InlineButton = styled.button`
   &&& {
@@ -45,6 +47,9 @@ interface IProps {
 }
 
 const AddNewMem: React.FC<IProps> = (props) => {
+  const {
+    ctx: { isAuth },
+  } = useContext(AuthContext);
   const [upload] = useMutation(uploadFileMutation);
   const [createMem] = useMutation(createMemMutation);
   const { data, loading } = useQuery(getCategoriesQuery);
@@ -126,9 +131,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
   return (
     <>
       <ContentHeader>
-        <StyledTitleWithLine className="is-size-4">
-          Dodawanie własnego mema
-        </StyledTitleWithLine>
+        <StyledTitleWithLine>Dodawanie mema</StyledTitleWithLine>
       </ContentHeader>
       <ContentBody>
         <div className="section columns">
@@ -212,7 +215,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
                             Wybierz kategorię
                           </option>
                           {!loading
-                            ? data.categories.map((category) => (
+                            ? data?.categories?.map((category) => (
                                 <option key={category.id} value={category.id}>
                                   {category.name}
                                 </option>
@@ -256,18 +259,22 @@ const AddNewMem: React.FC<IProps> = (props) => {
                   Pobierz
                 </a>
               )}
-              {uploadedLink ? (
-                <Button
-                  className="is-primary light mb-5 px-6"
-                  onClick={clearFields}
-                  type="button"
-                >
-                  Dodaj następnego mema
-                </Button>
+              {isAuth ? (
+                uploadedLink ? (
+                  <Button
+                    className="is-primary light mb-5 px-6"
+                    onClick={clearFields}
+                    type="button"
+                  >
+                    Dodaj następnego mema
+                  </Button>
+                ) : (
+                  <Button className="is-primary light mb-5 px-6" type="submit">
+                    Dodaj mema
+                  </Button>
+                )
               ) : (
-                <Button className="is-primary light mb-5 px-6" type="submit">
-                  Dodaj mema
-                </Button>
+                <LoginOrRegister customText="dodać mema" />
               )}
             </StyledForm>
           </div>

@@ -23,7 +23,7 @@ const AuthContextProvider: React.FC<{
 }> = ({ children, token }) => {
   const { data, loading } = useQuery(getUserFromTokenQuery);
 
-  if (!loading && data && data.me) {
+  if (!loading && data?.me) {
     initState = {
       user: data.me,
       isAuth: true,

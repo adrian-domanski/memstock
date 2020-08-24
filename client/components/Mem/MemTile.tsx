@@ -3,14 +3,14 @@ import React from "react";
 import styled from "styled-components";
 import { MemType } from "../../utils/types";
 
-const StyledMemItem = styled.article`
+export const StyledMemItem = styled.article`
   background: ${({ theme }) => theme.colors.dark600};
   :nth-child(even) {
     background: ${({ theme }) => theme.colors.dark700};
   }
 `;
 
-const MemItemBody = styled.div`
+export const MemItemBody = styled.div`
   padding: 1rem;
 
   figure {
@@ -66,7 +66,16 @@ const MemTile: React.FC<Props> = ({ mem }) => {
               </Link>
               <ul className="mem-categories mb-3">
                 {mem.categories.map(({ name, id }) => (
-                  <li key={id}>#{name}</li>
+                  <li key={id}>
+                    <Link
+                      href={{
+                        pathname: "/",
+                        query: { category: name },
+                      }}
+                    >
+                      <a className="is-link has-text-primary">#{name}</a>
+                    </Link>
+                  </li>
                 ))}
               </ul>
             </figcaption>

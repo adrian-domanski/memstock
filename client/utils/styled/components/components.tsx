@@ -79,7 +79,7 @@ export const ContentHeader: React.FC<Props> = styled.header`
   }
 `;
 
-export const ContentBody: React.FC<Props> = styled.div`
+export const ContentBody = styled.div`
   padding: 1rem;
   background: ${({ theme }) => theme.colors.dark600};
 
@@ -129,7 +129,8 @@ export const Button = styled.button.attrs(
     overflow: hidden;
     font-size: 1.1rem;
     letter-spacing: 1px;
-    imfdgpp :hover {
+
+    :hover {
       background: ${({ theme }) => theme.colors.primaryDarker};
       color: black;
     }
@@ -187,6 +188,10 @@ export const Input = styled.input.attrs({
   border: none;
   color: ${({ theme }) => theme.colors.white500};
 
+  @media screen and (max-width: 1023px) {
+    width: 100%;
+  }
+
   :active {
     outline: none;
     border: none;
@@ -212,6 +217,11 @@ export const StyledTitleWithLine = styled.h2`
   color: ${({ theme }) => theme.colors.white500};
   position: relative;
   padding-left: 0.8rem;
+  font-size: 1.5rem;
+
+  @media screen and (max-width: 768px) {
+    font-size: 1.3rem;
+  }
 
   :before {
     content: "";

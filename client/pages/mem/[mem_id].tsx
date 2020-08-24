@@ -5,8 +5,6 @@ import Layout from "../../components/layout/Layout";
 import Loader from "../../components/Loader";
 import MemComments from "../../components/Mem/MemComments";
 import MemItem from "../../components/Mem/MemItem";
-import TopMems from "../../components/Mem/TopMems";
-import TopUsers from "../../components/Mem/TopUsers";
 import { getMemDetailsQuery } from "../../queries/memQueries";
 import {
   ContentBody,
@@ -25,37 +23,29 @@ const MemDetails: React.FC<Props> = ({ router }) => {
   });
 
   return (
-    <Layout>
-      <div className="columns">
-        <div className="column is-8-desktop">
-          {!loading ? (
-            <MemItem mem={data.mem} />
-          ) : (
-            <>
-              <ContentHeader />
-              <ContentBody>
-                <Loader />
-              </ContentBody>
-              <ContentFooter />
-            </>
-          )}
-          {!loading ? (
-            <MemComments memId={memId} comments={data.mem.comments} />
-          ) : (
-            <>
-              <ContentHeader />
-              <ContentBody>
-                <Loader />
-              </ContentBody>
-              <ContentFooter />
-            </>
-          )}
-        </div>
-        <div className="column is-4-desktop">
-          <TopMems />
-          <TopUsers />
-        </div>
-      </div>
+    <Layout topUsers popularMems>
+      {!loading && data?.mem ? (
+        <MemItem mem={data.mem} />
+      ) : (
+        <>
+          <ContentHeader />
+          <ContentBody>
+            <Loader />
+          </ContentBody>
+          <ContentFooter />
+        </>
+      )}
+      {!loading && data?.mem ? (
+        <MemComments memId={memId} comments={data.mem.comments} />
+      ) : (
+        <>
+          <ContentHeader />
+          <ContentBody>
+            <Loader />
+          </ContentBody>
+          <ContentFooter />
+        </>
+      )}
     </Layout>
   );
 };

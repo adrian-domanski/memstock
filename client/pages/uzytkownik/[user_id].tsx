@@ -14,11 +14,7 @@ import {
   getUserDetailsQuery,
 } from "../../queries/userQueries";
 import { formatDate, getRankName } from "../../utils/helpers";
-import {
-  ContentBody,
-  ContentFooter,
-  StyledTabs,
-} from "../../utils/styled/components/components";
+import { ContentBody } from "../../utils/styled/components/components";
 import {
   Avatar,
   MemItemHeader as UserInfo,
@@ -140,17 +136,22 @@ const UserDetails: React.FC<Props> = ({ router }) => {
           <div className="user-informations">
             <UserContentHeader>
               <div className="content-wrapper">
-                {!userLoading ? (
+                {!userLoading && userData?.user ? (
                   <>
                     <Avatar>
-                      <img
-                        src={
-                          userData.user.avatar
-                            ? `${process.env.SERVER_URL}${userData.user.avatar.url}`
-                            : "/img/avatar-placeholder.jpg"
-                        }
-                        alt={`Zdjęcie profilowe użytkownika ${userData.user.username}`}
-                      />
+                      <div
+                        className="image-wrapper"
+                        onClick={() => setIsUpdateAvatarModalOpen(true)}
+                      >
+                        <img
+                          src={
+                            userData.user.avatar
+                              ? `${process.env.SERVER_URL}${userData.user.avatar.url}`
+                              : "/img/avatar-placeholder.jpg"
+                          }
+                          alt={`Zdjęcie profilowe użytkownika ${userData.user.username}`}
+                        />
+                      </div>
                       <figcaption>
                         <div className="user-name">
                           {userData.user.username}
@@ -246,26 +247,6 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                 </div>
               </ul>
             </ContentBody>
-            <ContentFooter>
-              <StyledTabs className="tabs is-accent">
-                <ul>
-                  <li
-                    className={`${selectedTab === "mems" ? "is-active" : ""}`}
-                    onClick={() => setSelectedTab("mems")}
-                  >
-                    <a>Memy</a>
-                  </li>
-                  <li
-                    className={`${
-                      selectedTab === "favourite" ? "is-active" : ""
-                    }`}
-                    onClick={() => setSelectedTab("favourite")}
-                  >
-                    <a>Ulubione</a>
-                  </li>
-                </ul>
-              </StyledTabs>
-            </ContentFooter>
           </div>
           <div className="user-content mt-5">
             <MemList where={{ user: { id: userId }, isPublic: true }} />

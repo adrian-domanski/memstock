@@ -11,6 +11,11 @@ export const StyledMemItem = styled.article`
 export const MemItemHeader = styled.header`
   background: ${({ theme }) => theme.colors.dark700};
   padding: 0.2rem 2rem;
+  min-height: 30px;
+
+  @media screen and (max-width: 600px) {
+    padding: 0.2rem 1rem;
+  }
 
   .content-wrapper {
     max-width: 800px;
@@ -48,11 +53,60 @@ export const Avatar = styled.figure`
   display: flex;
 
   img {
+    object-position: center;
+    object-fit: cover;
+    display: block;
     border-radius: 50%;
     width: 50px;
     height: 50px;
-    object-position: center;
+    display: block;
   }
+
+  .image-wrapper {
+    position: relative;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    :hover {
+      :after,
+      :before {
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    :before,
+    :after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    :before {
+      content: "\f0ad";
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      font-family: "Font Awesome 5 Free";
+      font-weight: bold;
+      transition: transform 0.3s ease;
+      transform: scale(0) translateY(20px);
+    }
+
+    :after {
+      content: "";
+      display: block;
+      background: black;
+      opacity: 0.4;
+      transform: scale(0);
+    }
+  }
+
   figcaption {
     padding-left: 0.8rem;
 
@@ -74,6 +128,10 @@ export const MemItemBody = styled.div`
   justify-content: center;
   background: ${({ theme }) => theme.colors.dark600};
 
+  @media screen and (max-width: 600px) {
+    padding: 1rem;
+  }
+
   .content-wrapper {
     max-width: 800px;
     margin: 0 auto;
@@ -90,6 +148,10 @@ export const MemItemBody = styled.div`
   .mem-title {
     color: ${({ theme }) => theme.colors.white500};
     font-size: 2rem;
+
+    @media screen and (max-width: 1023px) {
+      font-size: 1.3rem;
+    }
   }
 
   .mem-categories {
@@ -112,6 +174,10 @@ export const MemItemFooter = styled.footer`
   }
   padding: 1rem 2rem;
   background: ${({ theme }) => theme.colors.dark700};
+
+  @media screen and (max-width: 600px) {
+    padding: 1rem;
+  }
 `;
 
 export const StyledDropdown = styled.div`

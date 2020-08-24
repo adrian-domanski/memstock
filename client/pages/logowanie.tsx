@@ -9,7 +9,6 @@ import {
 import { Logo } from "../utils/styled/components/Navbar";
 import Link from "next/link";
 import {
-  CustomPageWrapper,
   CustomContentHeader,
   ExtendedLogoWrapper,
   StyledForm,
@@ -102,86 +101,84 @@ const LoginPage: React.FC<Props> = ({ router }) => {
 
   return (
     <Layout>
-      <CustomPageWrapper>
-        <CustomContentHeader>
-          <ExtendedLogoWrapper>
-            <Logo className="is-size-1">
-              <span>Mem</span>Stock
-            </Logo>
-            <LogoSubText className="is-size-4 is-family-primary">
-              Witaj ponownie przywoływaczu
-            </LogoSubText>
-          </ExtendedLogoWrapper>
-        </CustomContentHeader>
-        <ContentBody>
-          <StyledForm onSubmit={handleSubmit} action="submit">
-            {errors.ALL_FIELDS_FILLED && (
-              <div className="notification is-danger is-light">
-                {errors.ALL_FIELDS_FILLED}
-              </div>
-            )}
-
-            <Alert
-              alert={alert}
-              clearAlert={() => setAlert({ msg: "", type: "" })}
-            />
-
-            <div className="field">
-              <label className="label" htmlFor="email">
-                Email
-              </label>
-              <div className="control has-icons-left">
-                <input
-                  className={`input ${
-                    errors.EMAIL || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
-                  }`}
-                  type="email"
-                  id="email"
-                  placeholder="Twój adres email"
-                  value={credentials.email}
-                  onChange={handleChange}
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-envelope"></i>
-                </span>
-              </div>
-              {errors.EMAIL && <p className="help is-danger">{errors.EMAIL}</p>}
+      <CustomContentHeader>
+        <ExtendedLogoWrapper>
+          <Logo className="is-size-1">
+            <span>Mem</span>Stock
+          </Logo>
+          <LogoSubText className="is-size-4-desktop is-size-5-mobile is-family-primary">
+            Witaj ponownie przywoływaczu
+          </LogoSubText>
+        </ExtendedLogoWrapper>
+      </CustomContentHeader>
+      <ContentBody>
+        <StyledForm onSubmit={handleSubmit} action="submit">
+          {errors.ALL_FIELDS_FILLED && (
+            <div className="notification is-danger is-light">
+              {errors.ALL_FIELDS_FILLED}
             </div>
-            <div className="field mb-5">
-              <label className="label" htmlFor="password">
-                Hasło
-              </label>
-              <div className="control has-icons-left">
-                <input
-                  className={`input ${
-                    errors.ALL_FIELDS_FILLED ? "is-danger" : ""
-                  }`}
-                  type="password"
-                  placeholder="Hasło do twojego konta"
-                  id="password"
-                  value={credentials.password}
-                  onChange={handleChange}
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-lock"></i>
-                </span>
-              </div>
-            </div>
+          )}
 
-            <Button className="is-primary light margin-auto mb-5 px-6">
-              Zaloguj
-            </Button>
-          </StyledForm>
-        </ContentBody>
-        <ContentFooter className="has-text-centered">
-          Nie masz jeszcze konta?{" "}
-          <Link href="/logowanie">
-            <a className="has-text-primary has-text-weight-bold">
-              Zarejestruj się
-            </a>
-          </Link>
-        </ContentFooter>
-      </CustomPageWrapper>
+          <Alert
+            alert={alert}
+            clearAlert={() => setAlert({ msg: "", type: "" })}
+          />
+
+          <div className="field">
+            <label className="label" htmlFor="email">
+              Email
+            </label>
+            <div className="control has-icons-left">
+              <input
+                className={`input ${
+                  errors.EMAIL || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
+                }`}
+                type="email"
+                id="email"
+                placeholder="Twój adres email"
+                value={credentials.email}
+                onChange={handleChange}
+              />
+              <span className="icon is-small is-left">
+                <i className="fas fa-envelope"></i>
+              </span>
+            </div>
+            {errors.EMAIL && <p className="help is-danger">{errors.EMAIL}</p>}
+          </div>
+          <div className="field mb-5">
+            <label className="label" htmlFor="password">
+              Hasło
+            </label>
+            <div className="control has-icons-left">
+              <input
+                className={`input ${
+                  errors.ALL_FIELDS_FILLED ? "is-danger" : ""
+                }`}
+                type="password"
+                placeholder="Hasło do twojego konta"
+                id="password"
+                value={credentials.password}
+                onChange={handleChange}
+              />
+              <span className="icon is-small is-left">
+                <i className="fas fa-lock"></i>
+              </span>
+            </div>
+          </div>
+
+          <Button className="is-primary light margin-auto mb-5 px-6">
+            Zaloguj
+          </Button>
+        </StyledForm>
+      </ContentBody>
+      <ContentFooter className="has-text-centered">
+        Nie masz jeszcze konta?{" "}
+        <Link href="/logowanie">
+          <a className="has-text-primary has-text-weight-bold">
+            Zarejestruj się
+          </a>
+        </Link>
+      </ContentFooter>
     </Layout>
   );
 };

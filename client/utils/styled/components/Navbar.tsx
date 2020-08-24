@@ -1,17 +1,32 @@
 import styled, { DefaultTheme } from "styled-components";
-import { Props } from "./components";
 
-export const Logo: React.FC<{ className?: string }> = styled.h1`
+export const StyledAuthNavbar = styled.div`
+  &&&& {
+    @media screen and (max-width: 1023px) {
+      justify-content: center;
+      padding: 0;
+    }
+  }
+`;
+
+export const Logo = styled.figure`
   color: ${({ theme }) => theme.colors.primary};
   font-family: "Amaranth";
   font-size: 2.2rem;
   letter-spacing: 1px;
+  padding-left: 0;
   span {
     color: ${({ theme }) => theme.colors.accent};
   }
+
+  img {
+    display: block;
+    max-height: 2.75rem;
+    margin-right: 8px;
+  }
 `;
 
-export const SearchBar: React.FC<Props> = styled.div`
+export const SearchBar = styled.div`
   width: 282px;
   position: relative;
 
@@ -29,17 +44,17 @@ export const SearchBar: React.FC<Props> = styled.div`
     width: unset;
     max-width: 350px;
     margin: 0 auto;
-    padding-bottom: 1rem;
+    padding: 0 0.5rem 1rem 0.5rem;
   }
 `;
 
-export const StyledNavbar: React.FC<Props> = styled.div`
+export const StyledNavbar = styled.div`
   margin: 0 auto;
   align-items: center;
   background: unset;
   max-width: ${({ theme }) => theme.pageWideSectionMaxWidth};
   width: 100%;
-  margin: 0 auto;
+  padding: 0.25rem 1rem;
 
   ${({ theme }) => theme.media.tabletAndBelow} {
     .navbar-burger {
@@ -88,19 +103,32 @@ export const StyledNavbar: React.FC<Props> = styled.div`
   }
 `;
 
-export const PrimaryNavbar: React.FC<Props> = styled.div`
+export const PrimaryNavbar = styled.div`
   background: ${({ theme }) => theme.colors.dark700};
 `;
 
-export const SecondaryNavbar: React.FC<Props> = styled.div`
+export const SecondaryNavbar = styled.div`
   background: ${({ theme }) => theme.colors.dark600};
+
+  @media screen and (max-width: 1023px) {
+    display: none;
+  }
 `;
 
-export const NavbarLink: React.FC<
-  Props & { onClick?: Function }
-> = styled.a.attrs({
-  className: "navbar-item",
-})`
+export const StyledAuthButtons = styled.div`
+  @media screen and (max-width: 1023px) {
+    &&& {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+  }
+`;
+
+export const NavbarLink = styled.a.attrs(
+  ({ className }: { className: string }) => ({
+    className: `navbar-item ${className}`,
+  })
+)`
   &&& {
     font-size: 1rem;
     color: ${({ theme }) => theme.colors.primary};
@@ -119,8 +147,8 @@ export const NavbarLink: React.FC<
       transition: transform 0.1s ease-in;
 
       ${({ theme }) => theme.media.tabletAndBelow} {
-        width: 20%;
-        left: 40%;
+        width: 40%;
+        left: 30%;
       }
     }
     &.active:after {
@@ -144,9 +172,7 @@ export const NavbarLink: React.FC<
   }
 `;
 
-export const NavbarDropdown: React.FC<
-  Props & { reverse?: boolean }
-> = styled.div`
+export const NavbarDropdown = styled.div<{ reverse?: boolean }>`
   &&& {
     font-size: 1rem;
 

@@ -36,10 +36,15 @@ const GlobalStyles = createGlobalStyle`
   
 `;
 
-const MainContent = styled.main.attrs({ className: "section" })`
+const MainContent = styled.main`
   max-width: ${({ theme }) => theme.pageWideSectionMaxWidth};
-  width: 100%;
-  margin: 0 auto;
+  width: 100vw;
+  padding: 1rem;
+  margin: 2rem auto;
+
+  @media screen and (max-width: 1023px) {
+    margin: 1rem auto;
+  }
 `;
 
 interface Props {

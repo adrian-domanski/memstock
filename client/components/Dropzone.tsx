@@ -97,7 +97,9 @@ const MyDropzone: React.FC<Props> = ({
         />
       ) : (
         <IconWrapper>
-          <p>Przeciągnij zdjęcie, lub kliknij tutaj</p>
+          <p className="has-text-centered-mobile">
+            Przeciągnij zdjęcie, lub kliknij tutaj
+          </p>
           <i className="fas fa-upload"></i>
         </IconWrapper>
       )}

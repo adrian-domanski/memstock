@@ -1,9 +1,13 @@
+import { useQuery } from "@apollo/react-hooks";
+import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
+import { getCategoriesQuery } from "../../queries/memQueries";
 import {
   FooterContent,
   StyledFooter,
 } from "../../utils/styled/components/Footer";
+import { CategoryType } from "../../utils/types";
 
 const PrimaryFooter = styled.div`
   background: ${({ theme }) => theme.colors.dark700};
@@ -31,34 +35,41 @@ const GridListItem = styled.li`
   line-height: 2;
 `;
 
-const FooterTitle = styled.h3.attrs({
-  className: "title is-size-3-mobile",
-})`
+const FooterTitle = styled.h3.attrs(({ className }: { className: string }) => ({
+  className: `title is-size-3-mobile ${className}`,
+}))`
   color: ${({ theme }) => theme.colors.primaryDarker};
 `;
 
 const Footer: React.FC = () => {
+  const { data: categoriesData, loading: categoriesLoading } = useQuery(
+    getCategoriesQuery
+  );
+
   return (
-    <StyledFooter className="has-text-centered-mobile">
+    <StyledFooter>
       <SecondaryFooter>
         <WideWrapper>
-          <div className="columns">
+          <div className="columns has-text-centered-mobile">
             <div className="column is-4">
               <div className="section">
                 <FooterTitle>Kategorie</FooterTitle>
                 <GridList has2columns>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
+                  {!categoriesLoading &&
+                    categoriesData?.categories?.map(
+                      (category: CategoryType) => (
+                        <GridListItem key={category.id}>
+                          <Link
+                            href={{
+                              pathname: "/",
+                              query: { category: category.name },
+                            }}
+                          >
+                            <a className="is-link">{category.name}</a>
+                          </Link>
+                        </GridListItem>
+                      )
+                    )}
                 </GridList>
               </div>
             </div>
@@ -66,11 +77,26 @@ const Footer: React.FC = () => {
               <div className="section">
                 <FooterTitle>Przydatne linki</FooterTitle>
                 <GridList>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
-                  <GridListItem>Beka</GridListItem>
+                  <GridListItem>
+                    <Link href="/">
+                      <a className="is-link">Strona główna</a>
+                    </Link>
+                  </GridListItem>
+                  <GridListItem>
+                    <Link href="/dodaj-mema">
+                      <a className="is-link">Dodaj mema</a>
+                    </Link>
+                  </GridListItem>
+                  <GridListItem>
+                    <Link href="/generator-memow">
+                      <a className="is-link">Generator memów</a>
+                    </Link>
+                  </GridListItem>
+                  <GridListItem>
+                    <Link href="/ranking">
+                      <a className="is-link">Ranking</a>
+                    </Link>
+                  </GridListItem>
                 </GridList>
               </div>
             </div>
@@ -80,9 +106,13 @@ const Footer: React.FC = () => {
       <PrimaryFooter>
         <WideWrapper>
           <FooterContent>
-            <span className="accent">&copy; Mem</span>
-            <span className="has-text-primary">Stock</span>&nbsp;
-            {new Date().getFullYear()} - Wszelkie prawa zastrzeżone
+            <p className="page-name">
+              <span className="accent">&copy; Mem</span>
+              <span className="has-text-primary">Stock</span>&nbsp;
+            </p>
+            <p className="copyrights">
+              {new Date().getFullYear()} - Wszelkie prawa zastrzeżone
+            </p>
           </FooterContent>
         </WideWrapper>
       </PrimaryFooter>
