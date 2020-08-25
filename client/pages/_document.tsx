@@ -10,9 +10,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <title>
-            MemStock - Zbiór najlepszych memów i śmiesznych obrazków
-          </title>
           <link
             rel="apple-touch-icon"
             sizes="57x57"
@@ -89,10 +86,6 @@ class MyDocument extends Document {
           <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
-          />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
           />
         </Head>
         <body>

@@ -7,14 +7,10 @@ import { getCookie, isServer } from "../utils/helpers";
 import { setContext } from "apollo-link-context";
 import { createUploadLink } from "apollo-upload-client";
 
-const dev = process.env.NODE_ENV !== "production";
-
 export default withApollo(
   ({ initialState, ctx }) => {
     const httpLink = createUploadLink({
-      uri: dev
-        ? "http://localhost:1337/graphql"
-        : "http://localhost:1337/graphql",
+      uri: process.env.SERVER_URL,
     });
 
     const authLink = setContext((_, { headers }) => {

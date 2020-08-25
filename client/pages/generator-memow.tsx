@@ -77,7 +77,6 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
         return setTextFields([...currentTextFields]);
       case "textFieldBlackText":
         currentTextFields.forEach((textField) => {
-          console.log(value);
           if (textField.id === dataset.id) textField.blackText = checked;
         });
         return setTextFields([...currentTextFields]);
