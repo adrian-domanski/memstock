@@ -16,6 +16,7 @@
     "apollo-upload-client": "^14.1.1",
     "bulma": "^0.9.0",
     "compressorjs": "^1.0.6",
+    "dotenv": "^8.2.0",
     "graphql": "^15.3.0",
     "graphql-tag": "^2.11.0",
     "next": "9.5.0",

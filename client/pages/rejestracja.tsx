@@ -265,7 +265,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
             )}
           </div>
           <ReCAPTCHA
-            sitekey={process.env.RECAPTCHA_SITE_KEY}
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
             onChange={(value) => setRecaptcha(value)}
             className="margin-auto is-block mb-4"
           />
