@@ -348,10 +348,10 @@ const MemActions: React.FC<Props> = ({
               <span className="dislikes">{dislikes}</span>
             </div>
           </MemButtons>
-          <FacebookProvider appId="621710562109715">
+          <FacebookProvider appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}>
             <StyledShareButton
               className="button is-link"
-              href="http://google.com"
+              href={`${process.env.CLIENT_URL}/mem/${mem.id}`}
             >
               <span>Udostępnij</span>
               <i className="fas fa-share"></i>
