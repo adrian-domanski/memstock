@@ -1,15 +1,28 @@
 import Document, { Head, Html, Main, NextScript } from "next/document";
+import { ServerStyleSheet } from "styled-components";
 
-class MyDocument extends Document {
-  static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return { ...initialProps };
+interface IProps {
+  styleTags?: any;
+}
+
+export default class MyDocument extends Document<IProps> {
+  static getInitialProps({ renderPage }) {
+    const sheet = new ServerStyleSheet();
+
+    const page = renderPage((App) => (props) =>
+      sheet.collectStyles(<App {...props} />)
+    );
+
+    const styleTags = sheet.getStyleElement();
+
+    return { ...page, styleTags };
   }
 
   render() {
     return (
       <Html>
         <Head>
+          {this.props.styleTags}
           <link
             rel="apple-touch-icon"
             sizes="57x57"
@@ -99,5 +112,3 @@ class MyDocument extends Document {
     );
   }
 }
-
-export default MyDocument;
