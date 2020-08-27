@@ -208,9 +208,11 @@ export const Input = styled.input.attrs({
 `;
 
 export const StyledTitle: React.FC<Props> = styled.h2`
-  color: ${({ theme }) => theme.colors.primary};
-  font-size: 1.8rem;
-  width: 100%;
+  &&& {
+    color: ${({ theme }) => theme.colors.primary};
+    font-size: 1.8rem;
+    width: 100%;
+  }
 `;
 
 export const StyledTitleWithLine = styled.h2`

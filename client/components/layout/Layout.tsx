@@ -23,7 +23,7 @@ const GlobalStyles = createGlobalStyle`
   body {
     background-color: #3A3A3A;
     overflow-x: hidden;
-    color: ${({ theme }) => theme.colors.white500};
+    color: ${({ theme }) => theme.colors.white500} ;
   }
 
   #__next {
@@ -33,7 +33,6 @@ const GlobalStyles = createGlobalStyle`
     width: 100%;
     min-height: 100vh;
   }
-  
 `;
 
 const MainContent = styled.main`

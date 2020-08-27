@@ -35,10 +35,14 @@ const GridListItem = styled.li`
   line-height: 2;
 `;
 
-const FooterTitle = styled.h3.attrs(({ className }: { className: string }) => ({
-  className: `title is-size-3-mobile ${className}`,
-}))`
-  color: ${({ theme }) => theme.colors.primaryDarker};
+const FooterTitle = styled.h3.attrs(
+  ({ className = "" }: { className?: string }) => ({
+    className: `title is-size-3-mobile ${className}`,
+  })
+)`
+  &&& {
+    color: ${({ theme }) => theme.colors.primaryDarker};
+  }
 `;
 
 const Footer: React.FC = () => {

@@ -10,19 +10,21 @@ export const StyledAuthNavbar = styled.div`
 `;
 
 export const Logo = styled.figure`
-  color: ${({ theme }) => theme.colors.primary};
-  font-family: "Amaranth";
-  font-size: 2.2rem;
-  letter-spacing: 1px;
-  padding-left: 0;
-  span {
-    color: ${({ theme }) => theme.colors.accent};
-  }
+  &&& {
+    color: ${({ theme }) => theme.colors.primary};
+    font-family: "Amaranth";
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+    padding-left: 0;
+    span {
+      color: ${({ theme }) => theme.colors.accent};
+    }
 
-  img {
-    display: block;
-    max-height: 2.75rem;
-    margin-right: 8px;
+    img {
+      display: block;
+      max-height: 2.75rem;
+      margin-right: 8px;
+    }
   }
 `;
 
@@ -49,53 +51,55 @@ export const SearchBar = styled.div`
 `;
 
 export const StyledNavbar = styled.div`
-  margin: 0 auto;
-  align-items: center;
-  background: unset;
-  max-width: ${({ theme }) => theme.pageWideSectionMaxWidth};
-  width: 100%;
-  padding: 0.25rem 1rem;
+  &&& {
+    margin: 0 auto;
+    align-items: center;
+    background: unset;
+    max-width: ${({ theme }) => theme.pageWideSectionMaxWidth};
+    width: 100%;
+    padding: 0.25rem 1rem;
 
-  ${({ theme }) => theme.media.tabletAndBelow} {
-    .navbar-burger {
-      height: unset;
-      color: ${({ theme }) => theme.colors.primary};
-      &.is-active span:nth-child(3) {
-        transform: translateY(-7px) rotate(-45deg);
-      }
-      span {
-        height: 3px;
-        width: 20px;
-        left: calc(50% - 9px);
-        :nth-child(1) {
-          top: calc(50% - 7px);
+    ${({ theme }) => theme.media.tabletAndBelow} {
+      .navbar-burger {
+        height: unset;
+        color: ${({ theme }) => theme.colors.primary};
+        &.is-active span:nth-child(3) {
+          transform: translateY(-7px) rotate(-45deg);
         }
-        :nth-child(3) {
-          top: calc(50% + 5px);
-        }
-      }
-    }
-
-    @media screen and (max-width: 1023px) {
-      .navbar-menu {
-        .navbar-item.has-dropdown.is-hoverable,
-        .navbar-dropdown {
-          padding: 0;
-
-          .navbar-link {
-            display: none;
+        span {
+          height: 3px;
+          width: 20px;
+          left: calc(50% - 9px);
+          :nth-child(1) {
+            top: calc(50% - 7px);
+          }
+          :nth-child(3) {
+            top: calc(50% + 5px);
           }
         }
-        background-color: ${({ theme }) => theme.colors.dark800};
-        text-align: center;
-        padding: 0;
-        .navbar-item {
-          color: #fff;
-          font-size: 1rem;
-          padding: 1.2rem 1rem;
-          :hover {
+      }
+
+      @media screen and (max-width: 1023px) {
+        .navbar-menu {
+          .navbar-item.has-dropdown.is-hoverable,
+          .navbar-dropdown {
+            padding: 0;
+
+            .navbar-link {
+              display: none;
+            }
+          }
+          background-color: ${({ theme }) => theme.colors.dark800};
+          text-align: center;
+          padding: 0;
+          .navbar-item {
             color: #fff;
-            background-color: unset;
+            font-size: 1rem;
+            padding: 1.2rem 1rem;
+            :hover {
+              color: #fff;
+              background-color: unset;
+            }
           }
         }
       }

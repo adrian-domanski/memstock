@@ -25,7 +25,6 @@ interface Props {
 }
 
 const LoginPage: React.FC<Props> = ({ router }) => {
-  console.log(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
   const { dispatch } = useContext(AuthContext);
   const [login] = useMutation(loginMutation);
   const [alert, setAlert] = useState({ type: "", msg: "" });
