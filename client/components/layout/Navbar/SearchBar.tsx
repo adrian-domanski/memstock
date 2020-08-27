@@ -49,6 +49,7 @@ const SearchBar: React.FC = () => {
           type="text"
           placeholder="Szukaj mema..."
           autoComplete="off"
+          aria-label="Szukana fraza"
           onFocus={() => setSearchFocus(true)}
           onBlur={handleInputBlur}
           value={searchTerm}
@@ -60,6 +61,7 @@ const SearchBar: React.FC = () => {
           <button
             className="button is-primary"
             type="button"
+            aria-label="Szukaj"
             onClick={() => setSearchTerm("")}
           >
             <i className="fa fa-search" aria-hidden="true"></i>

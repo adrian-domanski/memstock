@@ -326,6 +326,7 @@ const MemActions: React.FC<Props> = ({
                   ? "is-active"
                   : ""
               }`}
+              aria-label="Lubię to"
               onClick={() => handleMemAction("LIKE")}
             >
               <i className="fas fa-thumbs-up"></i>
@@ -338,6 +339,7 @@ const MemActions: React.FC<Props> = ({
                   ? "is-active"
                   : ""
               }`}
+              aria-label="Nie lubie tego"
               onClick={() => handleMemAction("DISLIKE")}
             >
               <i className="fas fa-thumbs-down"></i>
