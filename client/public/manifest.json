@@ -37,11 +37,18 @@
       "sizes": "192x192",
       "type": "image/png",
       "density": "4.0"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "density": "5.0"
     }
   ],
   "theme_color": "#D69D00",
   "background_color": "#3A3A3A",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "purpose": "any maskable"
 }

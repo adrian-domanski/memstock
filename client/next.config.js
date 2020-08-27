@@ -1,6 +1,5 @@
 const withPWA = require("next-pwa");
 const isDev = process.env.NODE_ENV === "development";
-require("dotenv").config();
 
 module.exports = withPWA({
   pwa: {

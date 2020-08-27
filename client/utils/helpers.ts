@@ -55,3 +55,10 @@ export const formatDate = (date: Date, options?: formatDateOptions) => {
 
 export const isObjectEmpty = (obj: {}) =>
   Object.keys(obj).length === 0 && obj.constructor === Object;
+
+export const blobToFile = (theBlob: Blob, fileName: string) => {
+  return new File([theBlob], fileName, {
+    lastModified: new Date().getTime(),
+    type: theBlob.type,
+  });
+};

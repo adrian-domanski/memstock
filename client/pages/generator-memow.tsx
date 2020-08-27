@@ -8,7 +8,7 @@ import Layout from "../components/layout/Layout";
 import AddNewMem from "../components/Mem/AddNewMem";
 import MemCanvas from "../components/Mem/MemCanvas";
 import MemTemplates from "../components/Mem/MemTemplates";
-import { isFileImage } from "../utils/helpers";
+import { isFileImage, blobToFile } from "../utils/helpers";
 import {
   Button,
   ContentBody,
@@ -105,26 +105,21 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
 
   const handleSubmit = async (e: React.FormEvent<Element>) => {
     e.preventDefault();
-    canvasRef.current.toBlob(
-      async (blob) => {
-        setGeneratedMem(blob);
-
-        try {
-          new Compressor(blob, {
-            maxWidth: 800,
-            quality: 0.5,
-            mimeType: "image/jpeg",
-            success(result) {
-              setGeneratedMem(result);
-            },
-          });
-        } catch (err) {
-          console.log(err);
-        }
-      },
-      "image/jpeg",
-      0.8
-    );
+    canvasRef.current.toBlob(async (blob) => {
+      try {
+        new Compressor(blob, {
+          maxWidth: 800,
+          quality: 0.5,
+          mimeType: "image/jpeg",
+          success(result) {
+            const newFile = blobToFile(result, `${uuidv4()}.jpg`);
+            setGeneratedMem(newFile);
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

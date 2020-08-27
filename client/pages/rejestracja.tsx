@@ -175,6 +175,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
                 type="text"
                 placeholder="Nazwa użytkownika (widoczna publicznie)"
                 id="username"
+                name="username"
                 value={credentials.username}
                 onChange={handleChange}
               />
@@ -197,6 +198,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
                 }`}
                 type="email"
                 id="email"
+                name="email"
                 placeholder="Twój adres email"
                 value={credentials.email}
                 onChange={handleChange}
@@ -223,6 +225,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
                 type="password"
                 placeholder="Hasło do twojego konta"
                 id="password"
+                name="password"
                 value={credentials.password}
                 onChange={handleChange}
               />
@@ -253,6 +256,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
                 type="password"
                 placeholder="Powtórz hasło do konta"
                 id="confirmPassword"
+                name="confirmPassword"
                 value={credentials.confirmPassword}
                 onChange={handleChange}
               />

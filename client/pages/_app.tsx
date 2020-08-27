@@ -103,6 +103,17 @@ class MyApp extends App<IProps> {
             sizes="16x16"
             href="/icons/favicon-16x16.png"
           />
+          <link
+            rel="apple-touch-icon"
+            sizes="512x512"
+            href="/icons/apple-icon-512x512.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="512x512"
+            href="/icons/android-icon-512x512.png"
+          />
           <link rel="manifest" href="/manifest.json" />
           <meta name="msapplication-TileColor" content="#ffffff" />
           <meta
@@ -113,6 +124,10 @@ class MyApp extends App<IProps> {
           <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+          />
+          <meta
+            name="description"
+            content="Zbiór najlepszych memów i śmiesznych obrazków. Twórz swoje własne memy korzystając z naszych szablonów, lub dodaj własne zdjęcia i dziel się nimi z innymi."
           />
         </Head>
         <ThemeProvider theme={theme}>
