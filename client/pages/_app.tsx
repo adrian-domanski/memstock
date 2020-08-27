@@ -9,12 +9,11 @@ import { theme } from "../utils/styled/theme";
 import "../utils/styles/main.scss";
 import Head from "next/head";
 
-class MyApp extends App<
-  Readonly<any> &
-    Readonly<{
-      children?: React.ReactNode;
-    }>
-> {
+interface IProps {
+  token: string;
+}
+
+class MyApp extends App<IProps> {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
     if (Component.getInitialProps) {
