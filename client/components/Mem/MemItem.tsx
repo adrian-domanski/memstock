@@ -107,6 +107,10 @@ const MemItem: React.FC<Props> = ({
           property="og:image"
           content={`${process.env.SERVER_URL}${mem.image.url}`}
         />
+        <meta
+          property="og:url"
+          content={`${process.env.CLIENT_URL}/mem/${mem.id}`}
+        />
       </Head>
       <StyledMemItem>
         <Modal
