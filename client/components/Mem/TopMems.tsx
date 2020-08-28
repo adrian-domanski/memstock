@@ -56,7 +56,7 @@ const PopularSectionBody = styled.div`
 `;
 
 const TopMems: React.FC = () => {
-  const { data, loading } = useQuery(getTopMems);
+  const { data, loading } = useQuery(getTopMems, { ssr: false });
 
   return (
     <StyledPopularSection>

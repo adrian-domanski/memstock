@@ -24,7 +24,7 @@ const MemList: React.FC<Props> = ({
   sort = "createdAt:DESC",
 }) => {
   const MEMS_FETCH_MORE_AMOUNT = 10;
-  const MEMS_ON_START = 10;
+  const MEMS_ON_START = 5;
 
   const [offset, setOffset] = useState(MEMS_ON_START);
   const [hasMore, setHasMore] = useState(true);
@@ -32,6 +32,7 @@ const MemList: React.FC<Props> = ({
 
   const { data, loading, fetchMore, updateQuery } = useQuery(getMemsQuery, {
     variables: { limit: MEMS_ON_START, start: 0, where, sort },
+    ssr: false,
   });
 
   const fetchMoreResults = async () => {

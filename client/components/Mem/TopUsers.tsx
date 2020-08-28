@@ -74,7 +74,7 @@ export const RankingListItem = styled.li`
 `;
 
 const TopUsers: React.FC = () => {
-  const { data, loading } = useQuery(getUsersQuery);
+  const { data, loading } = useQuery(getUsersQuery, { ssr: false });
 
   return (
     <StyledPopularSection>
