@@ -26,6 +26,11 @@ class MyApp extends App {
             property="og:image"
             content={`${process.env.CLIENT_URL}/banner.png`}
           />
+          <meta
+            property="og:image:secure_url"
+            content={`${process.env.CLIENT_URL}/banner.png`}
+          />
+          <meta property="og:type" content="website" />
           <meta property="og:url" content={process.env.CLIENT_URL} />
           <title>
             MemStock - Zbiór najlepszych memów i śmiesznych obrazków
