@@ -3,25 +3,17 @@ import styled from "styled-components";
 import { FacebookProvider, ShareButton } from "react-facebook";
 
 const StyledShareButton = styled(ShareButton)`
-  &&& {
-    display: flex;
-    align-items: center;
-    min-height: 40px;
-    background-color: ${({ theme }) => theme.colors.accentBackground};
-    transition: background-color 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  min-height: 40px;
 
-    :hover {
-      background-color: #1b716e;
-    }
+  span {
+    padding-right: 8px;
+  }
 
+  @media screen and (max-width: 998px) {
     span {
-      padding-right: 8px;
-    }
-
-    @media screen and (max-width: 998px) {
-      span {
-        display: none;
-      }
+      display: none;
     }
   }
 `;

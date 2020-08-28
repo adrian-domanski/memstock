@@ -14,7 +14,6 @@ declare module "styled-components" {
       primaryDarker: string;
       accent: string;
       accentDarker: string;
-      accentBackground: string;
       danger: string;
       dark900: string;
       dark800: string;

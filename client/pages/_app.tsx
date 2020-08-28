@@ -101,13 +101,13 @@ class MyApp extends App {
             sizes="512x512"
             href="/icons/android-icon-512x512.png"
           />
-          <link rel="manifest" href="/manifest.json" />
-          <meta name="msapplication-TileColor" content="#ffffff" />
+          <meta name="msapplication-TileColor" content="#D69D00" />
           <meta
             name="msapplication-TileImage"
             content="/icons/ms-icon-144x144.png"
           />
-          <meta name="theme-color" content="#ffffff" />
+          <meta name="theme-color" content="#d69d00" />
+          <link rel="manifest" href="/manifest.json" />
           <meta
             name="description"
             content="Zbiór najlepszych memów i śmiesznych obrazków. Twórz swoje własne memy korzystając z naszych szablonów, lub dodaj własne zdjęcia i dziel się nimi z innymi."
