@@ -34,6 +34,11 @@ export default class MyDocument extends Document {
         <Head />
         <body>
           <Main />
+          <script
+            defer
+            src="https://kit.fontawesome.com/67491f19fa.js"
+            crossOrigin="anonymous"
+          ></script>
           <NextScript />
         </body>
       </Html>

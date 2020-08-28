@@ -108,10 +108,6 @@ class MyApp extends App {
             content="/icons/ms-icon-144x144.png"
           />
           <meta name="theme-color" content="#ffffff" />
-          <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
-          />
           <meta
             name="description"
             content="Zbiór najlepszych memów i śmiesznych obrazków. Twórz swoje własne memy korzystając z naszych szablonów, lub dodaj własne zdjęcia i dziel się nimi z innymi."
