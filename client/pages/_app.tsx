@@ -22,7 +22,10 @@ class MyApp extends App {
             property="og:description"
             content="Twórz swoje własne memy korzystając z naszych szablonów i dziel się z innymi."
           />
-          <meta property="og:image" content="/banner.png" />
+          <meta
+            property="og:image"
+            content={`${process.env.CLIENT_URL}/banner.png`}
+          />
           <meta property="og:url" content={process.env.CLIENT_URL} />
           <title>
             MemStock - Zbiór najlepszych memów i śmiesznych obrazków
