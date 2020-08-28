@@ -1,5 +1,4 @@
 import { getDataFromTree } from "@apollo/react-ssr";
-import cookies from "next-cookies";
 import App from "next/app";
 import React from "react";
 import { ThemeProvider } from "styled-components";
@@ -9,21 +8,9 @@ import { theme } from "../utils/styled/theme";
 import "../utils/styles/main.scss";
 import Head from "next/head";
 
-interface IProps {
-  token: string;
-}
-
-class MyApp extends App<IProps> {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {};
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-
-    return { pageProps, token: cookies(ctx).token || "" };
-  }
+class MyApp extends App {
   render() {
-    const { Component, pageProps, token } = this.props;
+    const { Component, pageProps } = this.props;
     return (
       <>
         <Head>
@@ -131,7 +118,7 @@ class MyApp extends App<IProps> {
           />
         </Head>
         <ThemeProvider theme={theme}>
-          <AuthContextProvider token={token}>
+          <AuthContextProvider>
             <Component {...pageProps} />
           </AuthContextProvider>
         </ThemeProvider>

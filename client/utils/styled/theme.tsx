@@ -10,6 +10,7 @@ export const theme: DefaultTheme = {
     primaryDarker: "#ad8108",
     accent: "#41B4B0",
     accentDarker: "#28908d",
+    accentBackground: "#1c7b77",
     danger: "#FF3860",
     dark700: "#2B2B2B",
     dark800: "#252525",

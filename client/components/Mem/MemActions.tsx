@@ -1,12 +1,12 @@
 import { useMutation } from "@apollo/react-hooks";
 import React, { useContext, useEffect, useState } from "react";
-import { FacebookProvider, ShareButton } from "react-facebook";
 import styled from "styled-components";
 import { AuthContext } from "../../context/authContext";
 import { Vote } from "../../context/reducers/authReducer";
 import { deleteMemMutation, updateMemMutation } from "../../queries/memQueries";
 import { updateUserMutation } from "../../queries/userQueries";
 import { mediaCheckTypes, MemType } from "../../utils/types";
+import ShareButton from "./ShareButton";
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -113,22 +113,6 @@ const MemButtons = styled.div<{ memCheckActions?: boolean }>`
       justify-content: center;
       align-items: center;
       user-select: none;
-    }
-  }
-`;
-
-const StyledShareButton = styled(ShareButton)`
-  display: flex;
-  align-items: center;
-  min-height: 40px;
-
-  span {
-    padding-right: 8px;
-  }
-
-  @media screen and (max-width: 998px) {
-    span {
-      display: none;
     }
   }
 `;
@@ -350,15 +334,7 @@ const MemActions: React.FC<Props> = ({
               <span className="dislikes">{dislikes}</span>
             </div>
           </MemButtons>
-          <FacebookProvider appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}>
-            <StyledShareButton
-              className="button is-link"
-              href={`${process.env.CLIENT_URL}/mem/${mem.id}`}
-            >
-              <span>Udostępnij</span>
-              <i className="fas fa-share"></i>
-            </StyledShareButton>
-          </FacebookProvider>
+          <ShareButton memId={mem.id} />
         </>
       )}
     </FlexWrapper>

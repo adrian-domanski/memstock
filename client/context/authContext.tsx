@@ -12,22 +12,19 @@ let initState: IState = {
   user: null,
   isAuth: false,
   votes: [],
-  token: null,
 };
 
 export const AuthContext = createContext<IAuthContext>(undefined);
 
 const AuthContextProvider: React.FC<{
   children: React.ReactNode;
-  token: string;
-}> = ({ children, token }) => {
+}> = ({ children }) => {
   const { data, loading } = useQuery(getUserFromTokenQuery);
 
   if (!loading && data?.me) {
     initState = {
       user: data.me,
       isAuth: true,
-      token,
       votes: [],
     };
   }

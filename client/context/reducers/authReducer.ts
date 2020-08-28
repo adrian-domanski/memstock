@@ -25,7 +25,6 @@ export interface Vote {
 export interface IState {
   user: UserType | null;
   isAuth: boolean;
-  token: string;
   votes: Vote[];
 }
 
