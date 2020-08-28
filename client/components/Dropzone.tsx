@@ -55,7 +55,7 @@ const MyDropzone: React.FC<Props> = ({
 }) => {
   const [alert, setAlert] = useState({ msg: "", type: "" });
 
-  const onDrop = useCallback(async (acceptedFiles) => {
+  const onDrop = useCallback((acceptedFiles) => {
     const [file] = acceptedFiles;
     if (!isFileImage(file)) {
       return setAlert({ msg: "Niepoprawny format pliku", type: "danger" });
@@ -100,7 +100,7 @@ const MyDropzone: React.FC<Props> = ({
           <p className="has-text-centered-mobile">
             Przeciągnij zdjęcie, lub kliknij tutaj
           </p>
-          <i className="fas fa-upload"></i>
+          <i className="fas fa-upload" aria-hidden="true"></i>
         </IconWrapper>
       )}
     </StyledWrapper>

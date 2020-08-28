@@ -21,10 +21,9 @@ const StyledAvatar = styled.figure`
     width: 128px;
     border-radius: 50%;
     overflow: hidden;
+    object-fit: cover;
     margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    object-position: center;
   }
 `;
 
@@ -62,9 +61,7 @@ const ChangeUserAvatar: React.FC<Props> = ({ actionClose, isOpen }) => {
     if (e.target.files.length) {
       setActionProgress(true);
       setAlert({ msg: "Proszę czekać...", type: "warning" });
-
       const [file] = e.target.files;
-
       if (!isFileImage(file)) {
         return setAlert({ msg: "Niepoprawny format pliku", type: "danger" });
       } else if (alert.msg) {
@@ -79,11 +76,10 @@ const ChangeUserAvatar: React.FC<Props> = ({ actionClose, isOpen }) => {
           success(result) {
             setPreviewURL(URL.createObjectURL(result));
             setFile(result);
+            setActionProgress(false);
+            setAlert({ msg: "", type: "" });
           },
         });
-
-        setActionProgress(false);
-        setAlert({ msg: "", type: "" });
       } catch (err) {
         setActionProgress(false);
         setAlert({ msg: "", type: "" });

@@ -133,7 +133,10 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
         setAlert({ msg: "Konto zostało utworzone", type: "success" });
         router.push("/");
       } catch (err) {
-        setAlert({ msg: "Nieprawidłowy login i/lub hasło", type: "danger" });
+        setAlert({
+          msg: "Użytkownik o takiej nazwie lub adresie email już istnieje",
+          type: "danger",
+        });
         dispatch({ type: "REGISTER_ERROR" });
       }
     }

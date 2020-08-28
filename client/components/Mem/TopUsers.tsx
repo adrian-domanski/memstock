@@ -9,6 +9,7 @@ import {
   StyledTitle,
 } from "../../utils/styled/components/components";
 import Loader from "../Loader";
+import { Avatar } from "../../utils/styled/components/MemItem";
 
 export const StyledPopularSection = styled.article`
   :not(:last-child) {
@@ -74,7 +75,10 @@ export const RankingListItem = styled.li`
 `;
 
 const TopUsers: React.FC = () => {
-  const { data, loading } = useQuery(getUsersQuery, { ssr: false });
+  const { data, loading } = useQuery(getUsersQuery, {
+    ssr: false,
+    variables: { sort: "rank:DESC", limit: 10 },
+  });
 
   return (
     <StyledPopularSection>
@@ -88,7 +92,7 @@ const TopUsers: React.FC = () => {
               <RankingListItem key={id}>
                 <Link href="/uzytkownik/[user_id]" as={`/uzytkownik/${id}`}>
                   <a>
-                    <figure>
+                    <Avatar>
                       <img
                         src={
                           avatar
@@ -100,7 +104,7 @@ const TopUsers: React.FC = () => {
                       <figcaption>
                         {username} ({rank} pkt)
                       </figcaption>
-                    </figure>
+                    </Avatar>
                   </a>
                 </Link>
               </RankingListItem>

@@ -192,7 +192,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
                         onChange={handleChangeTitle}
                       />
                       <span className="icon is-small is-left">
-                        <i className="fas fa-envelope"></i>
+                        <i className="fas fa-envelope" aria-hidden="true"></i>
                       </span>
                     </div>
                   </div>
