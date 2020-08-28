@@ -16,11 +16,11 @@ class MyApp extends App {
         <Head>
           <meta
             property="og:title"
-            content="MemStock - Najlepsze memy i śmieszne obrazki"
+            content="MemStock - Zbiór najlepszych memów i śmiesznych obrazków"
           />
           <meta
             property="og:description"
-            content="Twórz swoje własne memy korzystając z naszych szablonów i dziel się z innymi."
+            content="Zbiór najlepszych memów i śmiesznych obrazków. Twórz swoje własne memy korzystając z naszych szablonów, lub dodaj własne zdjęcia i dziel się nimi z innymi."
           />
           <meta
             property="og:image"
