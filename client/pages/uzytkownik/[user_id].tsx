@@ -190,7 +190,7 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                           role="menu"
                         >
                           <div className="dropdown-content">
-                            {userId === user.id && (
+                            {userId === user?.id && (
                               <button
                                 onClick={() => setIsUpdateAvatarModalOpen(true)}
                                 className="button button-link dropdown-item"

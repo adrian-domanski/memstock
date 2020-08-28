@@ -191,7 +191,7 @@ const MemActions: React.FC<Props> = ({
     updateMemList((prev) => {
       return {
         ...prev,
-        mems: prev.mems.filter((mem) => mem.id !== mem.id),
+        mems: prev.mems.filter(({ id }) => id !== mem.id),
       };
     });
     setLoading({ ...loading, publicMem: false });
@@ -203,7 +203,7 @@ const MemActions: React.FC<Props> = ({
     updateMemList((prev) => {
       return {
         ...prev,
-        mems: prev.mems.filter((mem) => mem.id !== mem.id),
+        mems: prev.mems.filter(({ id }) => id !== mem.id),
       };
     });
     setLoading({ ...loading, deleteMem: false });
@@ -240,8 +240,8 @@ const MemActions: React.FC<Props> = ({
       updateMemList((prev) => {
         return {
           ...prev,
-          mems: prev.mems.map((mem: MemType) => {
-            if (mem.id === mem.id)
+          mems: prev.mems.map(({ id }: MemType) => {
+            if (id === mem.id)
               return {
                 ...mem,
                 likes: updateData.likes,

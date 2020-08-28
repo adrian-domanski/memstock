@@ -170,7 +170,6 @@ const MemCanvas: React.FC<Props> = ({
     if (selectedTextId === null) return;
     const currentTextFields = textFields;
     currentTextFields.find((textField) => {
-      console.log(textField);
       if (textField.id === selectedTextId) {
         const fontSize = memConfig.getFontSize(+textField.fontSizeRatio);
         const mousePosition = getMousePosition(e);

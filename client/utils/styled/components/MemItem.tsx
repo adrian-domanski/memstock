@@ -39,6 +39,10 @@ export const MemItemHeader = styled.header`
       font-size: 1.5rem;
       width: 50px;
       height: 50px;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background: unset;
       border: none;
 
