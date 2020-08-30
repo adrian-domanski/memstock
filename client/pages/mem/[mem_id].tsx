@@ -23,7 +23,14 @@ const MemDetails: React.FC<Props> = ({ router }) => {
   });
 
   return (
-    <Layout topUsers popularMems>
+    <Layout
+      ogImage={`${process.env.SERVER_URL}${data?.mem?.image?.url}`}
+      ogTitle={data?.mem?.title}
+      ogType="article"
+      ogUrl={`${process.env.CLIENT_URL}/mem/${data?.mem?.id}`}
+      topUsers
+      popularMems
+    >
       {!loading && data?.mem ? (
         <MemItem mem={data.mem} />
       ) : (

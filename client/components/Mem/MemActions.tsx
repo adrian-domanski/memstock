@@ -313,7 +313,7 @@ const MemActions: React.FC<Props> = ({
               aria-label="Lubię to"
               onClick={() => handleMemAction("LIKE")}
             >
-              <i className="fas fa-thumbs-up"></i>
+              <i aria-hidden="true" className="fas fa-thumbs-up"></i>
             </LikeButton>
             <DislikeButton
               className={`button dislike ${
@@ -326,7 +326,7 @@ const MemActions: React.FC<Props> = ({
               aria-label="Nie lubie tego"
               onClick={() => handleMemAction("DISLIKE")}
             >
-              <i className="fas fa-thumbs-down"></i>
+              <i aria-hidden="true" className="fas fa-thumbs-down"></i>
             </DislikeButton>
             <div className="counter">
               <span className="likes">{likes}</span>

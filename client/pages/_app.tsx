@@ -15,27 +15,6 @@ class MyApp extends App {
       <>
         <Head>
           <meta
-            property="og:title"
-            content="MemStock - Zbiór najlepszych memów i śmiesznych obrazków"
-          />
-          <meta
-            property="og:description"
-            content="Zbiór najlepszych memów i śmiesznych obrazków. Twórz swoje własne memy korzystając z naszych szablonów, lub dodaj własne zdjęcia i dziel się nimi z innymi."
-          />
-          <meta
-            property="og:image"
-            content={`${process.env.CLIENT_URL}/banner.png`}
-          />
-          <meta
-            property="og:image:secure_url"
-            content={`${process.env.CLIENT_URL}/banner.png`}
-          />
-          <meta property="og:type" content="website" />
-          <meta property="og:url" content={process.env.CLIENT_URL} />
-          <title>
-            MemStock - Zbiór najlepszych memów i śmiesznych obrazków
-          </title>
-          <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />

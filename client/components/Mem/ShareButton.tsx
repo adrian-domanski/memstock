@@ -30,7 +30,7 @@ const FBShareButton: React.FC<IProps> = ({ memId }) => {
         href={`${process.env.CLIENT_URL}/mem/${memId}`}
       >
         <span>Udostępnij</span>
-        <i className="fas fa-share"></i>
+        <i aria-hidden="true" className="fas fa-share"></i>
       </StyledShareButton>
     </FacebookProvider>
   );
