@@ -7,7 +7,8 @@ module.exports = withPWA({
     disable: isDev,
   },
   env: {
-    SERVER_URL: !isDev ? "http://localhost:1337" : "https://api.memstock.pl",
+    // SERVER_URL: isDev ? "http://localhost:1337" : "https://api.memstock.pl",
+    SERVER_URL: "https://api.memstock.pl",
     CLIENT_URL: isDev ? "http://localhost:3000" : "https://memstock.pl",
   },
 });
