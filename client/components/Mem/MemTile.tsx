@@ -24,7 +24,9 @@ export const MemItemBody = styled.div`
 
   .mem-title {
     color: ${({ theme }) => theme.colors.white500};
-    font-size: 2rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin: 0.5rem 0;
   }
 
   .mem-categories {
@@ -61,7 +63,7 @@ const MemTile: React.FC<Props> = ({ mem }) => {
             <figcaption>
               <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
                 <a>
-                  <h3 className="mem-title">{mem.title}</h3>
+                  <h3 className="title mem-title">{mem.title}</h3>
                 </a>
               </Link>
               <ul className="mem-categories mb-3">

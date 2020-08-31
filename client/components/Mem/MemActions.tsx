@@ -167,7 +167,7 @@ const MemActions: React.FC<Props> = ({
     updateMemList((prev) => {
       return {
         ...prev,
-        mems: prev.mems.filter((mem) => mem.id !== mem.id),
+        mems: prev.mems.filter(({ id }) => id !== mem.id),
       };
     });
     setLoading({ ...loading, unReportMem: false });
@@ -240,14 +240,14 @@ const MemActions: React.FC<Props> = ({
       updateMemList((prev) => {
         return {
           ...prev,
-          mems: prev.mems.map(({ id }: MemType) => {
-            if (id === mem.id)
+          mems: prev.mems.map((currMem: MemType) => {
+            if (currMem.id === mem.id)
               return {
-                ...mem,
+                ...currMem,
                 likes: updateData.likes,
                 dislikes: updateData.dislikes,
               };
-            else return mem;
+            else return currMem;
           }),
         };
       });
@@ -329,9 +329,9 @@ const MemActions: React.FC<Props> = ({
               <i aria-hidden="true" className="fas fa-thumbs-down"></i>
             </DislikeButton>
             <div className="counter">
-              <span className="likes">{likes}</span>
-              <span className="divider">/</span>
               <span className="dislikes">{dislikes}</span>
+              <span className="divider">/</span>
+              <span className="likes">{likes}</span>
             </div>
           </MemButtons>
           <ShareButton memId={mem.id} />
