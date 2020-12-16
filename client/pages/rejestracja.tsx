@@ -29,7 +29,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
   const { dispatch } = useContext(AuthContext);
   const [alert, setAlert] = useState({ type: "", msg: "" });
   const [register] = useMutation(registerMutation);
-  const [recaptcha, setRecaptcha] = useState(false);
+  const [recaptcha, setRecaptcha] = useState(process.env.isDev);
   const [errors, setErrors] = useState({
     USERNAME: "",
     EMAIL: "",

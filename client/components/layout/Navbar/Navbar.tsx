@@ -3,7 +3,6 @@ import { SingletonRouter, withRouter } from "next/router";
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { isPageAdmin } from "../../../utils/helpers";
-import { Button } from "../../../utils/styled/components/components";
 import {
   Logo,
   NavbarDropdown,
@@ -13,8 +12,8 @@ import {
   StyledAuthNavbar,
   StyledNavbar,
 } from "../../../utils/styled/components/Navbar";
-import AuthNav from "./AuthNav";
-import SearchBar from "./SearchBar";
+import AuthNav from "./AuthNav/AuthNav";
+import SearchBar from "./SearchBar/SearchBar";
 import AuthButtons from "./AuthButtons";
 
 interface Props {

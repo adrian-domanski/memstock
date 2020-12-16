@@ -23,7 +23,7 @@ interface IProps {
 }
 
 const FBShareButton: React.FC<IProps> = ({ memId }) => {
-  return (
+  return process.env.isDev ? null : (
     <FacebookProvider appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}>
       <StyledShareButton
         className="button is-link"

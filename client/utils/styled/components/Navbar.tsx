@@ -28,28 +28,6 @@ export const Logo = styled.figure`
   }
 `;
 
-export const SearchBar = styled.div`
-  width: 282px;
-  position: relative;
-
-  input {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  button {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  ${({ theme }) => theme.media.tabletAndBelow} {
-    width: unset;
-    max-width: 350px;
-    margin: 0 auto;
-    padding: 0 0.5rem 1rem 0.5rem;
-  }
-`;
-
 export const StyledNavbar = styled.div`
   &&& {
     margin: 0 auto;
