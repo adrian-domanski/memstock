@@ -40,11 +40,7 @@ module.exports = {
   async update(ctx) {
     const { id } = ctx.params;
 
-    const user = await strapi
-      .query("user", "users-permissions")
-      .findOne({ _id: ctx.state.user.id });
-
-    if (user.id !== ctx.state.user.id) {
+    if (ctx.state.user.id !== id) {
       return ctx.throw(401, "Access denied");
     }
 

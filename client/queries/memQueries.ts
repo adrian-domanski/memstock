@@ -130,6 +130,7 @@ export const getMemDetailsQuery = gql`
         user {
           id
           username
+          rank
           avatar {
             id
             url

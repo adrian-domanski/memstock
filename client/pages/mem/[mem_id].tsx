@@ -1,9 +1,9 @@
 import { useQuery } from "@apollo/react-hooks";
 import { SingletonRouter, withRouter } from "next/router";
 import React from "react";
-import Layout from "../../components/layout/Layout";
+import Layout from "../../components/layout/Layout/Layout";
 import Loader from "../../components/Loader";
-import MemComments from "../../components/Mem/MemComments";
+import MemComments from "../../components/Mem/MemComments/MemComments";
 import MemItem from "../../components/Mem/MemItem";
 import { getMemDetailsQuery } from "../../queries/memQueries";
 import {

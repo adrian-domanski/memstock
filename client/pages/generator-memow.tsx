@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import Alert from "../components/Alert";
-import Layout from "../components/layout/Layout";
+import Layout from "../components/layout/Layout/Layout";
 import AddNewMem from "../components/Mem/AddNewMem";
 import MemCanvas from "../components/Mem/MemCanvas";
 import MemTemplates from "../components/Mem/MemTemplates";

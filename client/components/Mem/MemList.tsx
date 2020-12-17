@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/react-hooks";
 import React, { useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { getMemsQuery } from "../../queries/memQueries";
-import { ContentBody } from "../../utils/styled/components/components";
+import { Button, ContentBody } from "../../utils/styled/components/components";
 import { mediaCheckTypes, MemType } from "../../utils/types";
 import Loader from "../Loader";
 import MemItem from "./MemItem";
@@ -11,6 +11,7 @@ import {
   MemItemBody,
   MemItemFooter,
 } from "../../utils/styled/components/MemItem";
+import Link from "next/link";
 
 interface Props {
   where?: object;
@@ -76,7 +77,12 @@ const MemList: React.FC<Props> = ({
             )
           ) : (
             <ContentBody className="is-size-4-desktop is-size-5-mobile  has-text-centered py-5">
-              Brak wyników
+              <p>Brak wyników</p>
+              <Link href="/" passHref>
+                <Button as="a" className="is-primary center mt-5">
+                  Wróć do strony głownej
+                </Button>
+              </Link>
             </ContentBody>
           )}
         </InfiniteScroll>

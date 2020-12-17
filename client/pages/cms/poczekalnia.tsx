@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "../../components/layout/Layout";
+import Layout from "../../components/layout/Layout/Layout";
 import MemList from "../../components/Mem/MemList";
 import TopMems from "../../components/Mem/TopMems";
 import TopUsers from "../../components/Mem/TopUsers";

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
+import { Avatar } from "../../utils/styled/components/MemItem";
 import { UserType } from "../../utils/types";
 import { RankingListItem } from "../Mem/TopUsers";
 
@@ -18,6 +19,8 @@ const StyledRankingListItem = styled(RankingListItem)`
   }
 
   :not(:last-child) {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.dark800};
+    padding-bottom: 1rem;
     margin-bottom: 1rem;
   }
 `;
@@ -27,12 +30,12 @@ interface Props {
   index: number;
 }
 
-const MemItem: React.FC<Props> = ({ user, index }) => {
+const UserItem: React.FC<Props> = ({ user, index }) => {
   return (
     <StyledRankingListItem>
       <Link href="/uzytkownik/[user_id]" as={`/uzytkownik/${user.id}`}>
         <a>
-          <figure>
+          <Avatar>
             <figcaption className={`${index < 3 ? "has-text-primary" : ""}`}>
               {index + 1}. {user.username} ({user.rank} pkt)
             </figcaption>
@@ -44,11 +47,11 @@ const MemItem: React.FC<Props> = ({ user, index }) => {
               }
               alt={`Zdjęcie profilowe użytkownika ${user.username}`}
             />
-          </figure>
+          </Avatar>
         </a>
       </Link>
     </StyledRankingListItem>
   );
 };
 
-export default MemItem;
+export default UserItem;

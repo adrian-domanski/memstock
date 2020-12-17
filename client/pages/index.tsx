@@ -1,6 +1,6 @@
 import { SingletonRouter, withRouter } from "next/router";
 import React from "react";
-import Layout from "../components/layout/Layout";
+import Layout from "../components/layout/Layout/Layout";
 import MemList from "../components/Mem/MemList";
 import { isObjectEmpty } from "../utils/helpers";
 import {

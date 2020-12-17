@@ -112,7 +112,7 @@ export const StyledTextArea = styled.textarea`
 `;
 
 export const Button = styled.button.attrs(
-  ({ className, as }: { className: string; as: string }) => ({
+  ({ className, as }: { className?: string; as?: string }) => ({
     className: `button ${className}`,
     as,
   })

@@ -15,7 +15,7 @@ import {
 } from "../../utils/styled/components/MemItem";
 import { mediaCheckTypes, MemType } from "../../utils/types";
 import Modal from "../Modal";
-import MemActions from "./MemActions";
+import MemActions from "./MemActions/MemActions";
 
 interface Props {
   mem: MemType;

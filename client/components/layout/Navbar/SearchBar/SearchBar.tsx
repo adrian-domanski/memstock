@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import { getSearchHintsQuery } from "../../../../queries/memQueries";
 import { Input } from "../../../../utils/styled/components/components";
 import { SearchBar as StyledSearchBar } from "./styled";

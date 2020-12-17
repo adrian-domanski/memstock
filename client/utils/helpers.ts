@@ -1,3 +1,5 @@
+import badges from "./badges.json";
+
 export const isServer = () => typeof window === "undefined";
 
 export const getCookie = (name) => {
@@ -22,13 +24,16 @@ export const isPageAdmin = (role) => {
 };
 
 export const getRankName = (rank: number) => {
-  if (rank < 500) return "Początkujący śmieszek";
-  else if (rank < 1000) return "Śmieszek";
-  else if (rank < 1500) return "Fanatyk wędkarstwa";
-  else if (rank < 2000) return "Fanatyk leczo";
-  else {
-    return "Kozak totalny";
-  }
+  const neededPoints = Object.keys(badges);
+  let badge = "None";
+
+  neededPoints.forEach((points, index) => {
+    if (rank >= parseFloat(points)) {
+      badge = badges[points];
+    }
+  });
+
+  return badge;
 };
 
 interface formatDateOptions {

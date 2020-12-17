@@ -53,7 +53,7 @@ const Navbar: React.FC<Props> = ({ router }) => {
           aria-label="main navigation"
         >
           <div className="navbar-brand">
-            <Link href="/">
+            <Link href="/" passHref>
               <a>
                 <Logo className="navbar-item">
                   <img
@@ -83,7 +83,7 @@ const Navbar: React.FC<Props> = ({ router }) => {
 
           <div id="navbarBasicExample" className="navbar-menu">
             <div className="navbar-end">
-              <Link href="/">
+              <Link href="/" passHref>
                 <NavbarLink
                   className={`${router.pathname === "/" && "active"}`}
                 >
@@ -91,26 +91,26 @@ const Navbar: React.FC<Props> = ({ router }) => {
                 </NavbarLink>
               </Link>
               <NavbarDropdown className="navbar-item has-dropdown is-hoverable">
-                <a className="navbar-link">Dodaj</a>
+                <span className="navbar-link">Dodaj</span>
 
                 <div className="navbar-dropdown">
-                  <Link href="/generator-memow">
+                  <Link href="/generator-memow" passHref>
                     <NavbarLink>Generator memów</NavbarLink>
                   </Link>
-                  <Link href="/dodaj-mema">
+                  <Link href="/dodaj-mema" passHref>
                     <NavbarLink>Dodaj mema</NavbarLink>
                   </Link>
                 </div>
               </NavbarDropdown>
               {isAuth && isPageAdmin(user.role) && (
                 <NavbarDropdown className="navbar-item has-dropdown is-hoverable">
-                  <a className="navbar-link">Admin</a>
+                  <span className="navbar-link">Admin</span>
 
                   <div className="navbar-dropdown">
-                    <Link href="/cms/poczekalnia">
+                    <Link href="/cms/poczekalnia" passHref>
                       <NavbarLink>Poczekalnia</NavbarLink>
                     </Link>
-                    <Link href="/cms/zgloszenia">
+                    <Link href="/cms/zgloszenia" passHref>
                       <NavbarLink>Zgłoszenia</NavbarLink>
                     </Link>
                   </div>
