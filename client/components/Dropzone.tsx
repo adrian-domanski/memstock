@@ -1,4 +1,3 @@
-import Compressor from "compressorjs";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
@@ -63,19 +62,8 @@ const MyDropzone: React.FC<Props> = ({
       setAlert({ msg: "", type: "" });
     }
 
-    try {
-      new Compressor(file, {
-        maxWidth: 800,
-        quality: 0.5,
-        mimeType: "image/jpeg",
-        success(result) {
-          setPreviewURL(URL.createObjectURL(result));
-          setFile(result);
-        },
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    setPreviewURL(URL.createObjectURL(file));
+    setFile(file);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

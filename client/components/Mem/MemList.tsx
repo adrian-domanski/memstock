@@ -5,7 +5,7 @@ import { getMemsQuery } from "../../queries/memQueries";
 import { Button, ContentBody } from "../../utils/styled/components/components";
 import { mediaCheckTypes, MemType } from "../../utils/types";
 import Loader from "../Loader";
-import MemItem from "./MemItem";
+import MemItem from "./MemItem/MemItem";
 import {
   MemItemHeader,
   MemItemBody,
@@ -16,12 +16,14 @@ import Link from "next/link";
 interface Props {
   where?: object;
   memsForCheck?: mediaCheckTypes;
+  userMemList?: boolean;
   sort?: string;
 }
 
 const MemList: React.FC<Props> = ({
   where = { isPublic: true },
   memsForCheck,
+  userMemList,
   sort = "createdAt:DESC",
 }) => {
   const MEMS_FETCH_MORE_AMOUNT = 10;
@@ -78,11 +80,13 @@ const MemList: React.FC<Props> = ({
           ) : (
             <ContentBody className="is-size-4-desktop is-size-5-mobile  has-text-centered py-5">
               <p>Brak wyników</p>
-              <Link href="/" passHref>
-                <Button as="a" className="is-primary center mt-5">
-                  Wróć do strony głownej
-                </Button>
-              </Link>
+              {!userMemList && (
+                <Link href="/" passHref>
+                  <Button as="a" className="is-primary center mt-5">
+                    Wróć do strony głownej
+                  </Button>
+                </Link>
+              )}
             </ContentBody>
           )}
         </InfiniteScroll>

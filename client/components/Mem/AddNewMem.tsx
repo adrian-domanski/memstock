@@ -19,6 +19,8 @@ import {
 import { StyledForm } from "../../utils/styled/pages/authPages";
 import { AuthContext } from "../../context/authContext";
 import LoginOrRegister from "../User/LoginOrRegister";
+import { dataURItoBlob } from "../../utils/helpers";
+import Compressor from "compressorjs";
 
 const InlineButton = styled.button`
   &&& {
@@ -71,6 +73,13 @@ const AddNewMem: React.FC<IProps> = (props) => {
       });
     }
 
+    if (title.length > 60) {
+      return setAlert({
+        msg: "Tytuł nie może przekraczać 60 znaków",
+        type: "danger",
+      });
+    }
+
     for (let value of categories) {
       if (!value)
         return setAlert({
@@ -81,17 +90,35 @@ const AddNewMem: React.FC<IProps> = (props) => {
 
     try {
       setAlert({ msg: "Proszę czekać...", type: "warning" });
-      const { data: uploadFileData } = await upload({ variables: { file } });
-      const uploadedImgID = uploadFileData.upload.id;
-      const { data: createMemData } = await createMem({
-        variables: { title, categories, image: uploadedImgID },
-      });
-      setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
 
-      setAlert({
-        msg:
-          "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
-        type: "success",
+      // Compress, add watermark, upload
+      const watermark = (await import("watermarkjs")).default;
+      new Compressor(file, {
+        maxWidth: 800,
+        quality: 0.5,
+        mimeType: "image/jpeg",
+        success(result) {
+          watermark([result, "img/watermark.png"])
+            .image(watermark.image.lowerRight(0.5))
+            .then(async ({ src }) => {
+              const imgBlobWithWatermark = dataURItoBlob(src);
+
+              const { data: uploadFileData } = await upload({
+                variables: { file: imgBlobWithWatermark },
+              });
+              const uploadedImgID = uploadFileData.upload.id;
+              const { data: createMemData } = await createMem({
+                variables: { title, categories, image: uploadedImgID },
+              });
+              setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
+
+              setAlert({
+                msg:
+                  "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
+                type: "success",
+              });
+            });
+        },
       });
     } catch (err) {
       setAlert({

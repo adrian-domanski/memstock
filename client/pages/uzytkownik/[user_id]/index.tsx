@@ -171,7 +171,10 @@ const UserDetails: React.FC<Props> = ({ router }) => {
             </ContentBody>
           </div>
           <div className="user-content mt-5">
-            <MemList where={{ user: { id: userId }, isPublic: true }} />
+            <MemList
+              userMemList
+              where={{ user: { id: userId }, isPublic: true }}
+            />
           </div>
         </div>
         <div className="column is-4-desktop">

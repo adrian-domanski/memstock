@@ -4,7 +4,7 @@ import React from "react";
 import Layout from "../../components/layout/Layout/Layout";
 import Loader from "../../components/Loader";
 import MemComments from "../../components/Mem/MemComments/MemComments";
-import MemItem from "../../components/Mem/MemItem";
+import MemItem from "../../components/Mem/MemItem/MemItem";
 import { getMemDetailsQuery } from "../../queries/memQueries";
 import {
   ContentBody,
