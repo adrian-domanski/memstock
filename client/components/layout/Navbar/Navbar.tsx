@@ -7,9 +7,9 @@ import {
   Logo,
   NavbarDropdown,
   NavbarLink,
-  PrimaryNavbar,
   SecondaryNavbar,
   StyledAuthNavbar,
+  PrimaryNavbar,
   StyledNavbar,
 } from "../../../utils/styled/components/Navbar";
 import AuthNav from "./AuthNav/AuthNav";
@@ -32,11 +32,10 @@ const Navbar: React.FC<Props> = ({ router }) => {
     );
 
     if ($navbarBurgers.length > 0) {
-      $navbarBurgers.forEach((el) => {
+      $navbarBurgers.forEach((el: HTMLAnchorElement) => {
         el.addEventListener("click", () => {
           const target = el.dataset.target;
           const $target = document.getElementById(target);
-
           el.classList.toggle("is-active");
           $target.classList.toggle("is-active");
         });

@@ -45,21 +45,29 @@ interface Props {
   setFile: React.Dispatch<React.SetStateAction<File | Blob>>;
   previewURL: string;
   setPreviewURL: React.Dispatch<React.SetStateAction<string>>;
+  setAlert: React.Dispatch<
+    React.SetStateAction<{
+      msg: string;
+      type: string;
+    }>
+  >;
 }
 
 const MyDropzone: React.FC<Props> = ({
   setFile,
   previewURL,
   setPreviewURL,
+  setAlert,
 }) => {
-  const [alert, setAlert] = useState({ msg: "", type: "" });
-
   const onDrop = useCallback((acceptedFiles) => {
     const [file] = acceptedFiles;
     if (!isFileImage(file)) {
       return setAlert({ msg: "Niepoprawny format pliku", type: "danger" });
-    } else if (alert.msg) {
-      setAlert({ msg: "", type: "" });
+    } else if (file.size / 1024 / 1024 > 2) {
+      return setAlert({
+        msg: "Rozmiar pliku nie może przekraczać 2MB",
+        type: "danger",
+      });
     }
 
     setPreviewURL(URL.createObjectURL(file));

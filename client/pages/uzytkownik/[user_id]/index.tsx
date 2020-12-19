@@ -120,17 +120,6 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                                 Aktualizuj profil
                               </button>
                             )}
-
-                            <a href="#" className="dropdown-item">
-                              Other dropdown item
-                            </a>
-                            <hr className="dropdown-divider" />
-                            <a
-                              href="#"
-                              className="dropdown-item has-text-danger"
-                            >
-                              Zgłoś grafikę
-                            </a>
                           </div>
                         </StyledDropdown>
                       </div>

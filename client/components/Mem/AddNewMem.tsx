@@ -95,13 +95,13 @@ const AddNewMem: React.FC<IProps> = (props) => {
       const watermark = (await import("watermarkjs")).default;
       new Compressor(file, {
         maxWidth: 800,
-        quality: 0.5,
+        quality: 0.3,
         mimeType: "image/jpeg",
         success(result) {
           watermark([result, "img/watermark.png"])
             .image(watermark.image.lowerRight(0.5))
             .then(async ({ src }) => {
-              const imgBlobWithWatermark = dataURItoBlob(src);
+              let imgBlobWithWatermark: Blob = dataURItoBlob(src);
 
               const { data: uploadFileData } = await upload({
                 variables: { file: imgBlobWithWatermark },
@@ -174,6 +174,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
                 previewURL={previewURL}
                 setPreviewURL={setPreviewURL}
                 setFile={setFile}
+                setAlert={setAlert}
               />
             )}
           </div>
