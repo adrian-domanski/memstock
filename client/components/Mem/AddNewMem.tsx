@@ -19,8 +19,15 @@ import {
 import { StyledForm } from "../../utils/styled/pages/authPages";
 import { AuthContext } from "../../context/authContext";
 import LoginOrRegister from "../User/LoginOrRegister";
+import {
+  compressAccurately,
+  EImageType,
+  dataURLtoFile,
+  urltoBlob,
+  dataURLtoImage,
+  compress,
+} from "image-conversion";
 import { dataURItoBlob } from "../../utils/helpers";
-import Compressor from "compressorjs";
 
 const InlineButton = styled.button`
   &&& {
@@ -93,33 +100,47 @@ const AddNewMem: React.FC<IProps> = (props) => {
 
       // Compress, add watermark, upload
       const watermark = (await import("watermarkjs")).default;
-      new Compressor(file, {
-        maxWidth: 800,
-        quality: 0.3,
-        mimeType: "image/jpeg",
-        success(result) {
-          watermark([result, "img/watermark.png"])
-            .image(watermark.image.lowerRight(0.5))
-            .then(async ({ src }) => {
-              let imgBlobWithWatermark: Blob = dataURItoBlob(src);
 
-              const { data: uploadFileData } = await upload({
-                variables: { file: imgBlobWithWatermark },
-              });
-              const uploadedImgID = uploadFileData.upload.id;
-              const { data: createMemData } = await createMem({
-                variables: { title, categories, image: uploadedImgID },
-              });
-              setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
-
-              setAlert({
-                msg:
-                  "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
-                type: "success",
-              });
-            });
-        },
+      const imgWithProperWidth = await compress(file, {
+        quality: 0.8,
+        type: EImageType.PNG,
+        width: 800,
       });
+
+      console.log(imgWithProperWidth);
+
+      watermark([imgWithProperWidth, "img/watermark.png"])
+        .image(watermark.image.lowerRight(0.5))
+        .then(async ({ src }) => {
+          console.log(src);
+          let imgWithWatermark = await dataURLtoFile(src, EImageType.JPEG);
+
+          // const compressedImgWithWatermark = await compressAccurately(
+          //   imgWithWatermark,
+          //   {
+          //     size: 80,
+          //     accuracy: 0.9,
+          //     width: 800,
+          //     type: EImageType.JPEG,
+          //   }
+          // );
+
+          const { data: uploadFileData } = await upload({
+            variables: { file: imgWithWatermark },
+          });
+          const uploadedImgID = uploadFileData.upload.id;
+          const { data: createMemData } = await createMem({
+            variables: { title, categories, image: uploadedImgID },
+          });
+
+          setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
+
+          setAlert({
+            msg:
+              "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
+            type: "success",
+          });
+        });
     } catch (err) {
       setAlert({
         msg: "Wystąpił błąd, podczas dodawania zdjęcia",

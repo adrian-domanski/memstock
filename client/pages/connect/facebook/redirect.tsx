@@ -1,9 +1,12 @@
-import React from "react"
+import React from "react";
+import Layout from "../../../components/layout/Layout/Layout";
 
-export default const Redirect = () => {
+const Redirect = () => {
   return (
     <Layout>
       <h1>Hello world</h1>
     </Layout>
   );
 };
+
+export default Redirect;

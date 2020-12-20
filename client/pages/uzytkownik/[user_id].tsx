@@ -1,24 +1,21 @@
 import { useQuery } from "@apollo/react-hooks";
 import { SingletonRouter, withRouter } from "next/router";
 import React, { useContext, useState } from "react";
-import Layout from "../../../components/layout/Layout/Layout";
-import Loader from "../../../components/Loader";
-import MemList from "../../../components/Mem/MemList";
-import TopMems from "../../../components/Mem/TopMems";
-import TopUsers from "../../../components/Mem/TopUsers";
-import ChangeUserAvatar from "../../../components/User/ChangeUserAvatar";
-import { AuthContext } from "../../../context/authContext";
+import { AuthContext } from "../../context/authContext";
 import {
-  countUsersQuery,
   getUserDetailsQuery,
-} from "../../../queries/userQueries";
-import { formatDate, getRankName } from "../../../utils/helpers";
-import { ContentBody } from "../../../utils/styled/components/components";
-import {
-  Avatar,
-  StyledDropdown,
-} from "../../../utils/styled/components/MemItem";
-import { UserContentHeader } from "./styled";
+  countUsersQuery,
+} from "../../queries/userQueries";
+import Layout from "../../components/layout/Layout/Layout";
+import ChangeUserAvatar from "../../components/User/ChangeUserAvatar";
+import { UserContentHeader } from "../../utils/styled/pages/[user_id]";
+import { Avatar, StyledDropdown } from "../../utils/styled/components/MemItem";
+import { getRankName, formatDate } from "../../utils/helpers";
+import Loader from "../../components/Loader";
+import { ContentBody } from "../../utils/styled/components/components";
+import MemList from "../../components/Mem/MemList";
+import TopMems from "../../components/Mem/TopMems";
+import TopUsers from "../../components/Mem/TopUsers";
 
 interface Props {
   router: SingletonRouter;

@@ -1,4 +1,3 @@
-import { userInfo } from "os";
 import styled from "styled-components";
 import { MemItemHeader as UserInfo } from "../../../utils/styled/components/MemItem";
 

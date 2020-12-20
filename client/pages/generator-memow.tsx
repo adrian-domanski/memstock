@@ -1,4 +1,3 @@
-import Compressor from "compressorjs";
 import { NextPage } from "next";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
@@ -106,19 +105,7 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
   const handleSubmit = async (e: React.FormEvent<Element>) => {
     e.preventDefault();
     canvasRef.current.toBlob(async (blob) => {
-      try {
-        new Compressor(blob, {
-          maxWidth: 800,
-          quality: 0.5,
-          mimeType: "image/jpeg",
-          success(result) {
-            const newFile = blobToFile(result, `${uuidv4()}.jpg`);
-            setGeneratedMem(newFile);
-          },
-        });
-      } catch (err) {
-        console.log(err);
-      }
+      setGeneratedMem(blob);
     });
   };
 
