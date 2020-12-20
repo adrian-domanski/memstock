@@ -1,8 +1,7 @@
-import React from "react";
-import Layout from "../../components/layout/Layout/Layout";
+import Layout from "../components/layout/Layout/Layout";
+import { ContentBody, Button } from "../utils/styled/components/components";
+import { Styled404Page } from "../utils/styled/pages/404";
 import Link from "next/link";
-import { Button, ContentBody } from "../../utils/styled/components/components";
-import { Styled404Page } from "./styled";
 
 const Custom404 = () => {
   return (
