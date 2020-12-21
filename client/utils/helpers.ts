@@ -1,4 +1,41 @@
+import Compressor from "compressorjs";
 import badges from "./badges.json";
+import { v4 as uuidv4 } from "uuid";
+
+// Compress image, add watermark, get ready to download / server upload
+export const convertImage = async (file: Blob | File, titleBase?: string) =>
+  new Promise<Blob>(async (resolve, reject) => {
+    const watermark = (await import("watermarkjs")).default;
+    try {
+      new Compressor(file, {
+        quality: 0.7,
+        maxWidth: 800,
+        mimeType: "image/jpeg",
+        async success(resizedImage) {
+          watermark([resizedImage, "img/watermark-default.png"])
+            .image(watermark.image.lowerRight(0.5))
+            .then(async (image: HTMLImageElement) => {
+              const imageName = `${
+                titleBase ? encodeURIComponent(titleBase) : ""
+              }${uuidv4()}`;
+              const imgWithWatermark = dataURLtoFile(image.src, imageName);
+
+              // PNG => JPG
+              new Compressor(imgWithWatermark, {
+                quality: 0.9,
+                maxWidth: 800,
+                mimeType: "image/jpeg",
+                success(compressedImage) {
+                  resolve(compressedImage);
+                },
+              });
+            });
+        },
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
 
 export const isServer = () => typeof window === "undefined";
 
@@ -68,18 +105,14 @@ export const blobToFile = (theBlob: Blob, fileName: string) => {
   });
 };
 
-export function dataURItoBlob(dataURI) {
-  var byteString;
-  if (dataURI.split(",")[0].indexOf("base64") >= 0)
-    byteString = atob(dataURI.split(",")[1]);
-  else byteString = unescape(dataURI.split(",")[1]);
-
-  var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
-
-  var ia = new Uint8Array(byteString.length);
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
+export const dataURLtoFile = (dataUrl, filename) => {
+  var arr = dataUrl.split(","),
+    mime = "image/jpeg",
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
   }
-
-  return new Blob([ia], { type: mimeString });
-}
+  return new File([u8arr], filename, { type: mime });
+};

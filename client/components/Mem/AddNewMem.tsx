@@ -19,15 +19,9 @@ import {
 import { StyledForm } from "../../utils/styled/pages/authPages";
 import { AuthContext } from "../../context/authContext";
 import LoginOrRegister from "../User/LoginOrRegister";
-import {
-  compressAccurately,
-  EImageType,
-  dataURLtoFile,
-  urltoBlob,
-  dataURLtoImage,
-  compress,
-} from "image-conversion";
-import { dataURItoBlob } from "../../utils/helpers";
+import Compressor from "compressorjs";
+import { convertImage, dataURLtoFile } from "../../utils/helpers";
+import { v4 as uuidv4 } from "uuid";
 
 const InlineButton = styled.button`
   &&& {
@@ -98,49 +92,21 @@ const AddNewMem: React.FC<IProps> = (props) => {
     try {
       setAlert({ msg: "Proszę czekać...", type: "warning" });
 
-      // Compress, add watermark, upload
-      const watermark = (await import("watermarkjs")).default;
+      const compressedImage = await convertImage(file, title);
 
-      const imgWithProperWidth = await compress(file, {
-        quality: 0.8,
-        type: EImageType.PNG,
-        width: 800,
+      const { data: uploadFileData } = await upload({
+        variables: { file: compressedImage },
       });
-
-      console.log(imgWithProperWidth);
-
-      watermark([imgWithProperWidth, "img/watermark.png"])
-        .image(watermark.image.lowerRight(0.5))
-        .then(async ({ src }) => {
-          console.log(src);
-          let imgWithWatermark = await dataURLtoFile(src, EImageType.JPEG);
-
-          // const compressedImgWithWatermark = await compressAccurately(
-          //   imgWithWatermark,
-          //   {
-          //     size: 80,
-          //     accuracy: 0.9,
-          //     width: 800,
-          //     type: EImageType.JPEG,
-          //   }
-          // );
-
-          const { data: uploadFileData } = await upload({
-            variables: { file: imgWithWatermark },
-          });
-          const uploadedImgID = uploadFileData.upload.id;
-          const { data: createMemData } = await createMem({
-            variables: { title, categories, image: uploadedImgID },
-          });
-
-          setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
-
-          setAlert({
-            msg:
-              "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
-            type: "success",
-          });
-        });
+      const uploadedImgID = uploadFileData.upload.id;
+      const { data: createMemData } = await createMem({
+        variables: { title, categories, image: uploadedImgID },
+      });
+      setUploadedLink(`/mem/${createMemData.createMem.mem.id}`);
+      setAlert({
+        msg:
+          "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
+        type: "success",
+      });
     } catch (err) {
       setAlert({
         msg: "Wystąpił błąd, podczas dodawania zdjęcia",
@@ -164,6 +130,15 @@ const AddNewMem: React.FC<IProps> = (props) => {
       currentCategories[index] = e.target.value;
       setCategories(currentCategories);
     }
+  };
+
+  const handleDownloadMem = async () => {
+    const compressedImage = await convertImage(file);
+    const dataURL = URL.createObjectURL(compressedImage);
+    const downloadLink = document.createElement("a");
+    downloadLink.download = `${uuidv4()}.jpeg`;
+    downloadLink.href = dataURL;
+    downloadLink.click();
   };
 
   const clearFields = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -300,13 +275,13 @@ const AddNewMem: React.FC<IProps> = (props) => {
               )}
 
               {props.download && file && (
-                <a
+                <button
                   className="button is-link mb-3"
-                  href={URL.createObjectURL(file)}
-                  download
+                  type="button"
+                  onClick={handleDownloadMem}
                 >
                   Pobierz
-                </a>
+                </button>
               )}
               {isAuth ? (
                 uploadedLink ? (

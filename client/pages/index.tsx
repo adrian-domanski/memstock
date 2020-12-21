@@ -1,10 +1,13 @@
 import { SingletonRouter, withRouter } from "next/router";
 import React from "react";
+import Layout from "../components/layout/Layout/Layout";
 import MemList from "../components/Mem/MemList";
 import { isObjectEmpty } from "../utils/helpers";
-import { ContentHeader, StyledTitle } from "../utils/styled/components/components";
+import {
+  ContentHeader,
+  StyledTitle,
+} from "../utils/styled/components/components";
 import { IWhereFilter } from "../utils/types";
-import Layout from "../components/layout/Layout/Layout";
 
 interface Props {
   router: SingletonRouter;
