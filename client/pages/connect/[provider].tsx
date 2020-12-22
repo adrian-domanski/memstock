@@ -21,7 +21,7 @@ const Redirect: React.FC<IProps> = ({ router }) => {
   useEffect(() => {
     if (params.access_token) {
       fetch(
-        `${process.env.SERVER_URL}/auth/facebook/callback?access_token=${params.access_token}`
+        `${process.env.SERVER_URL}/auth/${params.provider}/callback?access_token=${params.access_token}`
       )
         .then((res) => res.json())
         .then((data) => {
