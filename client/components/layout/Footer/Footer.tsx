@@ -6,7 +6,6 @@ import {
   FooterContent,
   StyledFooter,
 } from "../../../utils/styled/components/Footer";
-import { Paragraph } from "../../../utils/styled/components/Paragraph";
 import { CategoryType } from "../../../utils/types";
 import {
   SecondaryFooter,
