@@ -21,12 +21,13 @@ const Redirect: React.FC<IProps> = ({ router }) => {
 
   useEffect(() => {
     if (params.access_token) {
-      try {
-        fetch(
-          `${process.env.SERVER_URL}/auth/${params.provider}/callback?access_token=${params.access_token}`
-        )
-          .then((res) => res.json())
-          .then((data) => {
+      fetch(
+        `${process.env.SERVER_URL}/auth/${params.provider}/callback?access_token=${params.access_token}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data?.user && data?.jwt) {
             dispatch({
               type: "LOGIN_SUCCESS",
               payload: {
@@ -34,14 +35,12 @@ const Redirect: React.FC<IProps> = ({ router }) => {
                 token: data.jwt,
               },
             });
-          });
-        router.push("/");
-      } catch (err) {
-        console.log(err);
-        console.log({ ...err });
-        // Account with such email was created using standard registration method
-        setError(true);
-      }
+          } else {
+            // Account with such email is already created using standard - register method (email taken)
+            setError(true);
+          }
+        });
+      router.push("/");
     }
   }, []);
 
