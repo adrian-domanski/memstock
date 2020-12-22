@@ -11,6 +11,7 @@ import Link from "next/link";
 import {
   CustomContentHeader,
   ExtendedLogoWrapper,
+  Separator,
   StyledForm,
 } from "../utils/styled/pages/authPages";
 import validator from "validator";
@@ -19,6 +20,7 @@ import { loginMutation } from "../queries/userQueries";
 import { AuthContext } from "../context/authContext";
 import { withRouter, SingletonRouter } from "next/router";
 import Alert from "../components/Alert";
+import LoginWithProviders from "../components/LoginWithProviders/LoginWithProviders";
 
 interface Props {
   router: SingletonRouter;
@@ -170,6 +172,8 @@ const LoginPage: React.FC<Props> = ({ router }) => {
             Zaloguj
           </Button>
         </StyledForm>
+        <Separator />
+        <LoginWithProviders />
       </ContentBody>
       <ContentFooter className="has-text-centered">
         Nie masz jeszcze konta?{" "}

@@ -12,6 +12,7 @@ import Link from "next/link";
 import {
   CustomContentHeader,
   ExtendedLogoWrapper,
+  Separator,
   StyledForm,
 } from "../utils/styled/pages/authPages";
 import validator from "validator";
@@ -20,6 +21,7 @@ import { registerMutation } from "../queries/userQueries";
 import { AuthContext } from "../context/authContext";
 import Alert from "../components/Alert";
 import { withRouter, SingletonRouter } from "next/router";
+import LoginWithProviders from "../components/LoginWithProviders/LoginWithProviders";
 
 interface Props {
   router: SingletonRouter;
@@ -281,6 +283,8 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
             Zarejestruj się
           </Button>
         </StyledForm>
+        <Separator />
+        <LoginWithProviders />
       </ContentBody>
       <ContentFooter className="has-text-centered">
         Masz już konto?{" "}

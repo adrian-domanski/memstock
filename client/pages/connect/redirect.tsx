@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { SingletonRouter, withRouter } from "next/router";
 import React, { useContext, useEffect } from "react";
-import Layout from "../../../components/layout/Layout/Layout";
-import { AuthContext } from "../../../context/authContext";
+import Layout from "../../components/layout/Layout/Layout";
+import { AuthContext } from "../../context/authContext";
 import {
   ContentBody,
   Button,
   StyledTitle,
-} from "../../../utils/styled/components/components";
-import { PageWrapper } from "../../../utils/styled/pages/connect/facebook/redirect";
+} from "../../utils/styled/components/components";
+import { PageWrapper } from "../../utils/styled/pages/connect/facebook/redirect";
 
 interface IProps {
   router: SingletonRouter;
@@ -20,7 +20,9 @@ const Redirect: React.FC<IProps> = ({ router }) => {
 
   useEffect(() => {
     if (params.access_token) {
-      fetch(`${process.env.SERVER_URL}?access_token=${params.access_token}`)
+      fetch(
+        `${process.env.SERVER_URL}/auth/facebook/callback?access_token=${params.access_token}`
+      )
         .then((res) => res.json())
         .then((data) => {
           dispatch({
@@ -31,9 +33,8 @@ const Redirect: React.FC<IProps> = ({ router }) => {
             },
           });
         });
-    } else {
-      router.push("/");
     }
+    router.push("/");
   }, []);
 
   return (

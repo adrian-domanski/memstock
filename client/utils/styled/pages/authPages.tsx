@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import { ContentHeader } from "../components/components";
 
+export const Separator = styled.hr`
+  background-color: ${({ theme }) => theme.colors.dark800};
+  max-width: 700px;
+  margin: 1rem auto;
+`;
+
 export const CustomContentHeader = styled(ContentHeader)`
   height: auto;
   display: flex;
