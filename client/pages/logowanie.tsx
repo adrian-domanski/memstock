@@ -177,7 +177,7 @@ const LoginPage: React.FC<Props> = ({ router }) => {
       </ContentBody>
       <ContentFooter className="has-text-centered">
         Nie masz jeszcze konta?{" "}
-        <Link href="/logowanie">
+        <Link href="/rejestracja">
           <a className="has-text-primary has-text-weight-bold">
             Zarejestruj się
           </a>
