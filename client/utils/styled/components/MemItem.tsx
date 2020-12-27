@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const StyledMemItem = styled.article`
   :not(:last-child) {
@@ -53,7 +53,7 @@ export const MemItemHeader = styled.header`
   }
 `;
 
-export const Avatar = styled.figure`
+export const Avatar = styled.figure<{ hoverEffect?: boolean }>`
   display: flex;
 
   img {
@@ -68,18 +68,21 @@ export const Avatar = styled.figure`
 
   .image-wrapper {
     position: relative;
-    cursor: pointer;
+    cursor: ${(props) => (props.hoverEffect ? "pointer" : "default")};
     width: 50px;
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
 
-    :hover {
-      :after,
-      :before {
-        transform: scale(1) translateY(0);
-      }
-    }
+    ${(props) =>
+      props.hoverEffect &&
+      `
+     :hover {
+       :after,
+       :before {
+         transform: scale(1) translateY(0);
+       }
+  `}}
 
     :before,
     :after {

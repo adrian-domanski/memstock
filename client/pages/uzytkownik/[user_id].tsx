@@ -46,6 +46,8 @@ const UserDetails: React.FC<Props> = ({ router }) => {
     }
   );
 
+  const isItMyAccount = () => userId === user.id;
+
   return (
     <Layout>
       <ChangeUserData
@@ -59,10 +61,12 @@ const UserDetails: React.FC<Props> = ({ router }) => {
               <div className="content-wrapper">
                 {!userLoading && userData?.user ? (
                   <>
-                    <Avatar>
+                    <Avatar hoverEffect={isItMyAccount()}>
                       <div
                         className="image-wrapper"
-                        onClick={() => setIsUpdateUserDataModalOpen(true)}
+                        onClick={() =>
+                          isItMyAccount() && setIsUpdateUserDataModalOpen(true)
+                        }
                       >
                         <img
                           src={
@@ -82,36 +86,36 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                         </div>
                       </figcaption>
                     </Avatar>
-                    <div
-                      className="options"
-                      onClick={() => {
-                        setIsOptionsActive(true);
-                      }}
-                      onMouseLeave={() => {
-                        setIsOptionsActive(false);
-                      }}
-                    >
+                    {userId === user?.id && (
                       <div
-                        className={`dropdown ${
-                          isOptionsActive ? "is-active" : ""
-                        }`}
+                        className="options"
+                        onClick={() => {
+                          setIsOptionsActive(true);
+                        }}
+                        onMouseLeave={() => {
+                          setIsOptionsActive(false);
+                        }}
                       >
-                        <div className="dropdown-trigger">
-                          <i
-                            aria-haspopup="true"
-                            aria-controls="dropdown-menu"
-                            className={`button fas fa-ellipsis-h ${
-                              isOptionsActive ? "active" : ""
-                            }`}
-                          ></i>
-                        </div>
-                        <StyledDropdown
-                          className="dropdown-menu"
-                          id="dropdown-menu"
-                          role="menu"
+                        <div
+                          className={`dropdown ${
+                            isOptionsActive ? "is-active" : ""
+                          }`}
                         >
-                          <div className="dropdown-content">
-                            {userId === user?.id && (
+                          <div className="dropdown-trigger">
+                            <i
+                              aria-haspopup="true"
+                              aria-controls="dropdown-menu"
+                              className={`button fas fa-ellipsis-h ${
+                                isOptionsActive ? "active" : ""
+                              }`}
+                            ></i>
+                          </div>
+                          <StyledDropdown
+                            className="dropdown-menu"
+                            id="dropdown-menu"
+                            role="menu"
+                          >
+                            <div className="dropdown-content">
                               <button
                                 onClick={() =>
                                   setIsUpdateUserDataModalOpen(true)
@@ -120,11 +124,11 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                               >
                                 Aktualizuj profil
                               </button>
-                            )}
-                          </div>
-                        </StyledDropdown>
+                            </div>
+                          </StyledDropdown>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </>
                 ) : (
                   <Loader />
