@@ -7,6 +7,7 @@
  */
 
 const { sanitizeEntity } = require("strapi-utils");
+const { isAdmin } = require("../../../helpers");
 
 const sanitizeUser = (user) =>
   sanitizeEntity(user, {
@@ -39,9 +40,21 @@ module.exports = {
   // Update
   async update(ctx) {
     const { id } = ctx.params;
+    const possibleUpdates = ["username"];
 
-    if (ctx.state.user.id !== id) {
-      return ctx.throw(401, "Access denied");
+    if (!isAdmin(ctx)) {
+      for (const prop in ctx.request.body) {
+        if (!possibleUpdates.includes(prop)) {
+          return ctx.throw(
+            401,
+            "Access denied - can't update these properties"
+          );
+        }
+      }
+    }
+
+    if (ctx.state.user.id !== id && !isAdmin(ctx)) {
+      return ctx.throw(401, "Access denied - can't access someone else's data");
     }
 
     const updatedUser = await strapi
@@ -49,9 +62,9 @@ module.exports = {
       .update({ id }, ctx.request.body);
 
     // Remove old avatar if update occured
-    if (ctx.request.body.avatar && user.avatar) {
+    if (ctx.request.body.avatar && ctx.state.user.avatar) {
       const file = await strapi.plugins["upload"].services.upload.fetch({
-        id: user.avatar.id,
+        id: ctx.state.user.avatar.id,
       });
       await strapi.plugins["upload"].services.upload.remove(file);
     }

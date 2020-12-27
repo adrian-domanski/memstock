@@ -5,6 +5,7 @@ import {
   ContentFooter,
   LogoSubText,
   Button,
+  Input,
 } from "../utils/styled/components/components";
 import { Logo } from "../utils/styled/components/Navbar";
 import Link from "next/link";
@@ -131,7 +132,7 @@ const LoginPage: React.FC<Props> = ({ router }) => {
               Email
             </label>
             <div className="control has-icons-left">
-              <input
+              <Input
                 className={`input ${
                   errors.EMAIL || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
                 }`}
@@ -152,7 +153,7 @@ const LoginPage: React.FC<Props> = ({ router }) => {
               Hasło
             </label>
             <div className="control has-icons-left">
-              <input
+              <Input
                 className={`input ${
                   errors.ALL_FIELDS_FILLED ? "is-danger" : ""
                 }`}

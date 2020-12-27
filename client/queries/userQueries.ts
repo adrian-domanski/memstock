@@ -25,6 +25,7 @@ export const updateUserMutation = gql`
     updateUser(input: $input) {
       user {
         id
+        username
         avatar {
           id
           url

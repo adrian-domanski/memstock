@@ -7,7 +7,7 @@ import {
   countUsersQuery,
 } from "../../queries/userQueries";
 import Layout from "../../components/layout/Layout/Layout";
-import ChangeUserAvatar from "../../components/User/ChangeUserAvatar";
+import ChangeUserData from "../../components/User/ChangeUserData/ChangeUserData";
 import { UserContentHeader } from "../../utils/styled/pages/[user_id]";
 import { Avatar, StyledDropdown } from "../../utils/styled/components/MemItem";
 import { getRankName, formatDate } from "../../utils/helpers";
@@ -27,7 +27,9 @@ const UserDetails: React.FC<Props> = ({ router }) => {
   } = useContext(AuthContext);
   const userId = router.query.user_id;
   const [isOptionsActive, setIsOptionsActive] = useState(false);
-  const [isUpdateAvatarModalOpen, setIsUpdateAvatarModalOpen] = useState(false);
+  const [isUpdateAvatarModalOpen, setIsUpdateUserDataModalOpen] = useState(
+    false
+  );
 
   const { data: userData, loading: userLoading } = useQuery(
     getUserDetailsQuery,
@@ -46,9 +48,9 @@ const UserDetails: React.FC<Props> = ({ router }) => {
 
   return (
     <Layout>
-      <ChangeUserAvatar
+      <ChangeUserData
         isOpen={isUpdateAvatarModalOpen}
-        actionClose={() => setIsUpdateAvatarModalOpen(false)}
+        actionClose={() => setIsUpdateUserDataModalOpen(false)}
       />
       <div className="columns">
         <div className="column is-8-desktop">
@@ -60,7 +62,7 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                     <Avatar>
                       <div
                         className="image-wrapper"
-                        onClick={() => setIsUpdateAvatarModalOpen(true)}
+                        onClick={() => setIsUpdateUserDataModalOpen(true)}
                       >
                         <img
                           src={
@@ -111,7 +113,9 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                           <div className="dropdown-content">
                             {userId === user?.id && (
                               <button
-                                onClick={() => setIsUpdateAvatarModalOpen(true)}
+                                onClick={() =>
+                                  setIsUpdateUserDataModalOpen(true)
+                                }
                                 className="button button-link dropdown-item"
                               >
                                 Aktualizuj profil

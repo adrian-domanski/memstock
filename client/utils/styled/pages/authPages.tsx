@@ -39,9 +39,5 @@ export const StyledForm = styled.form`
     ::placeholder {
       color: ${({ theme }) => theme.colors.grey700};
     }
-
-    :hover {
-      border-color: #5a5a5a;
-    }
   }
 `;

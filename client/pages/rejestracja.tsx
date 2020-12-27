@@ -5,6 +5,7 @@ import {
   ContentFooter,
   LogoSubText,
   Button,
+  Input,
 } from "../utils/styled/components/components";
 import { Logo } from "../utils/styled/components/Navbar";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -74,17 +75,15 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
           "Proszę wypełnić wszystkie informacje oraz zaznaczyć pole ReCAPTCHA",
       };
     } else {
-      if (credentials.username.length < 3 || credentials.username.length > 16) {
-        currentErrors = {
-          ...currentErrors,
-          USERNAME: "Nazwa użytkownika musi zawierać od 3 do 16 znaków",
-        };
-      }
-      if (!validator.isAlphanumeric(credentials.username, "pl-PL")) {
+      if (
+        !credentials.username.match(
+          /^(?=.{3,14}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/
+        )
+      ) {
         currentErrors = {
           ...currentErrors,
           USERNAME:
-            "Nazwa użytkownika może składać się wyłącznie z liter oraz cyfr",
+            "Nazwa użytkownika musi zawierać od 3 do 14 znaków. Może składać się wyłącznie z liter, cyfr oraz znaków takich jak . lub _ użytych w celu połączenia wyrazów.",
         };
       }
       if (!validator.isEmail(credentials.email)) {
@@ -173,7 +172,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
               Nazwa użytkownika
             </label>
             <div className="control has-icons-left">
-              <input
+              <Input
                 className={`input ${
                   errors.USERNAME || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
                 }`}
@@ -197,7 +196,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
               Email
             </label>
             <div className="control has-icons-left">
-              <input
+              <Input
                 className={`input ${
                   errors.EMAIL || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
                 }`}
@@ -219,7 +218,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
               Hasło
             </label>
             <div className="control has-icons-left">
-              <input
+              <Input
                 className={`input ${
                   errors.PASSWORD ||
                   errors.SAME_PASSWORDS ||
@@ -250,7 +249,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
               Powtórz hasło
             </label>
             <div className="control has-icons-left has-icons-right">
-              <input
+              <Input
                 className={`input ${
                   errors.PASSWORD ||
                   errors.SAME_PASSWORDS ||

@@ -14,6 +14,12 @@ $family-sans-serif: BlinkMacSystemFont, -apple-system, "Montserrat", "Roboto",
 .is-hovered.textarea,
 .is-hovered.input {
   border-color: transparent !important;
+  box-shadow: none;
+}
+
+.is-danger.textarea,
+.is-danger.input {
+  border-color: #f14668 !important;
 }
 
 .select select:focus,
@@ -28,7 +34,7 @@ $family-sans-serif: BlinkMacSystemFont, -apple-system, "Montserrat", "Roboto",
 .select select.is-active,
 .is-active.textarea,
 .is-active.input {
-  border-color: $primary !important;
+  border-color: unset !important;
   box-shadow: none !important;
 }
 

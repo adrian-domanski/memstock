@@ -180,26 +180,28 @@ export const StyledSelect: React.FC<Props> = styled.div`
   }
 `;
 
-export const Input = styled.input.attrs({
-  className: "input",
-})`
+export const Input = styled.input.attrs(
+  ({ className }: { className?: string }) => ({
+    className: `${className} input is-fullwidth`,
+  })
+)`
   width: unset;
   background-color: ${({ theme }) => theme.colors.dark500};
-  border: none;
+  border-color: ${({ theme }) => theme.colors.dark800};
   color: ${({ theme }) => theme.colors.white500};
 
   @media screen and (max-width: 1023px) {
     width: 100%;
   }
 
-  :active {
-    outline: none;
-    border: none;
-    box-shadow: none;
-  }
-
-  :focus {
-    box-shadow: none;
+  &:active,
+  &:focus {
+    border: unset !important;
+    border: none !important;
+    border-color: none !important;
+    border-color: red !important;
+    box-shadow: none !important;
+    outline-color: ${({ theme }) => theme.colors.primary} !important;
   }
 
   ::placeholder {
