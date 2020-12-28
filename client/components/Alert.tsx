@@ -1,20 +1,34 @@
 import React from "react";
+import { StyledAlert } from "../utils/styled/components/Alert";
 
-interface Props {
+interface IProps {
   alert: {
     type: string;
     msg: string;
   };
   clearAlert: () => void;
+  maxWidth?: number;
+  isCentered?: boolean;
+  className?: string;
 }
 
-const Alert: React.FC<Props> = ({ alert, clearAlert }) => {
+const Alert: React.FC<IProps> = ({
+  alert,
+  clearAlert,
+  isCentered,
+  maxWidth,
+  className,
+}) => {
   return (
     alert.msg && (
-      <div className={`notification is-${alert.type} is-light`}>
+      <StyledAlert
+        maxWidth={maxWidth}
+        isCentered={isCentered}
+        className={`notification is-${alert.type} is-light ${className}`}
+      >
         <button className="delete" onClick={clearAlert}></button>
         {alert.msg}
-      </div>
+      </StyledAlert>
     )
   );
 };

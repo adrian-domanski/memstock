@@ -90,7 +90,7 @@ export const ContentHeader: React.FC<Props> = styled.header`
 `;
 
 export const ContentBody = styled.div`
-  padding: 1rem;
+  padding: 3rem 1rem;
   background: ${({ theme }) => theme.colors.dark600};
 
   .content-wrapper {

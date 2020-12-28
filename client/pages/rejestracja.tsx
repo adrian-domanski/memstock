@@ -74,6 +74,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
         ALL_FIELDS_FILLED:
           "Proszę wypełnić wszystkie informacje oraz zaznaczyć pole ReCAPTCHA",
       };
+      setAlert({ msg: "Proszę wypełnić wszystkie pola", type: "danger" });
     } else {
       if (
         !credentials.username.match(
@@ -117,7 +118,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (handleValidate()) {
-      setAlert({ msg: "Proszę czekać", type: "warning" });
+      setAlert({ msg: "Proszę czekać...", type: "warning" });
       try {
         const { data } = await register({
           variables: {
@@ -157,12 +158,6 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
       </CustomContentHeader>
       <ContentBody>
         <StyledForm onSubmit={handleSubmit} action="submit">
-          {errors.ALL_FIELDS_FILLED && (
-            <div className="notification is-danger is-light">
-              {errors.ALL_FIELDS_FILLED}
-            </div>
-          )}
-
           <Alert
             alert={alert}
             clearAlert={() => setAlert({ msg: "", type: "" })}

@@ -1,4 +1,5 @@
 import { useMutation } from "@apollo/react-hooks";
+import Link from "next/link";
 import { SingletonRouter, withRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Alert from "../components/Alert";
@@ -24,6 +25,8 @@ const ChangePasswordPage: React.FC<IProps> = ({ router }) => {
   const [alert, setAlert] = useState({ msg: "", type: "" });
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [timeoutState, setTimeoutState] = useState(null);
+  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
   const [errors, setErrors] = useState({
     PASSWORD: "",
     SAME_PASSWORDS: "",
@@ -32,20 +35,21 @@ const ChangePasswordPage: React.FC<IProps> = ({ router }) => {
 
   const [resetPassword] = useMutation(resetPasswordMutation);
 
+  // Check if code query param is available
   useEffect(() => {
-    let timeout;
     if (!code) {
       setAlert({
         type: "danger",
         msg:
           "Brak kodu autoryzacyjnego - zostaniesz przekierowany na stronę główną",
       });
-      timeout = setTimeout(() => {
-        router.push("/");
-      }, 3000);
+      setTimeoutState(
+        setTimeout(() => {
+          router.push("/");
+        }, 3000)
+      );
     }
-
-    return () => timeout && clearTimeout(timeout);
+    return () => timeoutState && clearTimeout(timeoutState);
   }, []);
 
   const handleValidate = () => {
@@ -60,6 +64,7 @@ const ChangePasswordPage: React.FC<IProps> = ({ router }) => {
         ...currentErrors,
         ALL_FIELDS_FILLED: "Proszę wypełnić wszystkie pola",
       };
+      setAlert({ msg: "Proszę wypełnić wszystkie pola", type: "danger" });
     } else {
       if (password.length < 6) {
         currentErrors = {
@@ -97,11 +102,22 @@ const ChangePasswordPage: React.FC<IProps> = ({ router }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (handleValidate()) {
+      setAlert({ msg: "Proszę czekać...", type: "warning" });
       try {
         await resetPassword({
           variables: { password, passwordConfirmation: confirmPassword, code },
         });
-        setAlert({ msg: "Hasło zostało pomyślnie zmienione", type: "success" });
+        setPasswordChangeSuccess(true);
+        setAlert({
+          msg:
+            "Hasło zostało pomyślnie zmienione - za chwilę zostaniesz przekierowany na stronę główną",
+          type: "success",
+        });
+        setTimeoutState(
+          setTimeout(() => {
+            router.push("/");
+          }, 3000)
+        );
       } catch (e) {
         console.log(e);
         setAlert({ msg: "Wystąpił błąd podczas zmiany hasła", type: "danger" });
@@ -115,13 +131,21 @@ const ChangePasswordPage: React.FC<IProps> = ({ router }) => {
         <StyledTitle className="has-text-centered">Zmiana hasła</StyledTitle>
       </ContentHeader>
       <ContentBody>
-        <ContentBody>
+        <Alert
+          className="mt-4"
+          isCentered
+          maxWidth={700}
+          alert={alert}
+          clearAlert={() => setAlert({ msg: "", type: "" })}
+        />
+        {passwordChangeSuccess ? (
+          <Link href="/" passHref>
+            <Button as="a" className="is-primary light margin-auto my-4 px-6">
+              Strona główna
+            </Button>
+          </Link>
+        ) : (
           <StyledForm onSubmit={handleSubmit} action="submit">
-            <Alert
-              alert={alert}
-              clearAlert={() => setAlert({ msg: "", type: "" })}
-            />
-
             <div className="field">
               <label className="label" htmlFor="password">
                 Hasło
@@ -189,7 +213,7 @@ const ChangePasswordPage: React.FC<IProps> = ({ router }) => {
               Zmień hasło
             </Button>
           </StyledForm>
-        </ContentBody>
+        )}
       </ContentBody>
       <ContentFooter className="has-text-centered has-text-grey-light"></ContentFooter>
     </Layout>

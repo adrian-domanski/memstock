@@ -24,7 +24,7 @@ export const StyledForm = styled.form`
   justify-content: center;
   flex-direction: column;
   max-width: 700px;
-  margin: 3rem auto 0 auto;
+  margin: 0 auto 0 auto;
 
   label {
     color: ${({ theme }) => theme.colors.grey600};
