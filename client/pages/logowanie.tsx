@@ -6,11 +6,13 @@ import {
   LogoSubText,
   Button,
   Input,
+  StyledLink,
 } from "../utils/styled/components/components";
 import { Logo } from "../utils/styled/components/Navbar";
 import Link from "next/link";
 import {
   CustomContentHeader,
+  DontRememberPassword,
   ExtendedLogoWrapper,
   Separator,
   StyledForm,
@@ -167,6 +169,11 @@ const LoginPage: React.FC<Props> = ({ router }) => {
                 <i className="fas fa-lock"></i>
               </span>
             </div>
+            <DontRememberPassword>
+              <Link href="/nie-pamietam-hasla" passHref>
+                <StyledLink>Nie pamiętam hasła</StyledLink>
+              </Link>
+            </DontRememberPassword>
           </div>
 
           <Button className="is-primary light margin-auto mb-5 px-6">

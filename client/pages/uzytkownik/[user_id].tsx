@@ -46,7 +46,7 @@ const UserDetails: React.FC<Props> = ({ router }) => {
     }
   );
 
-  const isItMyAccount = () => userId === user.id;
+  const isItMyAccount = () => userId === user?.id;
 
   return (
     <Layout>

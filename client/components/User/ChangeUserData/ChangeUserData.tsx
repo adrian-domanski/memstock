@@ -55,8 +55,10 @@ const ChangeUserData: React.FC<Props> = ({ actionClose, isOpen }) => {
 
   // Set current values from ctx
   useEffect(() => {
-    setUsername(user.username);
-  }, []);
+    if (user?.username) {
+      setUsername(user.username);
+    }
+  }, [user]);
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setUsername(e.target.value);

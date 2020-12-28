@@ -41,3 +41,9 @@ export const StyledForm = styled.form`
     }
   }
 `;
+
+export const DontRememberPassword = styled.div`
+  width: 100%;
+  margin-top: 1rem;
+  text-align: right;
+`;

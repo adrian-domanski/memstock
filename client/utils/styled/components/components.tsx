@@ -27,6 +27,16 @@ export const StyledBreadcrumb = styled.nav`
   }
 `;
 
+export const StyledLink = styled.a`
+  color: ${({ theme }) => theme.colors.primary};
+  transition: color 0.2s ease-out;
+  cursor: pointer;
+
+  :hover {
+    color: #a37800;
+  }
+`;
+
 export const StyledTabs = styled.div`
   &&& {
     ul li a {
@@ -70,7 +80,7 @@ export const ContentHeader: React.FC<Props> = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
+  min-height: 80px;
 
   .content-wrapper {
     max-width: 800px;
