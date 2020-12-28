@@ -14,6 +14,20 @@ export const getUsersQuery = gql`
   }
 `;
 
+export const resetPasswordMutation = gql`
+  mutation($password: String!, $passwordConfirmation: String!, $code: String!) {
+    resetPassword(
+      password: $password
+      passwordConfirmation: $passwordConfirmation
+      code: $code
+    ) {
+      user {
+        id
+      }
+    }
+  }
+`;
+
 export const countUsersQuery = gql`
   query($where: JSON!) {
     countUsers(where: $where)
