@@ -54,10 +54,20 @@ const ForgottenPassword = () => {
           "Wiadomość została wysłana na Twója adres email. <b>Sprawdź folder ze spamem!</b>",
       });
     } catch (e) {
-      setAlert({
-        type: "danger",
-        msg: "Wystąpił błąd podczas wysyłania wiadomości email.",
-      });
+      if (
+        e?.message?.[0]?.messages[0]?.id === "Auth.form.error.user.not-exist"
+      ) {
+        return setAlert({
+          type: "danger",
+          msg:
+            "Użytkownik o takim adresie email nie istnieje w naszym serwisie.",
+        });
+      } else {
+        setAlert({
+          type: "danger",
+          msg: "Wystąpił błąd podczas wysyłania wiadomości email.",
+        });
+      }
     }
   };
 
