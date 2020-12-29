@@ -54,9 +54,7 @@ const ForgottenPassword = () => {
           "Wiadomość została wysłana na Twója adres email. <b>Sprawdź folder ze spamem!</b>",
       });
     } catch (e) {
-      if (
-        e?.message?.[0]?.messages[0]?.id === "Auth.form.error.user.not-exist"
-      ) {
+      if (e.data[0]?.messages[0]?.id === "Auth.form.error.user.not-exist") {
         return setAlert({
           type: "danger",
           msg:
