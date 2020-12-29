@@ -15,10 +15,7 @@ import axios from "axios";
 
 const ForgottenPassword = () => {
   const [alert, setAlert] = useState({ msg: "", type: "" });
-  const [errors] = useState({
-    EMAIL: false,
-    ALL_FIELDS_FILLED: false,
-  });
+  const [emailError, setEmailError] = useState(false);
 
   const [email, setEmail] = useState("");
 
@@ -27,13 +24,16 @@ const ForgottenPassword = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setAlert({ msg: "Proszę czekać...", type: "warning" });
 
     // Validation
     if (!email) {
+      setEmailError(true);
       return setAlert({ type: "danger", msg: "Proszę wprowadzić adres email" });
     }
 
     if (!validator.isEmail(email)) {
+      setEmailError(true);
       return setAlert({
         type: "danger",
         msg: "Niepoprawny format adresu email",
@@ -47,10 +47,11 @@ const ForgottenPassword = () => {
       });
 
       setEmail("");
+      setEmailError(false);
       setAlert({
         type: "success",
         msg:
-          "Wiadomość została wysłana na Twója adres email. Sprawdź folder ze spamem!",
+          "Wiadomość została wysłana na Twója adres email. <b>Sprawdź folder ze spamem!</b>",
       });
     } catch (e) {
       setAlert({
@@ -81,9 +82,7 @@ const ForgottenPassword = () => {
               </label>
               <div className="control has-icons-left">
                 <Input
-                  className={`input ${
-                    errors.EMAIL || errors.ALL_FIELDS_FILLED ? "is-danger" : ""
-                  }`}
+                  className={`input ${emailError ? "is-danger" : ""}`}
                   type="email"
                   id="email"
                   placeholder="Twój adres email"
@@ -94,7 +93,6 @@ const ForgottenPassword = () => {
                   <i className="fas fa-envelope"></i>
                 </span>
               </div>
-              {errors.EMAIL && <p className="help is-danger">{errors.EMAIL}</p>}
             </div>
 
             <Button className="is-primary light margin-auto my-4 px-6">

@@ -27,7 +27,7 @@ const Alert: React.FC<IProps> = ({
         className={`notification is-${alert.type} is-light ${className}`}
       >
         <button className="delete" onClick={clearAlert}></button>
-        {alert.msg}
+        <p dangerouslySetInnerHTML={{ __html: alert.msg }}></p>
       </StyledAlert>
     )
   );
