@@ -19,8 +19,7 @@ import {
 import { StyledForm } from "../../utils/styled/pages/authPages";
 import { AuthContext } from "../../context/authContext";
 import LoginOrRegister from "../User/LoginOrRegister";
-import Compressor from "compressorjs";
-import { convertImage, dataURLtoFile } from "../../utils/helpers";
+import { convertImage } from "../../utils/helpers";
 import { v4 as uuidv4 } from "uuid";
 
 const InlineButton = styled.button`
@@ -298,7 +297,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
                   </Button>
                 )
               ) : (
-                <LoginOrRegister customText="dodać mema" />
+                <LoginOrRegister className="p-5" customText="dodać mema" />
               )}
             </StyledForm>
           </div>

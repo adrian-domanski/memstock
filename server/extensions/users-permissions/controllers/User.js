@@ -40,7 +40,7 @@ module.exports = {
   // Update
   async update(ctx) {
     const { id } = ctx.params;
-    const possibleUpdates = ["username"];
+    const possibleUpdates = ["username", "avatar"];
 
     if (!isAdmin(ctx)) {
       for (const prop in ctx.request.body) {

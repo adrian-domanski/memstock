@@ -1,5 +1,10 @@
 import styled from "styled-components";
 import { MemItemHeader as UserInfo } from "../../../utils/styled/components/MemItem";
+import { ContentBody } from "../components/components";
+
+export const UserContentBody = styled(ContentBody)`
+  padding: 1.5rem 2rem;
+`;
 
 export const UserContentHeader = styled(UserInfo).attrs({ as: "div" })`
   padding: 1.5rem 2rem;

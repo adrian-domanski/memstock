@@ -1,7 +1,7 @@
 const isAdmin = (ctx) => {
   if (
     ctx?.state?.user?.role?.name !== "PageAdmin" &&
-    ctx?.state?.user?.roles[0].name !== "Super Admin"
+    ctx?.state?.user?.roles?.[0]?.name !== "Super Admin"
   ) {
     return false;
   }

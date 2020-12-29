@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
       <SecondaryFooter>
         <WideWrapper>
           <div className="columns has-text-centered-mobile">
-            <div className="column is-4">
+            <div className="column is-4 is-6-tablet">
               <div className="section">
                 <FooterTitle>Kategorie</FooterTitle>
                 <GridList has2columns>
@@ -48,7 +48,7 @@ const Footer: React.FC = () => {
                 </GridList>
               </div>
             </div>
-            <div className="column is-4">
+            <div className="column is-4 is-6-tablet">
               <div className="section">
                 <FooterTitle>Przydatne linki</FooterTitle>
                 <GridList>

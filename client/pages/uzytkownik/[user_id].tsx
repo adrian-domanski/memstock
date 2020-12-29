@@ -8,14 +8,14 @@ import {
 } from "../../queries/userQueries";
 import Layout from "../../components/layout/Layout/Layout";
 import ChangeUserData from "../../components/User/ChangeUserData/ChangeUserData";
-import { UserContentHeader } from "../../utils/styled/pages/[user_id]";
+import {
+  UserContentHeader,
+  UserContentBody,
+} from "../../utils/styled/pages/[user_id]";
 import { Avatar, StyledDropdown } from "../../utils/styled/components/MemItem";
 import { getRankName, formatDate } from "../../utils/helpers";
 import Loader from "../../components/Loader";
-import { ContentBody } from "../../utils/styled/components/components";
 import MemList from "../../components/Mem/MemList";
-import TopMems from "../../components/Mem/TopMems";
-import TopUsers from "../../components/Mem/TopUsers";
 
 interface Props {
   router: SingletonRouter;
@@ -49,132 +49,115 @@ const UserDetails: React.FC<Props> = ({ router }) => {
   const isItMyAccount = () => userId === user?.id;
 
   return (
-    <Layout>
+    <Layout topUsers popularMems>
       <ChangeUserData
         isOpen={isUpdateAvatarModalOpen}
         actionClose={() => setIsUpdateUserDataModalOpen(false)}
       />
-      <div className="columns">
-        <div className="column is-8-desktop">
-          <div className="user-informations">
-            <UserContentHeader>
-              <div className="content-wrapper">
-                {!userLoading && userData?.user ? (
-                  <>
-                    <Avatar hoverEffect={isItMyAccount()}>
-                      <div
-                        className="image-wrapper"
-                        onClick={() =>
-                          isItMyAccount() && setIsUpdateUserDataModalOpen(true)
-                        }
-                      >
-                        <img
-                          src={
-                            userData.user.avatar
-                              ? `${process.env.SERVER_URL}${userData.user.avatar.url}`
-                              : "/img/avatar-placeholder.jpg"
-                          }
-                          alt={`Zdjęcie profilowe użytkownika ${userData.user.username}`}
-                        />
-                      </div>
-                      <figcaption>
-                        <div className="user-name">
-                          {userData.user.username}
-                        </div>
-                        <div className="user-rank">
-                          {getRankName(userData.user.rank)}
-                        </div>
-                      </figcaption>
-                    </Avatar>
-                    {userId === user?.id && (
-                      <div
-                        className="options"
-                        onClick={() => {
-                          setIsOptionsActive(true);
-                        }}
-                        onMouseLeave={() => {
-                          setIsOptionsActive(false);
-                        }}
-                      >
-                        <div
-                          className={`dropdown ${
-                            isOptionsActive ? "is-active" : ""
+      <div className="user-informations">
+        <UserContentHeader>
+          <div className="content-wrapper">
+            {!userLoading && userData?.user ? (
+              <>
+                <Avatar hoverEffect={isItMyAccount()}>
+                  <div
+                    className="image-wrapper"
+                    onClick={() =>
+                      isItMyAccount() && setIsUpdateUserDataModalOpen(true)
+                    }
+                  >
+                    <img
+                      src={
+                        userData.user.avatar
+                          ? `${process.env.SERVER_URL}${userData.user.avatar.url}`
+                          : "/img/avatar-placeholder.jpg"
+                      }
+                      alt={`Zdjęcie profilowe użytkownika ${userData.user.username}`}
+                    />
+                  </div>
+                  <figcaption>
+                    <div className="user-name">{userData.user.username}</div>
+                    <div className="user-rank">
+                      {getRankName(userData.user.rank)}
+                    </div>
+                  </figcaption>
+                </Avatar>
+                {userId === user?.id && (
+                  <div
+                    className="options"
+                    onClick={() => {
+                      setIsOptionsActive(true);
+                    }}
+                    onMouseLeave={() => {
+                      setIsOptionsActive(false);
+                    }}
+                  >
+                    <div
+                      className={`dropdown ${
+                        isOptionsActive ? "is-active" : ""
+                      }`}
+                    >
+                      <div className="dropdown-trigger">
+                        <i
+                          aria-haspopup="true"
+                          aria-controls="dropdown-menu"
+                          className={`button fas fa-ellipsis-h ${
+                            isOptionsActive ? "active" : ""
                           }`}
-                        >
-                          <div className="dropdown-trigger">
-                            <i
-                              aria-haspopup="true"
-                              aria-controls="dropdown-menu"
-                              className={`button fas fa-ellipsis-h ${
-                                isOptionsActive ? "active" : ""
-                              }`}
-                            ></i>
-                          </div>
-                          <StyledDropdown
-                            className="dropdown-menu"
-                            id="dropdown-menu"
-                            role="menu"
-                          >
-                            <div className="dropdown-content">
-                              <button
-                                onClick={() =>
-                                  setIsUpdateUserDataModalOpen(true)
-                                }
-                                className="button button-link dropdown-item"
-                              >
-                                Aktualizuj profil
-                              </button>
-                            </div>
-                          </StyledDropdown>
-                        </div>
+                        ></i>
                       </div>
-                    )}
-                  </>
-                ) : (
-                  <Loader />
+                      <StyledDropdown
+                        className="dropdown-menu"
+                        id="dropdown-menu"
+                        role="menu"
+                      >
+                        <div className="dropdown-content">
+                          <button
+                            onClick={() => setIsUpdateUserDataModalOpen(true)}
+                            className="button button-link dropdown-item"
+                          >
+                            Aktualizuj profil
+                          </button>
+                        </div>
+                      </StyledDropdown>
+                    </div>
+                  </div>
                 )}
-              </div>
-            </UserContentHeader>
-            <ContentBody>
-              <ul>
-                <div className="content-wrapper">
-                  {!userLoading && !countUsersLoading ? (
-                    <>
-                      <li>
-                        <span className="has-text-primary">
-                          Miejsce w rankingu:
-                        </span>{" "}
-                        {countUsersData.countUsers + 1}
-                      </li>
-                      <li>
-                        <span className="has-text-primary">Punktów:</span>{" "}
-                        {userData.user.rank}
-                      </li>
-                      <li>
-                        <span className="has-text-primary">
-                          Data dołączenia:
-                        </span>{" "}
-                        {formatDate(new Date(userData.user.createdAt))}
-                      </li>
-                    </>
-                  ) : (
-                    <Loader />
-                  )}
-                </div>
-              </ul>
-            </ContentBody>
+              </>
+            ) : (
+              <Loader />
+            )}
           </div>
-          <div className="user-content mt-5">
-            <MemList
-              userMemList
-              where={{ user: { id: userId }, isPublic: true }}
-            />
-          </div>
-        </div>
-        <div className="column is-4-desktop">
-          <TopMems />
-          <TopUsers />
-        </div>
+        </UserContentHeader>
+        <UserContentBody>
+          <ul>
+            <div className="content-wrapper">
+              {!userLoading && !countUsersLoading ? (
+                <>
+                  <li>
+                    <span className="has-text-primary">
+                      Miejsce w rankingu:
+                    </span>{" "}
+                    {countUsersData.countUsers + 1}
+                  </li>
+                  <li>
+                    <span className="has-text-primary">Punktów:</span>{" "}
+                    {userData.user.rank}
+                  </li>
+                  <li>
+                    <span className="has-text-primary">Data dołączenia:</span>{" "}
+                    {formatDate(new Date(userData.user.createdAt))}
+                  </li>
+                </>
+              ) : (
+                <Loader />
+              )}
+            </div>
+          </ul>
+        </UserContentBody>
+      </div>
+      <div className="user-content mt-5">
+        <MemList userMemList where={{ user: { id: userId }, isPublic: true }} />
       </div>
     </Layout>
   );

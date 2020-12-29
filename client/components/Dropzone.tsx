@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
 import { isFileImage } from "../utils/helpers";
@@ -24,6 +24,9 @@ export const StyledWrapper: React.FC<{ hasImage: boolean }> = styled.div`
 
   :hover {
     color: ${({ theme }) => theme.colors.primaryDarker};
+    i {
+      color: ${({ theme }) => theme.colors.primaryDarker};
+    }
   }
 `;
 
@@ -35,6 +38,7 @@ const IconWrapper = styled.div`
   align-items: center;
 
   i {
+    transition: color 0.1s ease-in-out;
     color: ${({ theme }) => theme.colors.primary};
     font-size: 3rem;
     margin-top: 2rem;

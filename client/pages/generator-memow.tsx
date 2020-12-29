@@ -1,13 +1,12 @@
 import { NextPage } from "next";
 import React, { useRef, useState } from "react";
-import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import Alert from "../components/Alert";
 import Layout from "../components/layout/Layout/Layout";
 import AddNewMem from "../components/Mem/AddNewMem";
 import MemCanvas from "../components/Mem/MemCanvas";
 import MemTemplates from "../components/Mem/MemTemplates";
-import { isFileImage, blobToFile } from "../utils/helpers";
+import { isFileImage } from "../utils/helpers";
 import {
   Button,
   ContentBody,
@@ -16,20 +15,8 @@ import {
   StyledTitleWithLine,
 } from "../utils/styled/components/components";
 import { StyledForm } from "../utils/styled/pages/authPages";
+import { StyledFileButton } from "../utils/styled/pages/generator-memow";
 import { MemGeneratorTemplate } from "../utils/types";
-
-const StyledFileButton = styled.div`
-  width: 100%;
-
-  label {
-    width: 100%;
-  }
-
-  .file-cta {
-    width: 100%;
-    justify-content: center;
-  }
-`;
 
 export interface ITextField {
   id: string;
