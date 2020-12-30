@@ -96,7 +96,7 @@ const MemComments: React.FC<Props> = ({ comments, memId }) => {
           <Comment key={comment.id} comment={comment} />
         ))
       ) : (
-        <StyledContentBody>Brak komentarzy</StyledContentBody>
+        <StyledContentBody className="py-5">Brak komentarzy</StyledContentBody>
       )}
     </CommentsSection>
   );

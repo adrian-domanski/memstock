@@ -5,7 +5,7 @@ export const Styled404Page = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: 60vh;
+  min-height: 40vh;
 
   h1 {
     font-weight: bold;

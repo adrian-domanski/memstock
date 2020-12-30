@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/react-hooks";
 import { SingletonRouter, withRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../../components/layout/Layout/Layout";
 import Loader from "../../components/Loader";
 import MemComments from "../../components/Mem/MemComments/MemComments";
@@ -18,9 +18,15 @@ interface Props {
 
 const MemDetails: React.FC<Props> = ({ router }) => {
   const memId = router.query.mem_id.toString();
-  const { data, loading } = useQuery(getMemDetailsQuery, {
+  const { data, loading, updateQuery } = useQuery(getMemDetailsQuery, {
     variables: { id: memId },
   });
+
+  useEffect(() => {
+    if (data && data.mem === null) {
+      router.push("/404");
+    }
+  }, [data]);
 
   return (
     <Layout
@@ -32,7 +38,7 @@ const MemDetails: React.FC<Props> = ({ router }) => {
       popularMems
     >
       {!loading && data?.mem ? (
-        <MemItem mem={data.mem} />
+        <MemItem mem={data.mem} updateMemQuery={updateQuery} />
       ) : (
         <>
           <ContentHeader />

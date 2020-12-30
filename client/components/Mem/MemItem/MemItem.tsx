@@ -1,5 +1,6 @@
 import { useMutation } from "@apollo/react-hooks";
 import Link from "next/link";
+import { SingletonRouter, withRouter } from "next/router";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../../context/authContext";
 import {
@@ -24,12 +25,18 @@ interface Props {
   mem: MemType;
   memForCheck?: mediaCheckTypes;
   updateMemList?: (prev) => void;
+  updateMemQuery?: (
+    mapFn: (previousQueryResult: any, options: any) => any
+  ) => void;
+  router: SingletonRouter;
 }
 
 const MemItem: React.FC<Props> = ({
   mem,
   memForCheck = mediaCheckTypes.NO_CHECK,
   updateMemList,
+  updateMemQuery,
+  router,
 }) => {
   const {
     ctx: { user, isAuth },
@@ -51,15 +58,24 @@ const MemItem: React.FC<Props> = ({
     try {
       setLoading({ ...loading, deleteMem: true });
       await deleteMem({ variables: { id: mem.id } });
-      updateMemList((prev) => {
-        return {
-          ...prev,
-          mems: prev.mems.filter(({ id }) => id !== mem.id),
-        };
-      });
       setLoading({ ...loading, deleteMem: false });
-    } catch {
+      setModals({ ...modals, deleteModal: false });
+
+      if (router.pathname !== "/") {
+        router.push("/");
+      }
+
+      if (updateMemList) {
+        updateMemList((prev) => {
+          return {
+            ...prev,
+            mems: prev.mems.filter(({ id }) => id !== mem.id),
+          };
+        });
+      }
+    } catch (e) {
       console.log("Wystąpił błąd podczas usuwania mema");
+      setModals({ ...modals, deleteModal: false });
     }
   };
 
@@ -166,9 +182,12 @@ const MemItem: React.FC<Props> = ({
                 role="menu"
               >
                 <div className="dropdown-content">
-                  <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
+                  <Link
+                    href="/uzytkownik/[user_id]"
+                    as={`/uzytkownik/${mem.user.id}`}
+                  >
                     <a href="#" className="dropdown-item">
-                      Zobacz więcej
+                      Zobacz profil
                     </a>
                   </Link>
                   {mem.isReported === null && (
@@ -211,11 +230,15 @@ const MemItem: React.FC<Props> = ({
         <div className="content-wrapper">
           <StyledMemFigure>
             <figcaption>
-              <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
-                <a>
-                  <h3 className="mem-title">{mem.title}</h3>
-                </a>
-              </Link>
+              {router.pathname !== "/mem/[mem_id]" ? (
+                <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
+                  <a>
+                    <h3 className="mem-title">{mem.title}</h3>
+                  </a>
+                </Link>
+              ) : (
+                <h3 className="mem-title">{mem.title}</h3>
+              )}
               <ul className="mem-categories mb-3">
                 {mem.categories.map(({ name, id }) => (
                   <li key={id}>
@@ -231,15 +254,23 @@ const MemItem: React.FC<Props> = ({
                 ))}
               </ul>
             </figcaption>
-            <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
-              <a>
-                <img
-                  className="is-fullwidth"
-                  src={`${process.env.SERVER_URL}${mem.image.url}`}
-                  alt={mem.title}
-                />
-              </a>
-            </Link>
+            {router.pathname !== "/mem/[mem_id]" ? (
+              <Link href="/mem/[mem_id]" as={`/mem/${mem.id}`}>
+                <a>
+                  <img
+                    className="is-fullwidth"
+                    src={`${process.env.SERVER_URL}${mem.image.url}`}
+                    alt={mem.title}
+                  />
+                </a>
+              </Link>
+            ) : (
+              <img
+                className="is-fullwidth"
+                src={`${process.env.SERVER_URL}${mem.image.url}`}
+                alt={mem.title}
+              />
+            )}
           </StyledMemFigure>
         </div>
       </MemItemBody>
@@ -250,6 +281,7 @@ const MemItem: React.FC<Props> = ({
             dislikes={mem.dislikes}
             memCheckActions={memForCheck}
             updateMemList={updateMemList}
+            updateMemQuery={updateMemQuery}
             mem={mem}
           />
         </div>
@@ -258,4 +290,4 @@ const MemItem: React.FC<Props> = ({
   );
 };
 
-export default MemItem;
+export default withRouter(MemItem);

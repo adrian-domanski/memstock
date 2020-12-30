@@ -1,5 +1,6 @@
 "use strict";
 const { sanitizeEntity, parseMultipartData } = require("strapi-utils");
+const { isAdmin } = require("../../../helpers");
 
 /**
  * Read the documentation (https://strapi.io/documentation/v3.x/concepts/controllers.html#core-controllers)
@@ -28,23 +29,17 @@ module.exports = {
 
     let entity;
 
-    if (
-      ctx.request.body.isPublic === true &&
-      (!user || user.role.name !== "PageAdmin")
-    ) {
+    if (ctx.request.body.isPublic === true && (!user || !isAdmin(ctx))) {
       return ctx.throw(401, "Access denied");
-    } else if (!user || user.role.name !== "PageAdmin") {
+    } else if (!user || !isAdmin(ctx)) {
       const allowedProperties = ["likes", "dislikes", "isReported"];
       for (let prop in ctx.request.body) {
         if (!allowedProperties.includes(prop)) {
           return ctx.throw(401, "Access denied");
         }
       }
-    } else if (
-      ctx.is("multipart") &&
-      (!user || user.role.name !== "PageAdmin")
-    ) {
-      return ctx.throw(401, "Access denies");
+    } else if (ctx.is("multipart") && (!user || !isAdmin(ctx))) {
+      return ctx.throw(401, "Access denied");
     }
 
     if (ctx.is("multipart")) {
@@ -59,7 +54,7 @@ module.exports = {
     return sanitizeEntity(entity, { model: strapi.models.mem });
   },
 
-  // Delete
+  // Delete mem
   async delete(ctx) {
     const { id } = ctx.params;
 
@@ -69,21 +64,21 @@ module.exports = {
       id: ctx.params.id,
     });
 
-    if (
-      mem.user.id !== ctx.state.user.id &&
-      ctx.state.user.role.name !== "PageAdmin"
-    ) {
+    if (mem.user.id !== ctx.state.user.id && !isAdmin(ctx)) {
       return ctx.throw(401, "Access denied");
     }
 
-    // Delete mem
-    entity = await strapi.services.mem.delete({ id }, ctx.request.body);
+    // Delete comments
+    await strapi.services.comment.delete({ "mem.id": id });
 
     // Delete image
     const file = await strapi.plugins["upload"].services.upload.fetch({
       id: mem.image.id,
     });
     await strapi.plugins["upload"].services.upload.remove(file);
+
+    // Delete mem
+    entity = await strapi.services.mem.delete({ id }, ctx.request.body);
 
     return sanitizeEntity(entity, { model: strapi.models.mem });
   },

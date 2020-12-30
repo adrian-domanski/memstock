@@ -16,16 +16,23 @@ import { Avatar, StyledDropdown } from "../../utils/styled/components/MemItem";
 import { getRankName, formatDate } from "../../utils/helpers";
 import Loader from "../../components/Loader";
 import MemList from "../../components/Mem/MemList";
+import {
+  ContentHeader,
+  StyledTabs,
+} from "../../utils/styled/components/components";
+import { countMemsQuery } from "../../queries/memQueries";
 
 interface Props {
   router: SingletonRouter;
 }
 
 const UserDetails: React.FC<Props> = ({ router }) => {
+  const userId = router.query.user_id;
   const {
     ctx: { user },
   } = useContext(AuthContext);
-  const userId = router.query.user_id;
+
+  const [activeTab, setActiveTab] = useState<"ALL" | "WAITING">("ALL");
   const [isOptionsActive, setIsOptionsActive] = useState(false);
   const [isUpdateAvatarModalOpen, setIsUpdateUserDataModalOpen] = useState(
     false
@@ -37,6 +44,20 @@ const UserDetails: React.FC<Props> = ({ router }) => {
       variables: { id: userId },
     }
   );
+
+  const { data: allMemsCountData, loading: allMemsCountLoading } = useQuery(
+    countMemsQuery,
+    {
+      variables: { where: { "user.id": userId, isPublic: true } },
+    }
+  );
+
+  const {
+    data: waitingMemsCountData,
+    loading: waitingMemsCountLoading,
+  } = useQuery(countMemsQuery, {
+    variables: { where: { "user.id": userId, isPublic: false } },
+  });
 
   const { data: countUsersData, loading: countUsersLoading } = useQuery(
     countUsersQuery,
@@ -157,7 +178,38 @@ const UserDetails: React.FC<Props> = ({ router }) => {
         </UserContentBody>
       </div>
       <div className="user-content mt-5">
-        <MemList userMemList where={{ user: { id: userId }, isPublic: true }} />
+        <ContentHeader className="has-background-black-ter">
+          <StyledTabs className="tabs is-primary is-accent">
+            <ul>
+              <li
+                className={activeTab === "ALL" ? "is-active" : ""}
+                onClick={() => setActiveTab("ALL")}
+              >
+                <a>
+                  Wszystkie
+                  {!allMemsCountLoading &&
+                    allMemsCountData &&
+                    ` ( ${allMemsCountData.countMems} )`}
+                </a>
+              </li>
+              <li
+                className={activeTab === "WAITING" ? "is-active" : ""}
+                onClick={() => setActiveTab("WAITING")}
+              >
+                <a>
+                  Oczekujące
+                  {!waitingMemsCountLoading &&
+                    waitingMemsCountData &&
+                    ` ( ${waitingMemsCountData.countMems} )`}
+                </a>
+              </li>
+            </ul>
+          </StyledTabs>
+        </ContentHeader>
+        <MemList
+          userMemList
+          where={{ user: { id: userId }, isPublic: activeTab === "ALL" }}
+        />
       </div>
     </Layout>
   );

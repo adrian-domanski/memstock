@@ -78,7 +78,6 @@ export const authReducer = (state: IState, action: IAction) => {
             vote.type === action.payload.type
         )
       ) {
-        console.log("x");
         updatedVotes = state.votes.filter(
           (vote) => vote.mediaId !== action.payload.mediaId
         );

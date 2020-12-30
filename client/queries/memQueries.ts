@@ -12,6 +12,12 @@ export const createMemMutation = gql`
   }
 `;
 
+export const countMemsQuery = gql`
+  query($where: JSON!) {
+    countMems(where: $where)
+  }
+`;
+
 export const deleteMemMutation = gql`
   mutation($id: ID!) {
     deleteMem(input: { where: { id: $id } }) {
@@ -104,6 +110,7 @@ export const getMemDetailsQuery = gql`
     mem(id: $id) {
       id
       title
+      isReported
       categories {
         id
         name

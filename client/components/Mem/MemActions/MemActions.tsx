@@ -16,8 +16,11 @@ interface Props {
   dislikes: number;
   memCheckActions: mediaCheckTypes;
   mem: MemType;
-  updateMemList: (
+  updateMemList?: (
     mapFn: (previousQueryResult: any, options: Pick<any, "variables">) => any
+  ) => void;
+  updateMemQuery?: (
+    mapFn: (previousQueryResult: any, options: any) => any
   ) => void;
 }
 
@@ -27,6 +30,7 @@ const MemActions: React.FC<Props> = ({
   memCheckActions = mediaCheckTypes.NO_CHECK,
   mem,
   updateMemList,
+  updateMemQuery,
 }) => {
   const {
     ctx: { votes },
@@ -132,21 +136,34 @@ const MemActions: React.FC<Props> = ({
         variables: { input: { where: { id: mem.id }, data: updateData } },
       });
 
-      updateMemList((prev) => {
-        return {
-          ...prev,
-          mems: prev.mems.map((currMem: MemType) => {
-            if (currMem.id === mem.id)
-              return {
-                ...currMem,
-                likes: updateData.likes,
-                dislikes: updateData.dislikes,
-              };
-            else return currMem;
-          }),
-        };
-      });
-      setLoading({ ...loading, deleteMem: false });
+      // Update UI (MemAction from mem list - updateMemList or from [mem_id] - updateMemQuery)
+      if (updateMemList) {
+        updateMemList((prev) => {
+          return {
+            ...prev,
+            mems: prev.mems.map((currMem: MemType) => {
+              if (currMem.id === mem.id)
+                return {
+                  ...currMem,
+                  likes: updateData.likes,
+                  dislikes: updateData.dislikes,
+                };
+              else return currMem;
+            }),
+          };
+        });
+      } else if (updateMemQuery) {
+        updateMemQuery((prev) => {
+          return {
+            ...prev,
+            mem: {
+              ...prev.mem,
+              likes: updateData.likes,
+              dislikes: updateData.dislikes,
+            },
+          };
+        });
+      }
     } catch (err) {
       console.log(err);
     }
