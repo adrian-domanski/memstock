@@ -106,7 +106,7 @@ export const addCommentMutation = gql`
 `;
 
 export const getMemDetailsQuery = gql`
-  query($id: ID!) {
+  query($id: ID!, $commentsLimit: Int!, $commentsStart: Int!) {
     mem(id: $id) {
       id
       title
@@ -130,7 +130,11 @@ export const getMemDetailsQuery = gql`
       }
       likes
       dislikes
-      comments(sort: "createdAt:DESC") {
+      comments(
+        sort: "createdAt:DESC"
+        limit: $commentsLimit
+        start: $commentsStart
+      ) {
         id
         createdAt
         content

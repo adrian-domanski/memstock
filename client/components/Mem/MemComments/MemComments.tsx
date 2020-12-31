@@ -18,13 +18,26 @@ import {
   CommentsSectionTitle,
   StyledContentBody,
 } from "./styled";
+import {
+  checkCommentCooldown,
+  setCommentCooldown,
+} from "../../../utils/helpers";
+import InfiniteScroll from "react-infinite-scroller";
+import Loader from "../../Loader";
 
 interface Props {
   comments: Array<CommentType>;
+  fetchMoreComments: () => Promise<void>;
+  hasMore: boolean;
   memId: string;
 }
 
-const MemComments: React.FC<Props> = ({ comments, memId }) => {
+const MemComments: React.FC<Props> = ({
+  fetchMoreComments,
+  hasMore,
+  comments,
+  memId,
+}) => {
   const {
     ctx: { user },
   } = useContext(AuthContext);
@@ -35,7 +48,23 @@ const MemComments: React.FC<Props> = ({ comments, memId }) => {
 
   const handleSubmitNewComment = async (e) => {
     e.preventDefault();
+
     if (!comment) return;
+
+    if (checkCommentCooldown()) {
+      return setAlert({
+        type: "danger",
+        msg: "Możesz napisać kolejny komentarz za 5 sekund!",
+      });
+    }
+
+    if (comment.length > 1500) {
+      return setAlert({
+        type: "danger",
+        msg: "Komentarz nie może być dłuższy niż 1500 znaków.",
+      });
+    }
+
     try {
       await addComment({
         variables: { userId: user.id, content: comment, memId },
@@ -44,6 +73,9 @@ const MemComments: React.FC<Props> = ({ comments, memId }) => {
         ],
       });
       setComment("");
+      setAlert({ msg: "", type: "" });
+
+      setCommentCooldown();
     } catch (err) {
       setAlert({
         type: "danger",
@@ -92,9 +124,15 @@ const MemComments: React.FC<Props> = ({ comments, memId }) => {
       )}
       <CommentsSectionTitle>Komentarze</CommentsSectionTitle>
       {comments.length ? (
-        comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
-        ))
+        <InfiniteScroll
+          hasMore={hasMore}
+          loadMore={fetchMoreComments}
+          loader={<Loader key={0} />}
+        >
+          {comments.map((comment) => (
+            <Comment key={comment.id} comment={comment} />
+          ))}
+        </InfiniteScroll>
       ) : (
         <StyledContentBody className="py-5">Brak komentarzy</StyledContentBody>
       )}

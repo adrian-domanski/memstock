@@ -192,17 +192,19 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                     ` ( ${allMemsCountData.countMems} )`}
                 </a>
               </li>
-              <li
-                className={activeTab === "WAITING" ? "is-active" : ""}
-                onClick={() => setActiveTab("WAITING")}
-              >
-                <a>
-                  Oczekujące
-                  {!waitingMemsCountLoading &&
-                    waitingMemsCountData &&
-                    ` ( ${waitingMemsCountData.countMems} )`}
-                </a>
-              </li>
+              {userId === user.id && (
+                <li
+                  className={activeTab === "WAITING" ? "is-active" : ""}
+                  onClick={() => setActiveTab("WAITING")}
+                >
+                  <a>
+                    Oczekujące
+                    {!waitingMemsCountLoading &&
+                      waitingMemsCountData &&
+                      ` ( ${waitingMemsCountData.countMems} )`}
+                  </a>
+                </li>
+              )}
             </ul>
           </StyledTabs>
         </ContentHeader>

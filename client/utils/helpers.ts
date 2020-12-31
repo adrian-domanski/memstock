@@ -116,3 +116,21 @@ export const dataURLtoFile = (dataUrl, filename) => {
   }
   return new File([u8arr], filename, { type: mime });
 };
+
+export const setCommentCooldown = () => {
+  const date = new Date();
+
+  localStorage.setItem("comment_cooldown", date.toString());
+};
+
+export const checkCommentCooldown = () => {
+  if (localStorage.getItem("comment_cooldown")) {
+    const now = new Date();
+    const lastCommentDate = Date.parse(
+      localStorage.getItem("comment_cooldown")
+    );
+    const timeInSec = Math.abs(lastCommentDate - now.getTime()) / 1000;
+    if (timeInSec < 5) return true;
+  }
+  return false;
+};
