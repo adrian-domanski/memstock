@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import Link from "next/link";
 import React, { useState, useContext } from "react";
-import styled from "styled-components";
 import Alert from "../../components/Alert";
 import MyDropzone from "../../components/Dropzone";
 import {
@@ -19,29 +18,16 @@ import {
 import { StyledForm } from "../../utils/styled/pages/authPages";
 import { AuthContext } from "../../context/authContext";
 import LoginOrRegister from "../User/LoginOrRegister";
-import { convertImage } from "../../utils/helpers";
+import {
+  checkMemCooldown,
+  convertImage,
+  setMemCooldown,
+} from "../../utils/helpers";
 import { v4 as uuidv4 } from "uuid";
-
-const InlineButton = styled.button`
-  &&& {
-    background: unset;
-    border: none;
-    padding: 0;
-    display: block;
-    justify-content: flex-start;
-
-    :hover {
-      color: ${({ theme }) => theme.colors.primaryDarker};
-    }
-
-    :active,
-    :focus {
-      outline: none;
-      box-shadow: unset;
-      border: none;
-    }
-  }
-`;
+import {
+  CustomMemLink,
+  InlineButton,
+} from "../../utils/styled/components/AddNewMem";
 
 interface IProps {
   generatedMem?: File | Blob;
@@ -88,6 +74,13 @@ const AddNewMem: React.FC<IProps> = (props) => {
         });
     }
 
+    if (checkMemCooldown()) {
+      return setAlert({
+        msg: "Możesz dodać 1 mema w ciągu minuty",
+        type: "danger",
+      });
+    }
+
     try {
       setAlert({ msg: "Proszę czekać...", type: "warning" });
 
@@ -106,6 +99,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
           "Sukces! Twój obrazek trafił do poczekalni i oczekuje na akceptację",
         type: "success",
       });
+      setMemCooldown();
     } catch (err) {
       setAlert({
         msg: "Wystąpił błąd, podczas dodawania zdjęcia",
@@ -192,8 +186,8 @@ const AddNewMem: React.FC<IProps> = (props) => {
                   ></button>
                   <p>
                     Link do twojego mema:&nbsp;
-                    <Link href={uploadedLink}>
-                      <a className="has-text-weight-bold">{`${process.env.CLIENT_URL}${uploadedLink}`}</a>
+                    <Link href={uploadedLink} passHref>
+                      <CustomMemLink className="has-text-weight-bold ">{`${process.env.CLIENT_URL}${uploadedLink}`}</CustomMemLink>
                     </Link>
                   </p>
                 </div>

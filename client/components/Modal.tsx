@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { Button } from "../utils/styled/components/components";
+import Alert from "./Alert";
 
 const StyledNoScroll = createGlobalStyle`
   html {
@@ -70,6 +71,11 @@ interface Props {
   actionClose: () => void;
   isOpen: boolean;
   actionProgress: boolean;
+  clearAlert?: () => void;
+  alert?: {
+    msg: string;
+    type: string;
+  };
 }
 
 const Modal: React.FC<Props> = ({
@@ -79,6 +85,8 @@ const Modal: React.FC<Props> = ({
   actionSubmit,
   isOpen,
   actionProgress,
+  alert,
+  clearAlert,
 }) => {
   return (
     <>
@@ -96,6 +104,7 @@ const Modal: React.FC<Props> = ({
             ></button>
           </header>
           <section className="modal-card-body">
+            {alert?.msg && <Alert alert={alert} clearAlert={clearAlert} />}
             {actionProgress ? "Proszę czekać..." : body}
           </section>
           <footer className="modal-card-foot is-radiusless">

@@ -58,7 +58,6 @@ const MemDetails: React.FC<Props> = ({ router }) => {
         commentsStart: commentsOffset,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
-        console.log(fetchMoreResult);
         if (!fetchMoreResult.mem.comments.length) {
           setAreThereMoreComments(false);
           return prev;
@@ -79,10 +78,6 @@ const MemDetails: React.FC<Props> = ({ router }) => {
       setFetchMoreCommentsLoading(false);
     });
   };
-
-  setTimeout(() => {
-    // fetchMoreComments();
-  }, 3000);
 
   return (
     <Layout
@@ -110,6 +105,7 @@ const MemDetails: React.FC<Props> = ({ router }) => {
           comments={data.mem.comments}
           hasMore={areThereMoreComments}
           fetchMoreComments={fetchMoreComments}
+          updateMemQuery={updateQuery}
         />
       ) : (
         <>

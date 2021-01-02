@@ -12,6 +12,16 @@ export const createMemMutation = gql`
   }
 `;
 
+export const deleteCommentMutation = gql`
+  mutation($id: ID!) {
+    deleteComment(input: { where: { id: $id } }) {
+      comment {
+        id
+      }
+    }
+  }
+`;
+
 export const countMemsQuery = gql`
   query($where: JSON!) {
     countMems(where: $where)

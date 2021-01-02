@@ -1,6 +1,6 @@
 "use strict";
 const { sanitizeEntity, parseMultipartData } = require("strapi-utils");
-const { isAdmin } = require("../../../helpers");
+const { isAdmin, addRankToUser } = require("../../../helpers");
 
 /**
  * Read the documentation (https://strapi.io/documentation/v3.x/concepts/controllers.html#core-controllers)
@@ -19,16 +19,21 @@ module.exports = {
       ctx.request.body.user = ctx.state.user.id;
       entity = await strapi.services.mem.create(ctx.request.body);
     }
+
+    // Add 25 rank for creating a mem
+    addRankToUser(ctx, 25);
+
     return sanitizeEntity(entity, { model: strapi.models.mem });
   },
 
-  // Update
+  // Update - available for everyone
   async update(ctx) {
     const { id } = ctx.params;
     const user = ctx.state.user;
 
     let entity;
 
+    // Validation, security
     if (ctx.request.body.isPublic === true && (!user || !isAdmin(ctx))) {
       return ctx.throw(401, "Access denied");
     } else if (!user || !isAdmin(ctx)) {
@@ -42,6 +47,7 @@ module.exports = {
       return ctx.throw(401, "Access denied");
     }
 
+    // Make an update
     if (ctx.is("multipart")) {
       const { data, files } = parseMultipartData(ctx);
       entity = await strapi.services.mem.update({ id }, data, {
@@ -49,6 +55,13 @@ module.exports = {
       });
     } else {
       entity = await strapi.services.mem.update({ id }, ctx.request.body);
+    }
+
+    // Add 100 rank to the owner of the mem - if updates to public
+    if (ctx?.request?.body?.isPublic) {
+      if (user) {
+        addRankToUser(ctx, 100, { updateUserId: entity.user.id });
+      }
     }
 
     return sanitizeEntity(entity, { model: strapi.models.mem });
@@ -61,7 +74,7 @@ module.exports = {
     let entity;
 
     const [mem] = await strapi.services.mem.find({
-      id: ctx.params.id,
+      id,
     });
 
     if (mem.user.id !== ctx.state.user.id && !isAdmin(ctx)) {

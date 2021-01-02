@@ -30,6 +30,9 @@ interface Props {
   fetchMoreComments: () => Promise<void>;
   hasMore: boolean;
   memId: string;
+  updateMemQuery: (
+    mapFn: (previousQueryResult: any, options: any) => any
+  ) => void;
 }
 
 const MemComments: React.FC<Props> = ({
@@ -37,6 +40,7 @@ const MemComments: React.FC<Props> = ({
   hasMore,
   comments,
   memId,
+  updateMemQuery,
 }) => {
   const {
     ctx: { user },
@@ -54,7 +58,7 @@ const MemComments: React.FC<Props> = ({
     if (checkCommentCooldown()) {
       return setAlert({
         type: "danger",
-        msg: "Możesz napisać kolejny komentarz za 5 sekund!",
+        msg: "Możesz napisać kolejny komentarz za 30 sekund!",
       });
     }
 
@@ -69,7 +73,10 @@ const MemComments: React.FC<Props> = ({
       await addComment({
         variables: { userId: user.id, content: comment, memId },
         refetchQueries: [
-          { query: getMemDetailsQuery, variables: { id: memId } },
+          {
+            query: getMemDetailsQuery,
+            variables: { id: memId, commentsLimit: 10, commentsStart: 0 },
+          },
         ],
       });
       setComment("");
@@ -130,7 +137,11 @@ const MemComments: React.FC<Props> = ({
           loader={<Loader key={0} />}
         >
           {comments.map((comment) => (
-            <Comment key={comment.id} comment={comment} />
+            <Comment
+              key={comment.id}
+              comment={comment}
+              updateMemQuery={updateMemQuery}
+            />
           ))}
         </InfiniteScroll>
       ) : (

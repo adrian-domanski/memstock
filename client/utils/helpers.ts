@@ -64,7 +64,7 @@ export const getRankName = (rank: number) => {
   const neededPoints = Object.keys(badges);
   let badge = "None";
 
-  neededPoints.forEach((points, index) => {
+  neededPoints.forEach((points) => {
     if (rank >= parseFloat(points)) {
       badge = badges[points];
     }
@@ -79,7 +79,7 @@ interface formatDateOptions {
 
 export const formatDate = (date: Date, options?: formatDateOptions) => {
   const day = date.getDate();
-  const month = date.getMonth();
+  const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
   if (options && options.getExactTime) {
@@ -130,7 +130,23 @@ export const checkCommentCooldown = () => {
       localStorage.getItem("comment_cooldown")
     );
     const timeInSec = Math.abs(lastCommentDate - now.getTime()) / 1000;
-    if (timeInSec < 5) return true;
+    if (timeInSec < 30) return true;
+  }
+  return false;
+};
+
+export const setMemCooldown = () => {
+  const date = new Date();
+
+  localStorage.setItem("mem_cooldown", date.toString());
+};
+
+export const checkMemCooldown = () => {
+  if (localStorage.getItem("mem_cooldown")) {
+    const now = new Date();
+    const lastMemDate = Date.parse(localStorage.getItem("mem_cooldown"));
+    const timeInSec = Math.abs(lastMemDate - now.getTime()) / 1000;
+    if (timeInSec < 60) return true;
   }
   return false;
 };

@@ -78,15 +78,6 @@ const MemActions: React.FC<Props> = ({
       variables: { input: { where: { id: mem.id }, data: { isPublic: true } } },
     });
 
-    await updateUser({
-      variables: {
-        input: {
-          where: { id: mem.user.id },
-          data: { rank: mem.user.rank + 100 },
-        },
-      },
-    });
-
     updateMemList((prev) => {
       return {
         ...prev,
@@ -138,31 +129,27 @@ const MemActions: React.FC<Props> = ({
 
       // Update UI (MemAction from mem list - updateMemList or from [mem_id] - updateMemQuery)
       if (updateMemList) {
-        updateMemList((prev) => {
-          return {
-            ...prev,
-            mems: prev.mems.map((currMem: MemType) => {
-              if (currMem.id === mem.id)
-                return {
-                  ...currMem,
-                  likes: updateData.likes,
-                  dislikes: updateData.dislikes,
-                };
-              else return currMem;
-            }),
-          };
-        });
+        updateMemList((prev) => ({
+          ...prev,
+          mems: prev.mems.map((currMem: MemType) => {
+            if (currMem.id === mem.id)
+              return {
+                ...currMem,
+                likes: updateData.likes,
+                dislikes: updateData.dislikes,
+              };
+            else return currMem;
+          }),
+        }));
       } else if (updateMemQuery) {
-        updateMemQuery((prev) => {
-          return {
-            ...prev,
-            mem: {
-              ...prev.mem,
-              likes: updateData.likes,
-              dislikes: updateData.dislikes,
-            },
-          };
-        });
+        updateMemQuery((prev) => ({
+          ...prev,
+          mem: {
+            ...prev.mem,
+            likes: updateData.likes,
+            dislikes: updateData.dislikes,
+          },
+        }));
       }
     } catch (err) {
       console.log(err);
