@@ -43,6 +43,7 @@ interface Props {
   templates: {
     memes: MemGeneratorTemplate[];
   };
+  scrollToAfterChange: React.MutableRefObject<HTMLDivElement>;
 }
 
 const TEMPLATES_PER_LOAD = 12;
@@ -51,6 +52,7 @@ const MemTemplates: React.FC<Props> = ({
   templates,
   setCanvasBaseImage: setPreviewURL,
   canvasBaseImage: previewURL,
+  scrollToAfterChange,
 }) => {
   const [pagination, setPagination] = useState({
     from: 0,
@@ -109,14 +111,19 @@ const MemTemplates: React.FC<Props> = ({
     setPagination({ ...newPagination });
   };
 
+  useEffect(() => {
+    scrollToAfterChange.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [previewURL]);
+
   return (
     <>
       <ContentHeader className="mt-5">
-        <StyledTitleWithLine className="is-size-5">
-          Szablony:
-        </StyledTitleWithLine>
+        <StyledTitleWithLine>Szablony:</StyledTitleWithLine>
       </ContentHeader>
-      <ContentBody>
+      <ContentBody className="py-0">
         <div className="columns is-flex section is-multiline">
           {templates && templates.memes ? (
             templates.memes

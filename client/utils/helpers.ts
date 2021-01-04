@@ -8,12 +8,27 @@ export const convertImage = async (file: Blob | File, titleBase?: string) =>
     const watermark = (await import("watermarkjs")).default;
     try {
       new Compressor(file, {
-        quality: 0.7,
         maxWidth: 800,
+        quality: 0.7,
         mimeType: "image/jpeg",
         async success(resizedImage) {
-          watermark([resizedImage, "img/watermark-default.png"])
-            .image(watermark.image.lowerRight(0.5))
+          // Watermark
+          const getXPos = (
+            resizedImage: HTMLCanvasElement,
+            watermark: HTMLCanvasElement
+          ) => {
+            return resizedImage.width - watermark.width - 10;
+          };
+
+          const getYPos = (
+            resizedImage: HTMLCanvasElement,
+            watermark: HTMLCanvasElement
+          ) => {
+            return resizedImage.height / 2 - watermark.height / 2;
+          };
+
+          watermark([resizedImage, "img/watermark.png"])
+            .image(watermark.image.atPos(getXPos, getYPos, 0.7))
             .then(async (image: HTMLImageElement) => {
               const imageName = `${
                 titleBase ? encodeURIComponent(titleBase) : ""
@@ -22,7 +37,7 @@ export const convertImage = async (file: Blob | File, titleBase?: string) =>
 
               // PNG => JPG
               new Compressor(imgWithWatermark, {
-                quality: 0.9,
+                quality: 0.7,
                 maxWidth: 800,
                 mimeType: "image/jpeg",
                 success(compressedImage) {

@@ -22,7 +22,7 @@ import { registerMutation } from "../queries/userQueries";
 import { AuthContext } from "../context/authContext";
 import Alert from "../components/Alert";
 import { withRouter, SingletonRouter } from "next/router";
-import LoginWithProviders from "../components/LoginWithProviders/LoginWithProviders";
+import AuthWithProviders from "../components/LoginWithProviders/AuthWithProviders";
 
 interface Props {
   router: SingletonRouter;
@@ -270,7 +270,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
           <ReCAPTCHA
             sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
             onChange={(value) => setRecaptcha(value)}
-            className="margin-auto is-block mb-4"
+            className="margin-auto is-block my-4"
           />
 
           <Button className="is-primary light margin-auto mb-5 px-6">
@@ -278,7 +278,7 @@ const RegisterPage: React.FC<Props> = ({ router }) => {
           </Button>
         </StyledForm>
         <Separator />
-        <LoginWithProviders />
+        <AuthWithProviders type="REGISTER" />
       </ContentBody>
       <ContentFooter className="has-text-centered">
         Masz już konto?{" "}

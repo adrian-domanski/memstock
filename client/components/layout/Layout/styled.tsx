@@ -1,6 +1,10 @@
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
   * {
     padding: 0;
     margin: 0;

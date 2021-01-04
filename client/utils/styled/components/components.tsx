@@ -90,7 +90,7 @@ export const ContentHeader: React.FC<Props> = styled.header`
 `;
 
 export const ContentBody = styled.div`
-  padding: 3rem 1rem;
+  padding: 3rem 1.5rem;
   background: ${({ theme }) => theme.colors.dark600};
 
   .content-wrapper {
@@ -206,12 +206,7 @@ export const Input = styled.input.attrs(
 
   &:active,
   &:focus {
-    border: unset !important;
-    border: none !important;
-    border-color: none !important;
-    border-color: red !important;
     box-shadow: none !important;
-    outline-color: ${({ theme }) => theme.colors.primary} !important;
   }
 
   ::placeholder {

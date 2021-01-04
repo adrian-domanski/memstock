@@ -70,7 +70,7 @@ const SearchBar: React.FC = () => {
   }, []);
 
   const handleInputBlur = () => {
-    setCloseHintsTimeout(setTimeout(() => setShowSearchResults(false), 100));
+    setCloseHintsTimeout(setTimeout(() => setShowSearchResults(false), 150));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -90,7 +90,7 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <StyledSearchBar className="field is-grouped" onSubmit={handleSubmit}>
+    <StyledSearchBar className="" onSubmit={handleSubmit}>
       <p className="control is-expanded mr-0">
         <Input
           type="text"

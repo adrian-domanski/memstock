@@ -26,23 +26,33 @@ export const SearchResults = styled.ul`
 `;
 
 export const SearchBar = styled.form`
-  width: 282px;
-  position: relative;
+  &&& {
+    width: 282px;
+    position: relative;
+    display: flex;
 
-  input {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
+    input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      width: 100%;
+      border-color: ${({ theme }) => theme.colors.dark500} !important;
 
-  button {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
+      :active,
+      :focus {
+        border-color: ${({ theme }) => theme.colors.primary} !important;
+      }
+    }
 
-  ${({ theme }) => theme.media.tabletAndBelow} {
-    width: unset;
-    max-width: 350px;
-    margin: 0 auto;
-    padding: 0 0.5rem 1rem 0.5rem;
+    button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    ${({ theme }) => theme.media.tabletAndBelow} {
+      width: unset;
+      max-width: 350px;
+      margin: 0 auto;
+      padding: 0 0.5rem 1rem 0.5rem;
+    }
   }
 `;

@@ -36,6 +36,7 @@ interface Props {
 
 const MemGenerator: NextPage<Props> = ({ templates }) => {
   const canvasRef: React.MutableRefObject<HTMLCanvasElement> = useRef(null);
+  const memCanvasDivEl: React.MutableRefObject<HTMLDivElement> = useRef(null);
   const [textFields, setTextFields] = useState<ITextField[]>([]);
   const [alert, setAlert] = useState({ msg: "", type: "" });
   const [canvasBaseImage, setCanvasBaseImage] = useState("");
@@ -120,7 +121,7 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
           </ContentHeader>
           <ContentBody>
             <div className="section columns">
-              <div className="column is-7">
+              <div className="column is-7" ref={memCanvasDivEl}>
                 <MemCanvas
                   canvasProps={{ textFields, setTextFields, canvasRef }}
                   canvasBaseImage={canvasBaseImage}
@@ -259,6 +260,7 @@ const MemGenerator: NextPage<Props> = ({ templates }) => {
             setCanvasBaseImage={setCanvasBaseImage}
             canvasBaseImage={canvasBaseImage}
             templates={templates}
+            scrollToAfterChange={memCanvasDivEl}
           />
         </>
       )}

@@ -23,7 +23,7 @@ import { loginMutation } from "../queries/userQueries";
 import { AuthContext } from "../context/authContext";
 import { withRouter, SingletonRouter } from "next/router";
 import Alert from "../components/Alert";
-import LoginWithProviders from "../components/LoginWithProviders/LoginWithProviders";
+import AuthWithProviders from "../components/LoginWithProviders/AuthWithProviders";
 
 interface Props {
   router: SingletonRouter;
@@ -181,7 +181,7 @@ const LoginPage: React.FC<Props> = ({ router }) => {
           </Button>
         </StyledForm>
         <Separator />
-        <LoginWithProviders />
+        <AuthWithProviders />
       </ContentBody>
       <ContentFooter className="has-text-centered">
         Nie masz jeszcze konta?{" "}

@@ -85,9 +85,7 @@ const Footer: React.FC = () => {
               <span className="accent">&copy; Mem</span>
               <span className="has-text-primary">Stock</span>&nbsp;
             </p>
-            <p className="copyrights">
-              {new Date().getFullYear()} - Wszelkie prawa zastrzeżone
-            </p>
+            <p className="copyrights">- Wszelkie prawa zastrzeżone</p>
           </FooterContent>
         </WideWrapper>
       </PrimaryFooter>

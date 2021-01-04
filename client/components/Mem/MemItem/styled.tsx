@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
 export const StyledMemFigure = styled.figure`
+  .mem-title {
+    word-break: break-all;
+    margin-bottom: 0.3rem;
+  }
+
   a {
     overflow: auto;
     max-height: 1000px;

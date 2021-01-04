@@ -17,7 +17,7 @@ const LoginOrRegister: React.FC<IProps> = ({
   customText = "",
 }) => {
   return (
-    <StyledContentBody className={className}>
+    <StyledContentBody className={`${className} py-5`}>
       <Link href="/logowanie">
         <a className="is-link">Zaloguj się</a>
       </Link>{" "}
