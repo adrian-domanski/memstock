@@ -192,7 +192,7 @@ const UserDetails: React.FC<Props> = ({ router }) => {
                     ` ( ${allMemsCountData.countMems} )`}
                 </a>
               </li>
-              {userId === user.id && (
+              {userId === user?.id && (
                 <li
                   className={activeTab === "WAITING" ? "is-active" : ""}
                   onClick={() => setActiveTab("WAITING")}
