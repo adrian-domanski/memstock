@@ -107,8 +107,9 @@ export const StyledAuthButtons = styled.div`
 `;
 
 export const NavbarLink = styled.a.attrs(
-  ({ className }: { className: string }) => ({
+  ({ className, as = "a" }: { className: string; as?: string }) => ({
     className: `navbar-item ${className}`,
+    as,
   })
 )`
   &&& {
@@ -147,6 +148,20 @@ export const NavbarLink = styled.a.attrs(
       color: ${({ theme }) => theme.colors.primary};
       background-color: ${({ theme }) => theme.colors.dark600};
     }
+
+    ${(props) =>
+      props.as === "button" &&
+      `
+    background: transparent;
+    border: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    
+    @media screen and (min-width: 1024px) {
+      text-align: left;
+    }
+    `}
 
     ${({ theme }) => theme.media.desktop} {
       font-size: 1.1rem;

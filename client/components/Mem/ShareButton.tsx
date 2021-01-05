@@ -6,6 +6,7 @@ const StyledShareButton = styled(ShareButton)`
   display: flex;
   align-items: center;
   min-height: 40px;
+  background-color: #2d7a79 !important;
 
   span {
     padding-right: 8px;

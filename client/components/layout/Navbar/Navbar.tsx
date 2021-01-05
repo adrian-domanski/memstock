@@ -60,7 +60,7 @@ const Navbar: React.FC<Props> = ({ router }) => {
                     alt="Logo strony MemStock"
                     className="image"
                     width={44}
-                    height={44}
+                    height={41}
                   />
                   <figcaption>
                     <span>Mem</span>Stock

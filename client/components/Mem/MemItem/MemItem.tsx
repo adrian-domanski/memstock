@@ -177,6 +177,7 @@ const MemItem: React.FC<Props> = ({
           </Avatar>
           <div
             className="options"
+            aria-label="Opcje"
             tabIndex={0}
             role="button"
             ref={optionsDropdownTriggerEl}

@@ -100,6 +100,8 @@ const TopUsers: React.FC = () => {
                             : `/img/avatar-placeholder.jpg`
                         }
                         alt={`Zdjęcie profilowe użytkownika ${username}`}
+                        width={40}
+                        height={40}
                       />
                       <figcaption>
                         {username} ({rank} pkt)
