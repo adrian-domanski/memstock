@@ -57,6 +57,8 @@ const MemTile: React.FC<Props> = ({ mem }) => {
                 <img
                   src={`${process.env.SERVER_URL}${mem.image.url}`}
                   alt={mem.title}
+                  width={mem.image.width}
+                  height={mem.image.height}
                 />
               </a>
             </Link>

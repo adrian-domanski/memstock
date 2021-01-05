@@ -10,12 +10,12 @@ interface IProps {
 const AuthButtons: React.FC<IProps> = ({ className = "" }) => {
   return (
     <StyledAuthButtons className={`buttons ${className}`}>
-      <Link href="/rejestracja">
+      <Link href="/rejestracja" passHref>
         <Button as="a" className="is-primary is-size-6 px-4 mr-4">
           Rejestracja
         </Button>
       </Link>
-      <Link href="/logowanie">
+      <Link href="/logowanie" passHref>
         <Button as="a" className="is-primary light is-size-6 px-4">
           Logowanie
         </Button>

@@ -87,6 +87,8 @@ export const getMemsQuery = gql`
       image {
         id
         url
+        width
+        height
       }
       likes
       dislikes
@@ -179,6 +181,8 @@ export const getTopMems = gql`
       image {
         id
         url
+        width
+        height
       }
       likes
       dislikes

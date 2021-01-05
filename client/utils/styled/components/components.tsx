@@ -156,10 +156,10 @@ export const Button = styled.button.attrs(
       }
     }
 
+    :focus,
     :active {
-      border: 1px solid ${({ theme }) => theme.colors.primary};
-      outline: none;
-      box-shadow: none;
+      outline: auto 2px -webkit-focus-ring-color;
+      outline-offset: 2px;
     }
 
     &.center {

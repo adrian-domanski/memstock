@@ -59,6 +59,8 @@ const Navbar: React.FC<Props> = ({ router }) => {
                     src="/img/logo.png"
                     alt="Logo strony MemStock"
                     className="image"
+                    width={44}
+                    height={44}
                   />
                   <figcaption>
                     <span>Mem</span>Stock
@@ -90,7 +92,9 @@ const Navbar: React.FC<Props> = ({ router }) => {
                 </NavbarLink>
               </Link>
               <NavbarDropdown className="navbar-item has-dropdown is-hoverable">
-                <span className="navbar-link">Dodaj</span>
+                <span className="navbar-link" tabIndex={0}>
+                  Dodaj
+                </span>
 
                 <div className="navbar-dropdown">
                   <Link href="/generator-memow" passHref>

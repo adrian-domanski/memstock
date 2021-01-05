@@ -115,7 +115,7 @@ const TopUsers: React.FC = () => {
         )}
       </PopularSectionBody>
       <ContentFooter>
-        <Link href="/ranking">
+        <Link href="/ranking" passHref>
           <Button as="a" className="is-primary margin-auto light">
             Zobacz ranking
           </Button>

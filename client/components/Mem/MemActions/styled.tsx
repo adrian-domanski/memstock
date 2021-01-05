@@ -32,6 +32,12 @@ export const LikeButton = styled.button<{ memCheckActions?: boolean }>`
       box-shadow: none;
     }
 
+    :active,
+    :focus {
+      outline: auto;
+      outline-offset: 2px;
+    }
+
     &.is-active i {
       color: #2a4433;
     }
@@ -63,6 +69,12 @@ export const DislikeButton = styled.button<{ memCheckActions?: boolean }>`
 
     :focus {
       box-shadow: none;
+    }
+
+    :active,
+    :focus {
+      outline: auto;
+      outline-offset: 2px;
     }
 
     &.is-active i {

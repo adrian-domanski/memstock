@@ -27,6 +27,8 @@ export const MemItemHeader = styled.header`
   }
 
   .options {
+    background: transparent;
+    border: none;
     cursor: pointer;
 
     :hover i {

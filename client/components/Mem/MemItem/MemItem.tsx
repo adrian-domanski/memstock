@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/react-hooks";
 import Link from "next/link";
 import { SingletonRouter, withRouter } from "next/router";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../../context/authContext";
 import {
   deleteMemMutation,
@@ -50,9 +50,28 @@ const MemItem: React.FC<Props> = ({
     deleteModal: false,
     reportModal: false,
   });
+
+  const optionsDropdownTriggerEl = useRef<HTMLDivElement>(null);
   const [isOptionsActive, setIsOptionsActive] = useState(false);
   const [deleteMem] = useMutation(deleteMemMutation);
   const [updateMem] = useMutation(updateMemMutation);
+
+  useEffect(() => {
+    const checkIfEnterPressed = (e: KeyboardEvent) => {
+      if (e.key === "Enter") setIsOptionsActive(true);
+    };
+
+    optionsDropdownTriggerEl.current.addEventListener(
+      "keypress",
+      checkIfEnterPressed
+    );
+
+    return () =>
+      optionsDropdownTriggerEl.current.removeEventListener(
+        "keypress",
+        checkIfEnterPressed
+      );
+  }, []);
 
   const handleDeleteMem = async () => {
     try {
@@ -158,6 +177,9 @@ const MemItem: React.FC<Props> = ({
           </Avatar>
           <div
             className="options"
+            tabIndex={0}
+            role="button"
+            ref={optionsDropdownTriggerEl}
             onClick={() => {
               setIsOptionsActive(true);
             }}
@@ -261,6 +283,8 @@ const MemItem: React.FC<Props> = ({
                     className="is-fullwidth"
                     src={`${process.env.SERVER_URL}${mem.image.url}`}
                     alt={mem.title}
+                    width={mem.image.width}
+                    height={mem.image.height}
                   />
                 </a>
               </Link>

@@ -46,6 +46,12 @@ export const SearchBar = styled.form`
     button {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
+
+      :active,
+      :focus {
+        outline: auto;
+        outline-offset: 2px;
+      }
     }
 
     ${({ theme }) => theme.media.tabletAndBelow} {
