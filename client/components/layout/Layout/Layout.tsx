@@ -35,6 +35,7 @@ const Layout: React.FC<Props> = ({
         <meta property="og:image:secure_url" content={ogImage} />
         <meta property="og:type" content={ogType} />
         <meta property="og:url" content={ogUrl} />
+        <meta property="fb:app_id" content="621710562109715" />
         <title>{ogTitle}</title>
       </Head>
       <GlobalStyles />
