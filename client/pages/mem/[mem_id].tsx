@@ -38,7 +38,6 @@ const MemDetails: React.FC<Props> = ({ router }) => {
         commentsLimit: COMMENTS_CONFIG.COMMENTS_ON_START,
         commentsStart: 0,
       },
-      ssr: false,
     }
   );
 
@@ -57,6 +56,7 @@ const MemDetails: React.FC<Props> = ({ router }) => {
         commentsLimit: COMMENTS_CONFIG.FETCH_MORE_COMMENTS_AMOUNT,
         commentsStart: commentsOffset,
       },
+
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult.mem.comments.length) {
           setAreThereMoreComments(false);
