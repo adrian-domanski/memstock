@@ -57,7 +57,9 @@ export const registerMutation = gql`
       user {
         id
         rank
+        email
         username
+        provider
         avatar {
           id
           url
@@ -78,6 +80,8 @@ export const loginMutation = gql`
       user {
         id
         rank
+        email
+        provider
         username
         avatar {
           id
@@ -99,6 +103,8 @@ export const getUserFromTokenQuery = gql`
     me {
       id
       rank
+      email
+      provider
       username
       avatar {
         id

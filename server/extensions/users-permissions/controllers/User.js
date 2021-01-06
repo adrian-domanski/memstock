@@ -32,7 +32,10 @@ module.exports = {
       .query("user", "users-permissions")
       .findOne({ _id: user.id });
 
-    const extendedUser = { ...user, mems: myUser.mems };
+    const extendedUser = {
+      ...user,
+      mems: myUser.mems,
+    };
 
     ctx.body = sanitizeUser(extendedUser);
   },

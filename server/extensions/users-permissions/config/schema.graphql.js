@@ -4,6 +4,7 @@ module.exports = {
       rank: String
       mems: [Mem]
       avatar: UploadFile
+      provider: String
     }
   `,
 

@@ -274,17 +274,23 @@ const ChangeUserData: React.FC<Props> = ({ actionClose, isOpen }) => {
               value={username}
               onChange={handleUsernameChange}
             />
-            <StyledSeparator />
-            <StyledTitle className="has-text-centered mb-3 mt-5">
-              Hasło
-            </StyledTitle>
-            <Button
-              className="is-primary light center"
-              onClick={handleChangePassword}
-              disabled={isChangePasswordEmailSent}
-            >
-              Wyślij link do zmiany hasła
-            </Button>
+
+            {/* Show change password option only if local provider */}
+            {user?.provider === "local" && (
+              <>
+                <StyledSeparator />
+                <StyledTitle className="has-text-centered mb-3 mt-5">
+                  Hasło
+                </StyledTitle>
+                <Button
+                  className="is-primary light center"
+                  onClick={handleChangePassword}
+                  disabled={isChangePasswordEmailSent}
+                >
+                  Wyślij link do zmiany hasła
+                </Button>
+              </>
+            )}
           </section>
           <footer className="modal-card-foot is-radiusless is-flex is-justify-content-flex-end">
             <Button className="ml-auto is-primary" onClick={handleCloseModal}>
