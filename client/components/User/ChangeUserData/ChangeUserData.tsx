@@ -1,4 +1,5 @@
 import { useMutation } from "@apollo/react-hooks";
+import axios from "axios";
 import Compressor from "compressorjs";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/authContext";
@@ -37,6 +38,9 @@ const ChangeUserData: React.FC<Props> = ({ actionClose, isOpen }) => {
   const [uploadFile] = useMutation(uploadFileMutation);
   const [updateUser] = useMutation(updateUserMutation);
 
+  const [isChangePasswordEmailSent, setIsChangePasswordEmailSent] = useState(
+    false
+  );
   const [avatarFile, setFile] = useState<File | Blob>(null);
   const [alert, setAlert] = useState({ type: "", msg: "" });
   const [previewURL, setPreviewURL] = useState(
@@ -182,6 +186,31 @@ const ChangeUserData: React.FC<Props> = ({ actionClose, isOpen }) => {
     }
   };
 
+  const handleChangePassword = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    // Send an email
+    try {
+      await axios.post(`${process.env.SERVER_URL}/auth/forgot-password`, {
+        email: user.email,
+      });
+
+      setAlert({
+        type: "success",
+        msg:
+          "Wiadomość z linkiem do zmiany hasła została wysłana na Twój adres email. <b>Sprawdź folder ze spamem!</b>",
+      });
+      setIsChangePasswordEmailSent(true);
+    } catch (e) {
+      setAlert({
+        type: "danger",
+        msg: "Wystąpił błąd podczas wysyłania wiadomości email.",
+      });
+    }
+  };
+
   return (
     <StyledWrapper>
       {isOpen && <StyledNoScroll />}
@@ -245,6 +274,17 @@ const ChangeUserData: React.FC<Props> = ({ actionClose, isOpen }) => {
               value={username}
               onChange={handleUsernameChange}
             />
+            <StyledSeparator />
+            <StyledTitle className="has-text-centered mb-3 mt-5">
+              Hasło
+            </StyledTitle>
+            <Button
+              className="is-primary light center"
+              onClick={handleChangePassword}
+              disabled={isChangePasswordEmailSent}
+            >
+              Wyślij link do zmiany hasła
+            </Button>
           </section>
           <footer className="modal-card-foot is-radiusless is-flex is-justify-content-flex-end">
             <Button className="ml-auto is-primary" onClick={handleCloseModal}>

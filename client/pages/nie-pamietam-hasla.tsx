@@ -51,7 +51,7 @@ const ForgottenPassword = () => {
       setAlert({
         type: "success",
         msg:
-          "Wiadomość została wysłana na Twója adres email. <b>Sprawdź folder ze spamem!</b>",
+          "Wiadomość została wysłana na Twój adres email. <b>Sprawdź folder ze spamem!</b>",
       });
     } catch (e) {
       if (
