@@ -32,7 +32,7 @@ export const convertImage = async (file: Blob | File, titleBase?: string) =>
             .then(async (image: HTMLImageElement) => {
               const imageName = `${
                 titleBase ? encodeURIComponent(titleBase) : ""
-              }${uuidv4()}`;
+              }${uuidv4()}.jpg`;
               const imgWithWatermark = dataURLtoFile(image.src, imageName);
 
               // PNG => JPG

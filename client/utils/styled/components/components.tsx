@@ -156,8 +156,7 @@ export const Button = styled.button.attrs(
       }
     }
 
-    :focus,
-    :active {
+    :focus-visible {
       outline: auto 2px -webkit-focus-ring-color;
       outline-offset: 2px;
     }

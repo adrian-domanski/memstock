@@ -1,14 +1,22 @@
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
-  *:focus:not(:focus-visible) {
-    outline: none;
-  }
-
   * {
     padding: 0;
     margin: 0;
     box-sizing: border-box !important;
+  }
+
+  *:focus:not(:focus-visible) {
+    outline: none !important;
+  }
+
+  button::focus-visible,
+  a::focus-visible
+  input::focus-visible
+  textarea::focus-visible {
+      outline: auto 2px -webkit-focus-ring-color;
+      outline-offset: 2px;
   }
 
   ${({ theme }) => theme.media.mobile} {

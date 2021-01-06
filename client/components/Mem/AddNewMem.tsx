@@ -129,7 +129,7 @@ const AddNewMem: React.FC<IProps> = (props) => {
     const compressedImage = await convertImage(file);
     const dataURL = URL.createObjectURL(compressedImage);
     const downloadLink = document.createElement("a");
-    downloadLink.download = `${uuidv4()}.jpeg`;
+    downloadLink.download = `${uuidv4()}.jpg`;
     downloadLink.href = dataURL;
     downloadLink.click();
   };

@@ -83,7 +83,7 @@ const MemDetails: React.FC<Props> = ({ router }) => {
     <Layout
       ogImage={`${process.env.SERVER_URL}${data?.mem?.image?.url}`}
       ogTitle={data?.mem?.title}
-      ogType="article"
+      ogType="website"
       ogUrl={`${process.env.CLIENT_URL}/mem/${data?.mem?.id}`}
       topUsers
       popularMems
