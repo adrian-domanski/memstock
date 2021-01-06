@@ -35,7 +35,7 @@ const Layout: React.FC<Props> = ({
         <meta property="og:image:secure_url" content={ogImage} />
         <meta property="og:type" content={ogType} />
         <meta property="og:url" content={ogUrl} />
-        <title>MemStock - Zbiór najlepszych memów i śmiesznych obrazków</title>
+        <title>{ogTitle}</title>
       </Head>
       <GlobalStyles />
       <Navbar />
