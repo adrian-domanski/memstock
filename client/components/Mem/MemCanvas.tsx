@@ -167,31 +167,40 @@ const MemCanvas: React.FC<Props> = ({
     e: React.MouseEvent<HTMLCanvasElement, MouseEvent>
   ) => {
     e.preventDefault();
-    if (selectedTextId === null) return;
+    let cursor = "default";
     const currentTextFields = textFields;
-    currentTextFields.find((textField) => {
-      if (textField.id === selectedTextId) {
-        const fontSize = memConfig.getFontSize(+textField.fontSizeRatio);
-        const mousePosition = getMousePosition(e);
-        let longestLine = "";
-        let splitedText = textField.value.split("\n");
-        splitedText.forEach((line) => {
-          if (line.length > longestLine.length) longestLine = line;
-        });
-        const { width } = ctx.measureText(longestLine);
+    currentTextFields.forEach((textField) => {
+      const mousePosition = getMousePosition(e);
+      if (
+        cursor === "default" &&
+        isActionInsideText(mousePosition.x, mousePosition.y, textField)
+      ) {
+        cursor = "pointer";
+      }
 
-        const dx = mousePosition.x - (textField.x - width / 2) - width / 2;
-        const dy =
-          mousePosition.y -
-          (textField.y + (fontSize * splitedText.length) / 2) +
-          fontSize / 2;
+      if (selectedTextId) {
+        if (textField.id === selectedTextId) {
+          const fontSize = memConfig.getFontSize(+textField.fontSizeRatio);
+          let longestLine = "";
+          let splitedText = textField.value.split("\n");
+          splitedText.forEach((line) => {
+            if (line.length > longestLine.length) longestLine = line;
+          });
+          const { width } = ctx.measureText(longestLine);
 
-        textField.x += dx;
-        textField.y += dy;
-        return true;
+          const dx = mousePosition.x - (textField.x - width / 2) - width / 2;
+          const dy =
+            mousePosition.y -
+            (textField.y + (fontSize * splitedText.length) / 2) +
+            fontSize / 2;
+
+          textField.x += dx;
+          textField.y += dy;
+        }
       }
     });
 
+    canvasRef.current.style.cursor = cursor;
     setTextFields([...currentTextFields]);
   };
 
