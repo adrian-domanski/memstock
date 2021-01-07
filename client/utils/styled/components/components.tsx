@@ -140,7 +140,7 @@ export const Button = styled.button.attrs(
     font-size: 1.1rem;
     letter-spacing: 1px;
 
-    :hover:not(::disabled) {
+    :hover:not(:disabled) {
       background: ${({ theme }) => theme.colors.primaryDarker};
       color: black;
     }
@@ -150,7 +150,7 @@ export const Button = styled.button.attrs(
       color: ${({ theme }) => theme.colors.primary};
       border: 1px solid ${({ theme }) => theme.colors.primary};
 
-      :hover:not(::disabled) {
+      :hover:not(:disabled) {
         background: ${({ theme }) => theme.colors.primary};
         color: black;
       }
