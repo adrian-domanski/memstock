@@ -90,7 +90,7 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <StyledSearchBar className="" onSubmit={handleSubmit}>
+    <StyledSearchBar onSubmit={handleSubmit}>
       <p className="control is-expanded mr-0">
         <Input
           type="text"

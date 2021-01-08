@@ -13,7 +13,7 @@ interface Props {
   router: SingletonRouter;
 }
 
-const index: React.FC<Props> = ({ router }) => {
+const HomePage: React.FC<Props> = ({ router }) => {
   const params = router.query;
   const whereFilter: IWhereFilter = { isPublic: true };
 
@@ -53,4 +53,4 @@ const index: React.FC<Props> = ({ router }) => {
   );
 };
 
-export default withRouter(index);
+export default withRouter(HomePage);

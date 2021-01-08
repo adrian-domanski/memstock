@@ -111,7 +111,17 @@ const connect = (provider, query) => {
           }
         }
 
-        // Create the new user.
+        // Username longer than 14 chars
+        if (profile.username.length > 14) {
+          profile.username = uniqueNamesGenerator({
+            dictionaries: [adjectives, colors, animals],
+          });
+        }
+
+        // Username replace spaces with _
+        profile.username.replace(/ /g, "_");
+
+        // Create new user.
         const params = _.assign(profile, {
           provider: provider,
           role: defaultRole.id,

@@ -10,6 +10,7 @@ import {
 import { getRankName, isPageAdmin } from "../../../utils/helpers";
 import {
   Avatar,
+  DropdownWrapper,
   MemItemBody,
   MemItemFooter,
   MemItemHeader,
@@ -182,13 +183,15 @@ const MemItem: React.FC<Props> = ({
             role="button"
             ref={optionsDropdownTriggerEl}
             onClick={() => {
-              setIsOptionsActive(true);
+              setIsOptionsActive((prev) => !prev);
             }}
             onMouseLeave={() => {
               setIsOptionsActive(false);
             }}
           >
-            <div className={`dropdown ${isOptionsActive ? "is-active" : ""}`}>
+            <DropdownWrapper
+              className={`dropdown ${isOptionsActive ? "is-active" : ""}`}
+            >
               <div className="dropdown-trigger">
                 <i
                   aria-hidden="true"
@@ -245,7 +248,7 @@ const MemItem: React.FC<Props> = ({
                     )}
                 </div>
               </StyledDropdown>
-            </div>
+            </DropdownWrapper>
           </div>
         </div>
       </MemItemHeader>

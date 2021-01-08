@@ -228,9 +228,9 @@ const MemActions: React.FC<Props> = ({
               <i aria-hidden="true" className="fas fa-thumbs-down"></i>
             </DislikeButton>
             <div className="counter">
-              <span className="dislikes">{dislikes}</span>
-              <span className="divider">/</span>
               <span className="likes">{likes}</span>
+              <span className="divider">/</span>
+              <span className="dislikes">{dislikes}</span>
             </div>
           </MemButtons>
           <ShareButton memId={mem.id} />

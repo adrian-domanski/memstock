@@ -55,8 +55,9 @@ export const SearchBar = styled.form`
     }
 
     ${({ theme }) => theme.media.tabletAndBelow} {
-      width: unset;
+      /* width: unset; */
       max-width: 350px;
+      justify-content: center;
       margin: 0 auto;
       padding: 0 0.5rem 1rem 0.5rem;
     }

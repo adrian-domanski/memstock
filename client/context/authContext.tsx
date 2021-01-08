@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/react-hooks";
 import React, { createContext, useEffect, useReducer } from "react";
 import { getUserFromTokenQuery } from "../queries/userQueries";
+import AuthPages from "./AuthPages";
 import { authReducer, IAction, IState } from "./reducers/authReducer";
 
 interface IAuthContext {
@@ -39,7 +40,7 @@ const AuthContextProvider: React.FC<{
 
   return (
     <AuthContext.Provider value={{ ctx, dispatch }}>
-      {children}
+      <AuthPages children={children} />
     </AuthContext.Provider>
   );
 };

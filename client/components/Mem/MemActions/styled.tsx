@@ -88,7 +88,7 @@ export const MemButtons = styled.div<{ memCheckActions?: boolean }>`
     display: ${({ memCheckActions }) => (memCheckActions ? "flex" : "grid")};
     ${({ memCheckActions }) =>
       memCheckActions && "justify-content: space-between; width:100%;"};
-    grid-template-areas: "dislike counter like";
+    grid-template-areas: "like counter dislike";
     grid-template-columns: 40px 80px 40px;
     grid-template-rows: 40px;
     gap: 8px;

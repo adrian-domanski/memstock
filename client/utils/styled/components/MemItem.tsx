@@ -190,6 +190,16 @@ export const MemItemFooter = styled.footer`
   }
 `;
 
+export const DropdownWrapper = styled.div`
+  .dropdown-trigger {
+    transition: background-color 0.15s ease-out;
+
+    :hover {
+      background-color: #252525;
+    }
+  }
+`;
+
 export const StyledDropdown = styled.div`
   box-shadow: ${({ theme }) => theme.boxShadow};
   padding-top: 0;
@@ -208,5 +218,10 @@ export const StyledDropdown = styled.div`
 
   .dropdown-divider {
     background-color: ${({ theme }) => theme.colors.dark800};
+  }
+
+  @media screen and (max-width: 1023px) {
+    left: auto;
+    right: 0;
   }
 `;
